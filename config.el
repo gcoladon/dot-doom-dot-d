@@ -174,6 +174,40 @@ It also checks the following:
 (global-set-key (kbd "s-i") 'org-roam-insert)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 
+(defun org-hide-properties ()
+  "Hide all org-mode headline property drawers in buffer. Could be slow if buffer has a lot of overlays."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward
+            "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+      (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
+        ;; (overlay-put ov_this 'display "")
+        ;;(overlay-put ov_this 'invisible t)
+        (overlay-put ov_this 'display (format "\n"))
+        (overlay-put ov_this 'hidden-prop-drawer t)))))
+
+(defun org-show-properties ()
+  "Show all org-mode property drawers hidden by org-hide-properties."
+  (interactive)
+  (remove-overlays (point-min) (point-max) 'hidden-prop-drawer t))
+
+(defun org-toggle-properties ()
+  "Toggle visibility of property drawers."
+  (interactive)
+  (if (eq (get 'org-toggle-properties-hide-state 'state) 'hidden)
+      (progn
+        (org-show-properties)
+        (put 'org-toggle-properties-hide-state 'state 'shown))
+    (progn
+      (org-hide-properties)
+      (put 'org-toggle-properties-hide-state 'state 'hidden))))
+
+;; Try to figure out where to put this so that it doesn't
+;; get called for my org-files.
+;; https://emacs.stackexchange.com/questions/14438/remove-hooks-for-specific-modes
+(remove-hook 'before-save-hook 'ws-butler-before-save)
+
 ;; wow that worked!
 (map! :leader
       ;;; <leader> n --- notes
@@ -186,6 +220,7 @@ It also checks the following:
          :desc "Org Roam"                      "r" #'org-roam
          :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
          :desc "Jump to Index"                 "x" #'org-roam-jump-to-index
+         :desc "Toggle property visibility"    "p" #'org-toggle-properties
 
          :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
          :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
