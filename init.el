@@ -183,4 +183,6 @@
 
        :config
        ;;literate
+       ;; I could try turning off smartparens if I wanted
+       ;; org-roam-server to work without issue
        (default +bindings +smartparens))
