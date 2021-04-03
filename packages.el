@@ -94,7 +94,12 @@
 ;;  :recipe (:type git :repo "https://depp.brause.cc/nov.el.git"))
 ;;(package! git-link)
 ;;(package! yaml-mode)
-;;(package! org-roam-server
-;;  :recipe (:host github :repo "org-roam/org-roam-server"))
+(package! org-roam-server
+  :recipe (:host github :repo "org-roam/org-roam-server"))
 ;;(package! emmet-mode)
 ;;(package! citeproc-org)
+
+(after! org-roam
+  (smartparens-global-mode -1)
+  (org-roam-server-mode)
+  (smartparens-global-mode 1))
