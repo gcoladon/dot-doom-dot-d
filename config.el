@@ -3,11 +3,17 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
-(setq user-full-name "Greg Coladonato"
-      user-mail-address "greg@pilot.ai")
+(setq user-full-name "Greg Coladonato")
+
+(if (equal (replace-regexp-in-string "[\t|\n]" ""
+                                  (shell-command-to-string "ifconfig en0 | grep ether"))
+        "ether f0:18:98:9a:c9:2c ")
+    (setq user-mail-address "gcoladon@gmail.com"
+          org-directory "~/dev/org/")
+  (setq user-mail-address "greg@pilot.ai"
+        org-directory "~/org/"))
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -29,7 +35,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+;; (setq org-directory "~/org/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -182,9 +188,9 @@ It also checks the following:
     (while (re-search-forward
             "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
       (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
-        ;; (overlay-put ov_this 'display "")
+        (overlay-put ov_this 'display "")
         ;;(overlay-put ov_this 'invisible t)
-        (overlay-put ov_this 'display (format "\n"))
+        ;; (overlay-put ov_this 'display (format "\n"))
         (overlay-put ov_this 'hidden-prop-drawer t)))))
 
 (defun org-show-properties ()
@@ -229,3 +235,5 @@ It also checks the following:
 
          :desc "Graph of 1"                    "1" #'gc/org-roam-graph-1
          :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2))
+
+(doom/increase-font-size 1)
