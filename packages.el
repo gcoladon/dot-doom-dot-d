@@ -66,18 +66,25 @@
 ;; -*- no-byte-compile: t; -*-
 ;; (package! ctrlf)
 ;;(package! dired-narrow)
-(package! deadgrep)
+;; (package! deadgrep)
 ;;(package! easy-kill)
 ;;(package! org-clock-convenience)
 ;;(package! company-posframe)
 ;;(package! org-roam
 ;;  :recipe (:host github :repo "org-roam/org-roam"))
-
 ;;(package! org-roam
 ;;  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
-;;(package! org-roam-bibtex
-;;  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+;; doing this because of: https://github.com/org-roam/org-roam-bibtex
+;; When using org-roam via the `+roam` flag
+(unpin! org-roam)
+;; When using bibtex-completion via the `biblio` module
+(unpin! bibtex-completion helm-bibtex ivy-bibtex)
+
+(package! pandoc)
+
 ;;(package! mathpix.el
 ;;  :recipe (:host github :repo "jethrokuan/mathpix.el"))
 (package! anki-editor)

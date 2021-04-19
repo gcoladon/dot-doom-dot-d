@@ -186,9 +186,9 @@ It also checks the following:
   (save-excursion
     (goto-char (point-min))
     (while (re-search-forward
-            "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+            "\n *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
       (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
-        (overlay-put ov_this 'display "")
+        (overlay-put ov_this 'display " -P-\n")
         ;;(overlay-put ov_this 'invisible t)
         ;; (overlay-put ov_this 'display (format "\n"))
         (overlay-put ov_this 'hidden-prop-drawer t)))))
@@ -212,7 +212,17 @@ It also checks the following:
 ;; Try to figure out where to put this so that it doesn't
 ;; get called for my org-files.
 ;; https://emacs.stackexchange.com/questions/14438/remove-hooks-for-specific-modes
-(remove-hook 'before-save-hook 'ws-butler-before-save)
+;; But this didn't work did it!
+;; (remove-hook 'before-save-hook 'ws-butler-before-save)
+;; this might work though
+(setq before-save-hook nil)
+
+;;(define-advice bibtex-generate-autokey (:before (&rest _) my-date)
+;;  "Set `bibtex-autokey-prefix-string' to desired date format."
+;;  (setq bibtex-autokey-prefix-string (format-time-string "%y%m%d-")))
+
+;;(bibtex-set-dialect 'BibTeX)
+;;(setq bibtex-autokey-prefix-string (format-time-string "%y%m%d-"))
 
 ;; wow that worked!
 (map! :leader
@@ -225,15 +235,66 @@ It also checks the following:
          :desc "Insert"                        "i" #'org-roam-insert
          :desc "Org Roam"                      "r" #'org-roam
          :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
-         :desc "Jump to Index"                 "x" #'org-roam-jump-to-index
+         :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
          :desc "Toggle property visibility"    "p" #'org-toggle-properties
+
+         ;; I prefer this function which spares me the need to confirm the defaults
+         ;; :desc "arxiv-get-pdf-add-bibtex-entry" "x" #'arxiv-get-pdf-add-bibtex-entry
+         :desc "gpc/get-arxiv"                 "x" #'gpc/get-arxiv
+
+         :desc "orb-note-actions"              "a" #'orb-note-actions
+         :desc "org-noter-create-skeleton"     "k" #'org-noter-create-skeleton
+         :desc "org-noter"                     "n" #'org-noter
+         :desc "helm-bibtex"                   "h" #'helm-bibtex
+         :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
 
          :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
          :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
-         :desc "Next Weekly"                   "n" #'gc/org-roam-weekly-next
-         :desc "Next-Next Weekly"              "N" #'gc/org-roam-weekly-next
+         :desc "Next Weekly"                   "w" #'gc/org-roam-weekly-next
+         :desc "Next-Next Weekly"              "W" #'gc/org-roam-weekly-next
 
          :desc "Graph of 1"                    "1" #'gc/org-roam-graph-1
          :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2))
 
-(doom/increase-font-size 1)
+;;(doom/increase-font-size 1)
+
+;; following instructions from https://github.com/org-roam/org-roam-bibtex
+(use-package! org-roam-bibtex
+  :after org-roam
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (require 'org-ref)
+  (bibtex-set-dialect 'BibTeX)
+  (helm-add-action-to-source
+   "Edit org-noter Notes"
+   'helm-bibtex-edit-notes
+   helm-source-bibtex
+   0)
+  (defun bibtex-autokey-wrapper (orig-fun &rest args)
+    "Dynamically bind `bibtex-autokey-prefix-string' to current date."
+    (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
+      (apply orig-fun args)))
+  (advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
+  )
+
+ ;; (use-package! org-noter
+ ;;    :after (:any org pdf-view)
+ ;;    :config
+ ;;    (setq org-noter-always-create-frame nil
+ ;;          org-noter-auto-save-last-location t)
+ ;;    (defun org-noter-init-pdf-view ()
+ ;;      (pdf-view-fit-width-to-window))
+ ;;      ;; (pdf-view-auto-slice-minor-mode)
+ ;;    (add-hook 'pdf-view-mode-hook 'org-noter-init-pdf-view))
+
+(use-package! org-noter
+    :after pdf-view
+    :config
+    (add-hook 'pdf-view-mode-hook 'pdf-view-fit-width-to-window))
+
+(defun gpc/get-arxiv ()
+  "Use the defaults for all three variables, don't ask me!!"
+  (interactive)
+  (arxiv-get-pdf-add-bibtex-entry (arxiv-maybe-arxiv-id-from-current-kill)
+                                  (car org-ref-default-bibliography)
+                                  (concat org-ref-pdf-directory "/")))
