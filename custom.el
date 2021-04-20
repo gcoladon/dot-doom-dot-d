@@ -35,7 +35,7 @@
 :NOTER_PAGE:
 :END:
 ")))
- '(org-agenda-files '(gpc/org-dir gpc/roam-dir))
+ '(org-agenda-files (list gpc/org-dir gpc/roam-dir))
  '(org-id-link-to-org-use-id t)
  '(org-id-method 'ts)
  '(org-id-ts-format "%y%m%d_%H%M%S")
