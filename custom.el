@@ -7,13 +7,13 @@
  '(bibtex-autokey-prefix-string (format-time-string "%y%m%d_"))
  '(bibtex-autokey-titlewords 2)
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
- '(bibtex-completion-bibliography '("~/dev/org/references.bib"))
+ '(bibtex-completion-bibliography gpc/bib-file)
  '(bibtex-completion-display-formats
    '((t . "${author:12} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
- '(bibtex-completion-library-path "~/pdfs")
- '(bibtex-completion-notes-path "~/dev/org/roam")
+ '(bibtex-completion-library-path gpc/pdf-dir)
+ '(bibtex-completion-notes-path gpc/roam-dir)
  '(bibtex-completion-pdf-field "file")
- '(deft-directory "/Users/greg/dev/org/roam/")
+ '(deft-directory gpc/roam-dir)
  '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 35)))
  '(orb-preformat-keywords
    '(("citekey" . "=key=")
@@ -35,15 +35,16 @@
 :NOTER_PAGE:
 :END:
 ")))
- '(org-agenda-files '("~/dev/org/" "~/dev/org/roam/"))
+ '(org-agenda-files '(gpc/org-dir gpc/roam-dir))
  '(org-id-link-to-org-use-id t)
  '(org-id-method 'ts)
  '(org-id-ts-format "%y%m%d_%H%M%S")
  '(org-log-done 'time)
+ '(org-noter-always-create-frame nil)
  '(org-noter-doc-split-fraction '(0.6 . 0.6))
- '(org-ref-default-bibliography '("~/dev/org/references.bib"))
- '(org-ref-notes-directory "~/dev/org/roam")
- '(org-ref-pdf-directory "~/pdfs")
+ '(org-ref-default-bibliography '(gpc/bib-file))
+ '(org-ref-notes-directory gpc/roam-dir)
+ '(org-ref-pdf-directory gpc/pdf-dir)
  '(org-roam-capture-templates
    '(("b" "blank" plain #'org-roam-capture--get-point "%?" :file-name "%<%y%m%d>_${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>

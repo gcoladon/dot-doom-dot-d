@@ -10,10 +10,19 @@
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
                                   (shell-command-to-string "ifconfig en0 | grep ether"))
         "ether f0:18:98:9a:c9:2c ")
-    (setq user-mail-address "gcoladon@gmail.com"
-          org-directory "~/dev/org/")
-  (setq user-mail-address "greg@pilot.ai"
-        org-directory "~/org/"))
+    (setq gpc/email "gcoladon@gmail.com"
+          gpc/org-dir "~/dev/org/"
+          gpc/pdf-dir "~/pdfs"
+          gpc/roam-dir "~/dev/org/roam"
+          gpc/bib-file "~/dev/org/references.bib")
+  (setq gpc/email "greg@pilot.ai"
+        gpc/org-dir "~/org/"
+        gpc/pdf-dir "~/pdfs"
+        gpc/roam-dir "~/org/roam"
+        gpc/bib-file "~/org/references.bib"))
+
+(setq user-mail-address gpc/email
+      org-directory gpc/org-dir)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
