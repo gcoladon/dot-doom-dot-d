@@ -284,6 +284,20 @@ It also checks the following:
     (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
       (apply orig-fun args)))
   (advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
+
+  (defun gpc/orb-find-file-open-noter (file)
+    (find-file file)
+    (outline-next-visible-heading 1)
+    (org-noter)
+    (other-window 1)
+    (org-roam)
+    (outline-next-visible-heading -1))
+
+  (defun gpc/orb-edit-notes (orig-fn &rest args)
+    (let ((org-roam-find-file-function #'gpc/orb-find-file-open-noter))
+      (apply orig-fn args)))
+
+  (advice-add 'orb-edit-notes :around #'gpc/orb-edit-notes)
   )
 
  ;; (use-package! org-noter
