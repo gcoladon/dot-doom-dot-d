@@ -240,10 +240,9 @@ It also checks the following:
 ;;        :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
 ;;        :desc "HTML-to-Org"                   "v" (lambda () (interactive) (html2org-clipboard))))
 
-(map! :leader
-      ;;; <leader> n --- notes
-      (:prefix-map ("n" "+notes")
-       :desc "Go to Greg's notes.org"        "g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))))
+;; (map! :leader
+;;       ;;; <leader> n --- notes
+;;       (:prefix-map ("n" . "+notes")
 
 (map! :leader
       ;;; <leader> r --- roam
@@ -265,6 +264,7 @@ It also checks the following:
          :desc "orb-note-actions"              "a" #'orb-note-actions
          :desc "org-noter-create-skeleton"     "k" #'org-noter-create-skeleton
          :desc "org-noter"                     "n" #'org-noter
+         :desc "Go to Greg's notes.org"        "g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))
          :desc "helm-bibtex"                   "h" #'helm-bibtex
          :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
          :desc "HTML-to-Org"                   "v" (lambda () (interactive) (html2org-clipboard))
