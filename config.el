@@ -234,10 +234,21 @@ It also checks the following:
 ;;(setq bibtex-autokey-prefix-string (format-time-string "%y%m%d-"))
 
 ;; wow that worked!
+;; (map! :leader
+;;       ;;; <leader> n --- notes
+;;       (:prefix-map "l"
+;;        :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+;;        :desc "HTML-to-Org"                   "v" (lambda () (interactive) (html2org-clipboard))))
+
 (map! :leader
       ;;; <leader> n --- notes
+      (:prefix-map ("n" "+notes")
+       :desc "Go to Greg's notes.org"        "g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))))
+
+(map! :leader
+      ;;; <leader> r --- roam
       (:prefix-map ("r" . "gc/roam bindings")
-         :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+       :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
          :desc "Capture"                       "c" #'org-roam-capture
          :desc "Find file"                     "f" #'org-roam-find-file
          :desc "Show graph"                    "g" #'org-roam-graph
@@ -256,6 +267,7 @@ It also checks the following:
          :desc "org-noter"                     "n" #'org-noter
          :desc "helm-bibtex"                   "h" #'helm-bibtex
          :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
+         :desc "HTML-to-Org"                   "v" (lambda () (interactive) (html2org-clipboard))
 
          :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
          :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
@@ -279,6 +291,7 @@ It also checks the following:
    'helm-bibtex-edit-notes
    helm-source-bibtex
    0)
+
   (defun bibtex-autokey-wrapper (orig-fun &rest args)
     "Dynamically bind `bibtex-autokey-prefix-string' to current date."
     (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
@@ -292,13 +305,19 @@ It also checks the following:
     (other-window 1)
     (org-roam)
     (outline-next-visible-heading -1))
-
   (defun gpc/orb-edit-notes (orig-fn &rest args)
     (let ((org-roam-find-file-function #'gpc/orb-find-file-open-noter))
       (apply orig-fn args)))
-
   (advice-add 'orb-edit-notes :around #'gpc/orb-edit-notes)
-  )
+
+  (defun gpc/orb-my-slug (orig-fn title)
+    "My version of Roam's title-to-slug to prefix data and chop legth"
+    (let* ((title (concat (format-time-string "%y%m%d ") title))
+           (result (apply orig-fn (list title)))
+           (subs (substring result 0 (min 30 (length result)))))
+      subs))
+  (advice-add 'org-roam--title-to-slug :around #'gpc/orb-my-slug))
+
 
  ;; (use-package! org-noter
  ;;    :after (:any org pdf-view)
@@ -321,3 +340,10 @@ It also checks the following:
   (arxiv-get-pdf-add-bibtex-entry (arxiv-maybe-arxiv-id-from-current-kill)
                                   (car org-ref-default-bibliography)
                                   (concat org-ref-pdf-directory "/")))
+
+(defun html2org-clipboard ()
+  "Convert clipboard contents from HTML to Org and then paste (yank)."
+  (interactive)
+  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | pandoc -f json -t org --wrap=none")
+  (kill-new (shell-command-to-string cmd))
+  (yank))
