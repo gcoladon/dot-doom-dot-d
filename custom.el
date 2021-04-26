@@ -46,12 +46,12 @@
  '(org-ref-notes-directory gpc/roam-dir)
  '(org-ref-pdf-directory gpc/pdf-dir)
  '(org-roam-capture-templates
-   '(("b" "blank" plain #'org-roam-capture--get-point "%?" :file-name "%<%y%m%d>_${slug}" :head ":PROPERTIES:
+   '(("b" "blank" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
 " :unnarrowed t)
-     ("p" "person" plain #'org-roam-capture--get-point "%?" :file-name "%<%y%m%d>_${slug}" :head ":PROPERTIES:
+     ("p" "person" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
@@ -64,7 +64,7 @@
 * Phone :: 
 * Notes
 - " :unnarrowed t)
-     ("w" "weekly" plain #'org-roam-capture--get-point "%?" :file-name "%<%y%m%d>_${slug}" :head ":PROPERTIES:
+     ("w" "weekly" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
@@ -98,7 +98,7 @@
 ** Meetings
 ** Notes
 " :unnarrowed t)
-     ("m" "minimal" plain #'org-roam-capture--get-point "%?" :file-name "%<%y%m%d>_${slug}" :head ":PROPERTIES:
+     ("m" "minimal" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
