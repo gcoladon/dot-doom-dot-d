@@ -14,7 +14,7 @@
  '(bibtex-completion-notes-path gpc/roam-dir)
  '(bibtex-completion-pdf-field "file")
  '(deft-directory gpc/roam-dir)
- '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 35)))
+ '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 40)))
  '(orb-preformat-keywords
    '(("citekey" . "=key=")
      "url" "file" "author-or-editor-abbrev" "keywords"))
@@ -24,8 +24,6 @@
 #+ROAM_KEY: cite:${citekey}
 #+ROAM_TAGS:
 
-- tags ::
-- keywords :: ${keywords}
 * ${title} %?
 :PROPERTIES:
 :ID: %<%y%m%d_%H%M%S>
@@ -35,16 +33,21 @@
 :NOTER_PAGE:
 :END:
 ")))
+ '(org-M-RET-may-split-line t)
  '(org-agenda-files (list gpc/org-dir gpc/roam-dir))
  '(org-id-link-to-org-use-id t)
  '(org-id-method 'ts)
  '(org-id-ts-format "%y%m%d_%H%M%S")
+ '(org-link-elisp-confirm-function 'y-or-n-p)
  '(org-log-done 'time)
+ '(org-log-into-drawer t)
  '(org-noter-always-create-frame nil)
  '(org-noter-doc-split-fraction '(0.6 . 0.6))
- '(org-ref-default-bibliography '(gpc/bib-file))
+ '(org-ref-default-bibliography (list gpc/bib-file))
  '(org-ref-notes-directory gpc/roam-dir)
  '(org-ref-pdf-directory gpc/pdf-dir)
+ '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
+ '(org-reverse-note-order t)
  '(org-roam-capture-templates
    '(("b" "blank" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
