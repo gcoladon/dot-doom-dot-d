@@ -133,17 +133,6 @@ It also checks the following:
                                      (slot . -1)
                                      (window-parameters . ((mode-line-format . none))))))))
 
-;; (map! :leader
-;;         :prefix "nr"
-;;         :desc "org-roam" "b" #'org-roam-buffer
-;;         :desc "org-roam-node-insert" "i" #'org-roam-node-insert
-;;         :desc "org-roam-node-find" "f" #'org-roam-node-find
-;;         :desc "org-roam-ref-find" "r" #'org-roam-ref-find
-;;         :desc "org-roam-show-graph" "g" #'org-roam-show-graph
-;;         :desc "org-roam-capture" "c" #'org-roam-capture
-;;         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
-;;
-
 ;; Let's see if I prefer this style of search interaction
 ;; (ctrlf-mode +1)
 
@@ -224,25 +213,14 @@ It also checks the following:
 ;; But this didn't work did it!
 ;; (remove-hook 'before-save-hook 'ws-butler-before-save)
 ;; this might work though
-(setq before-save-hook nil)
+;; (setq before-save-hook nil)
 
-;;(define-advice bibtex-generate-autokey (:before (&rest _) my-date)
-;;  "Set `bibtex-autokey-prefix-string' to desired date format."
-;;  (setq bibtex-autokey-prefix-string (format-time-string "%y%m%d-")))
-
-;;(bibtex-set-dialect 'BibTeX)
-;;(setq bibtex-autokey-prefix-string (format-time-string "%y%m%d-"))
-
-;; wow that worked!
-;; (map! :leader
-;;       ;;; <leader> n --- notes
-;;       (:prefix-map "l"
-;;        :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
-;;        :desc "HTML-to-Org"                   "v" (lambda () (interactive) (html2org-clipboard))))
-
-;; (map! :leader
-;;       ;;; <leader> n --- notes
-;;       (:prefix-map ("n" . "+notes")
+(map! :leader
+       :desc "debug-on-entry"              "t d" #'toggle-debug-on-error
+       :desc "Go to Greg's notes.org"      "n g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))
+       :desc "HTML-to-Org"                 "n h" (lambda () (interactive) (html2org-clipboard))
+       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
+       :desc "Bury buffer"                 "w y" #'bury-buffer)
 
 (map! :leader
       ;;; <leader> r --- roam
@@ -257,19 +235,12 @@ It also checks the following:
          :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
          :desc "Toggle property visibility"    "p" #'org-toggle-properties
 
-         ;; I prefer this function which spares me the need to confirm the defaults
-         ;; :desc "arxiv-get-pdf-add-bibtex-entry" "x" #'arxiv-get-pdf-add-bibtex-entry
          :desc "gpc/get-arxiv"                 "x" #'gpc/get-arxiv
-
          :desc "orb-note-actions"              "a" #'orb-note-actions
          :desc "org-noter-create-skeleton"     "k" #'org-noter-create-skeleton
          :desc "org-noter"                     "n" #'org-noter
-         :desc "Go to Greg's notes.org"        "G" (lambda () (interactive) (find-file "~/dev/org/notes.org"))
-         ;; don't think I really need to go to this file much more often!
-         ;; :desc "Go to Greg's emacs.org"        "E" (lambda () (interactive) (find-file "~/dev/emacs/emacs.org"))
          :desc "helm-bibtex"                   "h" #'helm-bibtex
          :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
-         :desc "HTML-to-Org"                   "v" (lambda () (interactive) (html2org-clipboard))
 
          :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
          :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
