@@ -9,7 +9,7 @@
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
  '(bibtex-completion-bibliography gpc/bib-file)
  '(bibtex-completion-display-formats
-   '((t . "${author:30} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:10}")))
+   '((t . "${author:20} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
  '(bibtex-completion-library-path gpc/pdf-dir)
  '(bibtex-completion-notes-path gpc/roam-dir)
  '(bibtex-completion-pdf-field "file")
