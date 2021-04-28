@@ -15,6 +15,7 @@
 ;;      directory (for easy access to its source code).
 
 ;; (debug-on-variable-change 'bibtex-autokey-titlewords)
+;; (debug-on-variable-change 'org-M-RET-may-split-line)
 ;;(debug-on-entry 'bibtex-completion-find-note-multiple-files)
 ;; (debug-on-entry 'orb-find-note-file)
 ;; (debug-on-entry 'helm-bibtex)
