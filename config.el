@@ -264,9 +264,9 @@ It also checks the following:
    "Edit org-noter Notes"
    'helm-bibtex-edit-notes
    helm-source-bibtex
-   0)
+   0))
 
-  (defun bibtex-autokey-wrapper (orig-fun &rest args)
+(defun bibtex-autokey-wrapper (orig-fun &rest args)
     "Dynamically bind `bibtex-autokey-prefix-string' to current date."
     (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
       (apply orig-fun args)))
