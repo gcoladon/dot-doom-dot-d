@@ -15,12 +15,9 @@
 ;;      directory (for easy access to its source code).
 
 ;; (debug-on-variable-change 'bibtex-autokey-titlewords)
-;; (debug-on-variable-change 'org-M-RET-may-split-line)
-;;(debug-on-entry 'bibtex-completion-find-note-multiple-files)
-;; (debug-on-entry 'orb-find-note-file)
-;; (debug-on-entry 'helm-bibtex)
+;; (debug-on-entry 'bibtex-completion-find-note-multiple-files)
 ;; (cancel-debug-on-entry 'helm-bibtex)
-;; (debug-on-variable-change 'pdf-view-display-size)
+;; (setq debug-on-error t)
 
 (doom! :input
        chinese
