@@ -17,7 +17,7 @@
 ;; (debug-on-variable-change 'bibtex-autokey-titlewords)
 ;; (debug-on-entry 'bibtex-completion-find-note-multiple-files)
 ;; (cancel-debug-on-entry 'helm-bibtex)
-;; (setq debug-on-error t)
+(setq debug-on-error t)
 
 (doom! :input
        chinese
