@@ -3,6 +3,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+
  '(+org-roam-open-buffer-on-find-file nil t)
  '(bibtex-autokey-prefix-string (format-time-string "%y%m%d_"))
  '(bibtex-autokey-titlewords 2)
@@ -113,7 +114,7 @@
 * Notes
 - " :unnarrowed t)))
  '(org-roam-db-update-method 'immediate)
- '(org-roam-graph-exclude-matcher '("-weekly" "-exclude"))
+ '(org-roam-graph-exclude-matcher '("_weekly" "_exclude"))
  '(org-roam-graph-viewer
    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
  '(org-roam-index-file "2021_0321-exclude_index.org")
