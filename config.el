@@ -818,3 +818,8 @@ Return the commands created, as a list of symbols."
     ;; ;; (global-set-key (kbd "j") 'gpc/cloze-mac)
     ;; (global-set-key (kbd "k") 'self-insert-command)
     ;; (global-set-key (kbd "j") 'self-insert-command)
+
+;; this didn't have the desired effect, but I'm leaving it here for now
+;;(defadvice! gpc/simplify-todos (&rest _)
+;;  :after 'org-set-regexps-and-options (setq org-todo-sets '("TODO" "DONE")))
+
