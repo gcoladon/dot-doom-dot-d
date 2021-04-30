@@ -284,18 +284,17 @@ It also checks the following:
       (apply orig-fn args)))
   (advice-add 'orb-edit-notes :around #'gpc/orb-edit-notes)
 
-  (defun gpc/orb-my-slug (orig-fn title)
+(defun gpc/orb-my-slug (orig-fn title)
     "My version of Roam's title-to-slug to prefix data and chop legth"
     (let* ((today (format-time-string "%y%m%d"))
-           (prefix (substring title 0 6))
+           (prefix (substring title 0 (min 6 (length title))))
            (prefixed_title (if (equal today prefix)
                                title
                              (concat today " " title)))
            (result (apply orig-fn (list prefixed_title)))
            (subs (substring result 0 (min 40 (length result)))))
       subs))
-  (advice-add 'org-roam--title-to-slug :around #'gpc/orb-my-slug))
-
+(advice-add 'org-roam--title-to-slug :around #'gpc/orb-my-slug)
 
  ;; (use-package! org-noter
  ;;    :after (:any org pdf-view)
