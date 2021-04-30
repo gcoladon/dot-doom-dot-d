@@ -284,6 +284,9 @@ It also checks the following:
       (apply orig-fn args)))
   (advice-add 'orb-edit-notes :around #'gpc/orb-edit-notes)
 
+(defun gpc/mon_day ()
+  (format-time-string "%m %d"))
+
 (defun gpc/orb-my-slug (orig-fn title)
     "My version of Roam's title-to-slug to prefix data and chop legth"
     (let* ((today (format-time-string "%y%m%d"))
