@@ -71,6 +71,7 @@
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
+#+TODO: TODO | DONE
 
 * Sun Mar 
 ** Plan
