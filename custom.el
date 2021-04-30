@@ -73,7 +73,7 @@
 #+title: ${title}
 #+TODO: TODO | DONE
 
-* Sun Mar 
+* Sun %(format-time-string \"%b %e\")
 ** Plan
 ** Meetings
 ** Notes
