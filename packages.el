@@ -79,6 +79,11 @@
 
 ;; doing this because of: https://github.com/org-roam/org-roam-bibtex
 ;; When using org-roam via the `+roam` flag
+
+;; why do neither of these work?
+;; (unpin! org-mode)
+;; (unpin! org)
+
 (unpin! org-roam)
 ;; When using bibtex-completion via the `biblio` module
 (unpin! bibtex-completion helm-bibtex ivy-bibtex)
