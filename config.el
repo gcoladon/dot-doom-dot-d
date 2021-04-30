@@ -217,6 +217,7 @@ It also checks the following:
 
 (map! :leader
        :desc "debug-on-entry"              "t d" #'toggle-debug-on-error
+       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
        :desc "Go to Greg's notes.org"      "n g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))
        :desc "HTML-to-Org"                 "n h" (lambda () (interactive) (html2org-clipboard))
        :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
