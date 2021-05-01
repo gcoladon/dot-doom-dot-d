@@ -833,7 +833,7 @@ Return the commands created, as a list of symbols."
    (lambda (num) (concat "* "
                          (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
                          "\n** Plan\n** Meetings\n** Notes\n"))
-   (list -1 0 1 2 3 4 5)
+   (number-sequence -1 5)
    ""))
 
 ;; (gpc/gen-weekly (current-time))
