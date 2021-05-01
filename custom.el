@@ -74,31 +74,31 @@
 #+title: ${title}
 #+TODO: TODO | DONE
 
-* Sun %(format-time-string \"%b %e\")
+* Sun %(format-time-string \"%b %e\" (time-add monday-tv (* -1 24 60 60)))
 ** Plan
 ** Meetings
 ** Notes
-* Mon Mar 
+* Mon %(format-time-string \"%b %e\" (time-add monday-tv (* 0 24 60 60)))
 ** Plan
 ** Meetings
 ** Notes
-* Tue Mar 
+* Tue %(format-time-string \"%b %e\" (time-add monday-tv (* 1 24 60 60)))
 ** Plan
 ** Meetings
 ** Notes
-* Wed Mar 
+* Wed %(format-time-string \"%b %e\" (time-add monday-tv (* 2 24 60 60)))
 ** Plan
 ** Meetings
 ** Notes
-* Thu Mar 
+* Thu %(format-time-string \"%b %e\" (time-add monday-tv (* 3 24 60 60)))
 ** Plan
 ** Meetings
 ** Notes
-* Fri Mar 
+* Fri %(format-time-string \"%b %e\" (time-add monday-tv (* 4 24 60 60)))
 ** Plan
 ** Meetings
 ** Notes
-* Sat Mar 
+* Sat %(format-time-string \"%b %e\" (time-add monday-tv (* 5 24 60 60)))
 ** Plan
 ** Meetings
 ** Notes
