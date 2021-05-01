@@ -139,9 +139,11 @@ It also checks the following:
 ;; https://sachachua.com/blog/2015/08/org-mode-date-arithmetic/
 ;; Thanks Sacha!
 (defun gc/org-roam-find-weekly (which)
-  (org-roam-find-file
-   (concat "Week of "
-           (org-read-date nil nil which)) nil nil t))
+  "Find file corresponding to the week beginning with WHICH"
+  (setq monday-tv (org-read-date nil t which))
+  (let ((monday-str (org-read-date nil nil which)))
+    (org-roam-find-file
+     (concat "Week of " monday-str)) nil nil t))
 
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
