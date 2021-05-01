@@ -3,10 +3,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-
  '(+org-roam-open-buffer-on-find-file nil t)
  '(bibtex-autokey-prefix-string (format-time-string "%y%m%d_"))
- '(bibtex-autokey-titlewords 2)
+ '(bibtex-autokey-titlewords 5)
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
  '(bibtex-completion-bibliography gpc/bib-file)
  '(bibtex-completion-display-formats
@@ -74,34 +73,7 @@
 #+title: ${title}
 #+TODO: TODO | DONE
 %?
-* Sun %(format-time-string \"%b %e\" (time-add monday-tv (* -1 24 60 60)))
-** Plan
-** Meetings
-** Notes
-* Mon %(format-time-string \"%b %e\" (time-add monday-tv (* 0 24 60 60)))
-** Plan
-** Meetings
-** Notes
-* Tue %(format-time-string \"%b %e\" (time-add monday-tv (* 1 24 60 60)))
-** Plan
-** Meetings
-** Notes
-* Wed %(format-time-string \"%b %e\" (time-add monday-tv (* 2 24 60 60)))
-** Plan
-** Meetings
-** Notes
-* Thu %(format-time-string \"%b %e\" (time-add monday-tv (* 3 24 60 60)))
-** Plan
-** Meetings
-** Notes
-* Fri %(format-time-string \"%b %e\" (time-add monday-tv (* 4 24 60 60)))
-** Plan
-** Meetings
-** Notes
-* Sat %(format-time-string \"%b %e\" (time-add monday-tv (* 5 24 60 60)))
-** Plan
-** Meetings
-** Notes
+%(gpc/gen-weekly monday-tv)
 " :unnarrowed t)
      ("m" "minimal" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
