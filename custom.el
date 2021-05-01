@@ -73,7 +73,7 @@
 :END:
 #+title: ${title}
 #+TODO: TODO | DONE
-
+%?
 * Sun %(format-time-string \"%b %e\" (time-add monday-tv (* -1 24 60 60)))
 ** Plan
 ** Meetings
