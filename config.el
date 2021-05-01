@@ -828,3 +828,12 @@ Return the commands created, as a list of symbols."
 ;;(defadvice! gpc/simplify-todos (&rest _)
 ;;  :after 'org-set-regexps-and-options (setq org-todo-sets '("TODO" "DONE")))
 
+(defun gpc/gen-weekly (monday-tv)
+  (mapconcat
+   (lambda (num) (concat "* "
+                         (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
+                         "\n** Plan\n** Meetings\n** Notes\n"))
+   (list -1 0 1 2 3 4 5)
+   ""))
+
+;; (gpc/gen-weekly (current-time))
