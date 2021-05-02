@@ -14,12 +14,15 @@
           gpc/org-dir "~/dev/org/"
           gpc/pdf-dir "~/pdfs"
           gpc/roam-dir "~/dev/org/roam"
-          gpc/bib-file "~/dev/org/references.bib")
+          gpc/bib-file "~/dev/org/references.bib"
+          org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser")
+
   (setq gpc/email "greg@pilot.ai"
         gpc/org-dir "~/org/"
         gpc/pdf-dir "~/pdfs"
         gpc/roam-dir "~/org/roam"
-        gpc/bib-file "~/org/references.bib"))
+        gpc/bib-file "~/org/references.bib"
+        org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
 
 (setq user-mail-address gpc/email
       org-directory gpc/org-dir)
