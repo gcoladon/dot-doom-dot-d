@@ -272,8 +272,11 @@ It also checks the following:
 
 (defun bibtex-autokey-wrapper (orig-fun &rest args)
     "Dynamically bind `bibtex-autokey-prefix-string' to current date."
-    (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
-      (apply orig-fun args)))
+    (let ((result
+           (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
+             (apply orig-fun args))))
+      (substring result 0 (min 30 (length result)))))
+
   (advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
 
   (defun gpc/orb-find-file-open-noter (file)
