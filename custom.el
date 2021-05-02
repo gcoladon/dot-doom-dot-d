@@ -87,10 +87,13 @@
 - " :unnarrowed t)))
  '(org-roam-db-update-method 'immediate)
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude"))
+ '(org-roam-graph-max-title-length 30)
+ '(org-roam-graph-shorten-titles 'wrap)
  '(org-roam-graph-viewer
    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
  '(org-roam-index-file "2021_0321-exclude_index.org")
  '(org-startup-folded nil)
+ '(pdf-misc-print-program-executable "/usr/local/bin/gpr")
  '(projectile-project-search-path "~/src"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
