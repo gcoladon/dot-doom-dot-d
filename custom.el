@@ -87,7 +87,7 @@
 - " :unnarrowed t)))
  '(org-roam-db-update-method 'immediate)
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude"))
- '(org-roam-graph-max-title-length 30)
+ '(org-roam-graph-max-title-length 25)
  '(org-roam-graph-shorten-titles 'wrap)
  '(org-roam-graph-viewer
    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
