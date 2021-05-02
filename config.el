@@ -302,7 +302,7 @@ It also checks the following:
                                title
                              (concat today " " title)))
            (result (apply orig-fn (list prefixed_title)))
-           (subs (substring result 0 (min 40 (length result)))))
+           (subs (substring result 0 (min 30 (length result)))))
       subs))
 (advice-add 'org-roam--title-to-slug :around #'gpc/orb-my-slug)
 
