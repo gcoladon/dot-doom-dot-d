@@ -4,8 +4,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(+org-roam-open-buffer-on-find-file nil t)
- '(bibtex-autokey-prefix-string (format-time-string "%y%m%d_"))
- '(bibtex-autokey-titlewords 5)
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
  '(bibtex-completion-bibliography gpc/bib-file)
  '(bibtex-completion-display-formats
