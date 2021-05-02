@@ -229,29 +229,31 @@ It also checks the following:
       ;;; <leader> r --- roam
       (:prefix-map ("r" . "gc/roam bindings")
        :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
-         :desc "Capture"                       "c" #'org-roam-capture
-         :desc "Find file"                     "f" #'org-roam-find-file
-         :desc "Show graph"                    "g" #'org-roam-graph
-         :desc "Insert"                        "i" #'org-roam-insert
-         :desc "Org Roam"                      "r" #'org-roam
-         :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
-         :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
-         :desc "Toggle property visibility"    "p" #'org-toggle-properties
+       :desc "Capture"                       "c" #'org-roam-capture
+       :desc "Find file"                     "f" #'org-roam-find-file
+       :desc "Show graph"                    "g" #'org-roam-graph
+       :desc "Insert"                        "i" #'org-roam-insert
+       :desc "Org Roam"                      "r" #'org-roam
+       :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
+       :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
+       :desc "Toggle property visibility"    "p" #'org-toggle-properties
 
-         :desc "gpc/get-arxiv"                 "x" #'gpc/get-arxiv
-         :desc "orb-note-actions"              "a" #'orb-note-actions
-         :desc "org-noter-create-skeleton"     "k" #'org-noter-create-skeleton
-         :desc "org-noter"                     "n" #'org-noter
-         :desc "helm-bibtex"                   "h" #'helm-bibtex
-         :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
+       :desc "gpc/get-arxiv"                 "x" #'gpc/get-arxiv
+       :desc "doi-utils-get-bibtex-entry-pdf" "d" #'doi-utils-get-bibtex-entry-pdf
 
-         :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
-         :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
-         :desc "Next Weekly"                   "w" #'gc/org-roam-weekly-next
-         :desc "Next-Next Weekly"              "W" #'gc/org-roam-weekly-next
+       :desc "orb-note-actions"              "a" #'orb-note-actions
+       :desc "org-noter-create-skeleton"     "k" #'org-noter-create-skeleton
+       :desc "org-noter"                     "n" #'org-noter
+       :desc "helm-bibtex"                   "h" #'helm-bibtex
+       :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
 
-         :desc "Graph of 1"                    "1" #'gc/org-roam-graph-1
-         :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2))
+       :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
+       :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
+       :desc "Next Weekly"                   "w" #'gc/org-roam-weekly-next
+       :desc "Next-Next Weekly"              "W" #'gc/org-roam-weekly-next
+
+       :desc "Graph of 1"                    "1" #'gc/org-roam-graph-1
+       :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2))
 
 ;;(doom/increase-font-size 1)
 
