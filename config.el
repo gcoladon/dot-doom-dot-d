@@ -237,11 +237,12 @@ It also checks the following:
 ;; (setq before-save-hook nil)
 
 (map! :leader
-       :desc "debug-on-entry"              "t d" #'toggle-debug-on-error
+       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
+       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
+       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
        :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
        :desc "Go to Greg's notes.org"      "n g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))
        :desc "HTML-to-Org"                 "n h" (lambda () (interactive) (html2org-clipboard))
-       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
        :desc "Bury buffer"                 "w y" #'bury-buffer)
 
 (map! :leader
