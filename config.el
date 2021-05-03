@@ -272,7 +272,10 @@ It also checks the following:
        :desc "Next-Next Weekly"              "W" #'gc/org-roam-weekly-next
 
        :desc "Graph of 1"                    "1" #'gc/org-roam-graph-1
-       :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2))
+       :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2
+       :desc "Graph of 3"                    "3" #'gc/org-roam-graph-3
+       :desc "Graph of 4"                    "4" #'gc/org-roam-graph-4
+       :desc "Graph of 5"                    "5" #'gc/org-roam-graph-5))
 
 ;;(doom/increase-font-size 1)
 
