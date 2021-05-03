@@ -178,6 +178,22 @@ It also checks the following:
   (interactive)
   (org-roam-graph 2))
 
+(defun gc/org-roam-graph-3 ()
+  "Generate a graph that goes out a distance of three edges"
+  (interactive)
+  (org-roam-graph 3))
+
+(defun gc/org-roam-graph-4 ()
+  "Generate a graph that goes out a distance of four edges"
+  (interactive)
+  (org-roam-graph 4))
+
+(defun gc/org-roam-graph-5 ()
+  "Generate a graph that goes out a distance of five edges"
+  (interactive)
+  (org-roam-graph 5))
+
+
 ;; Why not, I use these functions all the time, a single chord makes sense
 (global-set-key (kbd "s-r") 'org-roam-find-file)
 (global-set-key (kbd "s-i") 'org-roam-insert)
