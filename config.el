@@ -148,6 +148,15 @@ It also checks the following:
     (org-roam-find-file
      (concat "Week of " monday-str)) nil nil t))
 
+(defun gc/org-roam-monthly ()
+  "Find the monthly-file for this month."
+  (interactive)
+  (setq
+   next-first (org-read-date nil t "1")
+   first-tv (org-read-date nil t "--m" nil next-first)
+   first-str (org-read-date nil nil "--m" nil next-first))
+  (org-roam-find-file (concat "Month of " first-str)))
+
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
   (interactive)
@@ -268,6 +277,7 @@ It also checks the following:
        :desc "helm-bibtex"                   "h" #'helm-bibtex
        :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
 
+       :desc "This Monthly"                  "m" #'gc/org-roam-monthly
        :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
        :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
        :desc "Next Weekly"                   "w" #'gc/org-roam-weekly-next
