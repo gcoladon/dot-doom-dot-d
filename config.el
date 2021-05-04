@@ -241,6 +241,7 @@ It also checks the following:
        :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
        :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
        :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
+       :desc "org-forward-heading-same-level" "n C-f" #'org-forward-heading-same-level
        :desc "Go to Greg's notes.org"      "n g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))
        :desc "HTML-to-Org"                 "n h" (lambda () (interactive) (html2org-clipboard))
        :desc "Bury buffer"                 "w y" #'bury-buffer)
