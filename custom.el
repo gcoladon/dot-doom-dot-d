@@ -84,6 +84,7 @@
 * Notes
 - " :unnarrowed t)))
  '(org-roam-db-update-method 'immediate)
+ '(org-roam-graph-edge-extra-config '(("color" . "#333333") ("dir" . "back")))
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude"))
  '(org-roam-graph-executable "neato")
  '(org-roam-graph-extra-config '(("overlap" . "false")))
