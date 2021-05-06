@@ -74,6 +74,11 @@
 ;;  :recipe (:host github :repo "org-roam/org-roam"))
 ;;(package! org-roam
 ;;  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+
+(unpin! org-roam)
+;;(package! org-roam
+;;  :recipe (:host github :repo "gcoladon/org-roam"))
+
 (package! org-roam-bibtex
   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
@@ -84,9 +89,11 @@
 ;; (unpin! org-mode)
 ;; (unpin! org)
 
-(unpin! org-roam)
+
+
 ;; When using bibtex-completion via the `biblio` module
 (unpin! bibtex-completion helm-bibtex ivy-bibtex)
+
 
 (package! pandoc)
 
