@@ -88,6 +88,7 @@
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude"))
  '(org-roam-graph-executable "neato")
  '(org-roam-graph-extra-config '(("overlap" . "false")))
+ '(org-roam-graph-filetype "pdf")
  '(org-roam-graph-max-title-length 25)
  '(org-roam-graph-shorten-titles 'wrap)
  '(org-startup-folded nil)
