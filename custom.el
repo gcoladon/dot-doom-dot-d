@@ -18,7 +18,7 @@
      "url" "file" "author-or-editor-abbrev" "keywords"))
  '(orb-switch-persp t)
  '(orb-templates
-   '(("n" "ref+noter" plain #'org-roam-capture--get-point "" :file-name "${slug}" :head "#+TITLE: ${title}
+   '(("n" "ref+noter" plain #'org-roam-capture--get-point "" :file-name "roam-stem/${slug}" :head "#+TITLE: ${title}
 #+ROAM_KEY: cite:${citekey}
 #+ROAM_TAGS:
 
@@ -47,7 +47,17 @@
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
  '(org-roam-capture-templates
-   '(("b" "blank" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
+   '(("w" "blank work" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
+:ID:       %<%y%m%d_%H%M%S>
+:END:
+#+title: ${title}
+" :unnarrowed t)
+     ("s" "blank stem" plain #'org-roam-capture--get-point "%?" :file-name "roam-stem/${slug}" :head ":PROPERTIES:
+:ID:       %<%y%m%d_%H%M%S>
+:END:
+#+title: ${title}
+" :unnarrowed t)
+     ("h" "blank home" plain #'org-roam-capture--get-point "%?" :file-name "roam-personal/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
