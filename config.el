@@ -11,9 +11,10 @@
                                   (shell-command-to-string "ifconfig en0 | grep ether"))
         "ether f0:18:98:9a:c9:2c ")
     (setq gpc/email "gcoladon@gmail.com"
-          gpc/org-dir "~/dev/org/"
+          gpc/org-dir "~/org-roam/"
           gpc/pdf-dir "~/pdfs"
-          gpc/roam-dir "~/dev/org/roam"
+          ;; gpc/roam-dir "~/"
+          ;; gpc/roam-dir "~/roam/"
           gpc/bib-file "~/dev/org/references.bib"
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser")
 
