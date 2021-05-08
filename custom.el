@@ -9,9 +9,9 @@
  '(bibtex-completion-display-formats
    '((t . "${author:20} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
  '(bibtex-completion-library-path gpc/pdf-dir)
- '(bibtex-completion-notes-path gpc/roam-dir)
+ '(bibtex-completion-notes-path gpc/org-dir)
  '(bibtex-completion-pdf-field "file")
- '(deft-directory gpc/roam-dir)
+ '(deft-directory gpc/org-dir)
  '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 40)))
  '(orb-preformat-keywords
    '(("citekey" . "=key=")
@@ -32,7 +32,7 @@
 :END:
 ")))
  '(org-M-RET-may-split-line t)
- '(org-agenda-files (list gpc/org-dir gpc/roam-dir))
+ '(org-agenda-files (list gpc/org-dir))
  '(org-id-link-to-org-use-id t)
  '(org-id-method 'ts)
  '(org-id-ts-format "%y%m%d_%H%M%S")
@@ -42,7 +42,7 @@
  '(org-noter-always-create-frame nil)
  '(org-noter-doc-split-fraction '(0.6 . 0.6))
  '(org-ref-default-bibliography (list gpc/bib-file))
- '(org-ref-notes-directory gpc/roam-dir)
+ '(org-ref-notes-directory gpc/org-dir)
  '(org-ref-pdf-directory gpc/pdf-dir)
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
