@@ -155,7 +155,7 @@ It also checks the following:
    next-first (org-read-date nil t "1")
    first-tv (org-read-date nil t "--m" nil next-first)
    first-str (org-read-date nil nil "--m" nil next-first))
-  (org-roam-find-file (concat "Month of " first-str)))
+  (org-roam-find-file (concat "Month of " (substring first-str 0 7))))
 
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
