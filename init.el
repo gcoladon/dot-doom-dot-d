@@ -14,7 +14,7 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-;; (debug-on-variable-change 'bibtex-autokey-titlewords)
+;; (debug-on-variable-change 'org-roam-directory)
 ;; (debug-on-entry 'bibtex-completion-find-note-multiple-files)
 ;; (cancel-debug-on-entry 'helm-bibtex)
 ;; (setq debug-on-error t)
@@ -62,7 +62,7 @@
        fold              ; (nigh) universal code folding
        ;;(format +onsave)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
-       ;;lispy             ; vim for lisp, for people who don't like vim
+       lispy             ; vim for lisp, for people who don't like vim
        ;;multiple-cursors  ; editing in many places at once
        ;;objed             ; text object editing for the innocent
        ;;parinfer          ; turn lisp into python, sort of
