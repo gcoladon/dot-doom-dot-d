@@ -62,7 +62,7 @@
 :END:
 #+title: ${title}
 " :unnarrowed t)
-     ("p" "person" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
+     ("p" "person" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
@@ -75,7 +75,7 @@
 * Phone :: 
 * Notes
 - " :unnarrowed t)
-     ("w" "weekly" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
+     ("W" "weekly" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
@@ -83,7 +83,7 @@
 %?
 %(gpc/gen-weekly monday-tv)
 " :unnarrowed t)
-     ("m" "minimal" plain #'org-roam-capture--get-point "%?" :file-name "${slug}" :head ":PROPERTIES:
+     ("m" "minimal" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
@@ -95,7 +95,7 @@
 - " :unnarrowed t)))
  '(org-roam-db-update-method 'immediate)
  '(org-roam-graph-edge-extra-config '(("color" . "#333333") ("dir" . "back")))
- '(org-roam-graph-exclude-matcher '("_weekly" "_exclude"))
+ '(org-roam-graph-exclude-matcher '("_weekly" "_exclude" "_monthly"))
  '(org-roam-graph-executable "neato")
  '(org-roam-graph-extra-config '(("overlap" . "false")))
  '(org-roam-graph-filetype "pdf")
