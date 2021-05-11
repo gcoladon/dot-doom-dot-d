@@ -32,7 +32,7 @@
 :END:
 ")))
  '(org-M-RET-may-split-line t)
- '(org-agenda-files (list gpc/org-dir))
+ '(org-agenda-files 'gpc/org-agenda-files)
  '(org-id-link-to-org-use-id t)
  '(org-id-method 'ts)
  '(org-id-ts-format "%y%m%d_%H%M%S")
