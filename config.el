@@ -9,7 +9,7 @@
 
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
                                   (shell-command-to-string "ifconfig en0 | grep ether"))
-        "ether f0:18:98:9a:c9:2c ")
+           "ether f0:18:98:9a:c9:2c ")
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-dir "~/org-roam/"
           gpc/org-agenda-files (list (concat gpc/org-dir "roam/roam-personal/")
