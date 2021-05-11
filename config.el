@@ -269,7 +269,7 @@ It also checks the following:
        :desc "Find file"                     "f" #'org-roam-find-file
        :desc "Show graph"                    "g" #'org-roam-graph
        :desc "Insert"                        "i" #'org-roam-insert
-       :desc "Org Roam"                      "r" #'org-roam
+       :desc "Insert last stored link"       "s" #'org-insert-last-stored-link
        :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
        :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
        :desc "Toggle property visibility"    "p" #'org-toggle-properties
@@ -293,7 +293,8 @@ It also checks the following:
        :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2
        :desc "Graph of 3"                    "3" #'gc/org-roam-graph-3
        :desc "Graph of 4"                    "4" #'gc/org-roam-graph-4
-       :desc "Graph of 5"                    "5" #'gc/org-roam-graph-5))
+       :desc "Graph of 5"                    "5" #'gc/org-roam-graph-5)
+      )
 
 ;;(doom/increase-font-size 1)
 
