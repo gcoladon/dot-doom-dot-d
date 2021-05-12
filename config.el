@@ -883,3 +883,5 @@ Return the commands created, as a list of symbols."
    ""))
 
 ;; (gpc/gen-weekly (current-time))
+
+(global-set-key (kbd "M-=") 'mark-whole-buffer)
