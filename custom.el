@@ -12,6 +12,12 @@
  '(bibtex-completion-notes-path gpc/org-dir)
  '(bibtex-completion-pdf-field "file")
  '(deft-directory gpc/org-dir)
+ '(deft-recursive t)
+ '(deft-strip-summary-regexp ":PROPERTIES:
+\\(.+
+\\)+:END:
+#\\+title: ")
+ '(deft-use-filename-as-title t)
  '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 40)))
  '(orb-preformat-keywords
    '(("citekey" . "=key=")
