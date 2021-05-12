@@ -15,8 +15,6 @@
           gpc/org-agenda-files (list (concat gpc/org-dir "roam/roam-personal/")
                                      (concat gpc/org-dir "roam/roam-stem/"))
           gpc/pdf-dir "~/pdfs"
-          ;; gpc/roam-dir "~/"
-          ;; gpc/roam-dir "~/roam/"
           gpc/bib-file "~/dev/org/references.bib"
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser")
 
@@ -25,7 +23,6 @@
         gpc/org-agenda-files (list (concat gpc/org-dir "roam/roam-pilot/")
                                    (concat gpc/org-dir "roam/roam-stem/"))
         gpc/pdf-dir "~/pdfs"
-        ;; gpc/roam-dir "~/org/roam"
         gpc/bib-file "~/org/references.bib"
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
 
