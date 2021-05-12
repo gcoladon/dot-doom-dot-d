@@ -53,22 +53,22 @@
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
  '(org-roam-capture-templates
-   '(("w" "blank work" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
+   '(("w" "work blank" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
 " :unnarrowed t)
-     ("s" "blank stem" plain #'org-roam-capture--get-point "%?" :file-name "roam-stem/${slug}" :head ":PROPERTIES:
+     ("s" "stem blank" plain #'org-roam-capture--get-point "%?" :file-name "roam-stem/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
 " :unnarrowed t)
-     ("h" "blank home" plain #'org-roam-capture--get-point "%?" :file-name "roam-personal/${slug}" :head ":PROPERTIES:
+     ("h" "home blank" plain #'org-roam-capture--get-point "%?" :file-name "roam-personal/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
 " :unnarrowed t)
-     ("p" "person" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
+     ("p" "work person" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
@@ -81,7 +81,7 @@
 * Phone :: 
 * Notes
 - " :unnarrowed t)
-     ("W" "weekly" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
+     ("W" "work weekly" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
@@ -89,7 +89,7 @@
 %?
 %(gpc/gen-weekly monday-tv)
 " :unnarrowed t)
-     ("m" "minimal" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
+     ("m" "work minimal" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
 :ID:       %<%y%m%d_%H%M%S>
 :END:
 #+title: ${title}
