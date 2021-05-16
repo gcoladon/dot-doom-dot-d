@@ -11,17 +11,17 @@
                                   (shell-command-to-string "ifconfig en0 | grep ether"))
            "ether f0:18:98:9a:c9:2c ")
     (setq gpc/email "gcoladon@gmail.com"
-          gpc/org-dir "~/org-roam/"
-          gpc/org-agenda-files (list (concat gpc/org-dir "roam/roam-personal/")
-                                     (concat gpc/org-dir "roam/roam-stem/"))
+          gpc/org-dir "~/org/"
+          gpc/org-agenda-files (list (concat gpc/org-dir "roam-personal/")
+                                     (concat gpc/org-dir "roam-stem/"))
           gpc/pdf-dir "~/pdfs"
           gpc/bib-file "~/dev/org/references.bib"
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser")
 
   (setq gpc/email "greg@pilot.ai"
         gpc/org-dir "~/org/"
-        gpc/org-agenda-files (list (concat gpc/org-dir "roam/roam-pilot/")
-                                   (concat gpc/org-dir "roam/roam-stem/"))
+        gpc/org-agenda-files (list (concat gpc/org-dir "roam-pilot/")
+                                   (concat gpc/org-dir "roam-stem/"))
         gpc/pdf-dir "~/pdfs"
         gpc/bib-file "~/org/references.bib"
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
