@@ -24,13 +24,15 @@
      "url" "file" "author-or-editor-abbrev" "keywords"))
  '(orb-switch-persp t)
  '(orb-templates
-   '(("n" "ref+noter" plain #'org-roam-capture--get-point "" :file-name "roam-stem/${slug}" :head "#+TITLE: ${title}
+   '(("n" "ref+noter" plain #'org-roam-capture--get-point "" :file-name "roam-stem/${slug}" :head ":PROPERTIES:
+:ID:       %<%y%m%d_%H%M%S>
+:END:
+#+TITLE: ${title}
 #+ROAM_KEY: cite:${citekey}
 #+ROAM_TAGS:
 
 * ${title} %?
 :PROPERTIES:
-:ID: %<%y%m%d_%H%M%S>
 :URL: ${url}
 :AUTHOR: ${author-or-editor-abbrev}
 :NOTER_DOCUMENT: ${file}
