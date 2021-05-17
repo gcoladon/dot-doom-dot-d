@@ -15,15 +15,15 @@
           gpc/org-agenda-files (list (concat gpc/org-dir "roam-personal/")
                                      (concat gpc/org-dir "roam-stem/"))
           gpc/pdf-dir "~/pdfs"
-          gpc/bib-file "~/dev/org/references.bib"
+          gpc/bib-file "~/pdfs/references.bib"
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser")
 
   (setq gpc/email "greg@pilot.ai"
         gpc/org-dir "~/org/"
         gpc/org-agenda-files (list (concat gpc/org-dir "roam-pilot/")
                                    (concat gpc/org-dir "roam-stem/"))
-        gpc/pdf-dir "~/pdfs"
-        gpc/bib-file "~/org/references.bib"
+        gpc/pdf-dir "~/roam-pdfs"
+        gpc/bib-file "~/roam-pdfs/references.bib"
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
 
 (setq user-mail-address gpc/email
@@ -268,6 +268,7 @@ It also checks the following:
        :desc "Find file"                     "f" #'org-roam-find-file
        :desc "Show graph"                    "g" #'org-roam-graph
        :desc "Insert"                        "i" #'org-roam-insert
+       :desc "org-roam-mode"                 "r" #'org-roam-buffer-toggle-display
        :desc "Insert last stored link"       "s" #'org-insert-last-stored-link
        :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
        :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
