@@ -88,7 +88,7 @@
 :END:
 #+title: ${title}
 #+TODO: TODO | DONE
-%?
+
 %(gpc/gen-weekly monday-tv)
 " :unnarrowed t)
      ("m" "work minimal" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:

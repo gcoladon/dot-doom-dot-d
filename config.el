@@ -162,7 +162,9 @@ It also checks the following:
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
   (interactive)
-  (gc/org-roam-find-weekly "-mon"))
+  (if (equal (format-time-string "%a" (current-time)) "Mon")
+      (gc/org-roam-find-weekly "+0")
+          (gc/org-roam-find-weekly "-mon")))
 
 (defun gc/org-roam-weekly-last ()
   "Find the weekly-file for last week."
