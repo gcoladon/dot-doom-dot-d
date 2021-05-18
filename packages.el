@@ -100,6 +100,9 @@
 ;;(package! mathpix.el
 ;;  :recipe (:host github :repo "jethrokuan/mathpix.el"))
 (package! anki-editor)
+;;  I don't know if this is needed or redundant. I'm thinking redundant.
+(package! ox-rst)
+
 ;;(package! gif-screencast
 ;;  :recipe (:host gitlab :repo "ambrevar/emacs-gif-screencast"))
 ;;(package! modus-operandi-theme)
