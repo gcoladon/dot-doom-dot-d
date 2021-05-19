@@ -887,14 +887,14 @@ Return the commands created, as a list of symbols."
 
 ;; https://org-roam.discourse.group/t/prototype-transclusion-block-reference-with-emacs-org-mode/830/96?u=gcoladon
 
-(advice-add #'org-roam-db-insert-file :after
-            #'my/org-id-update-location-at-org-roam-db-insert-file))
+;; (advice-add #'org-roam-db-insert-file :after
+;;             #'my/org-id-update-location-at-org-roam-db-insert-file))
 
-(defun my/org-id-update-location-at-org-roam-db-insert-file ()
-  "Update `org-id-locations-file' and hash table.
-It's meant to be used with `advice-add' :after
-`org-roam-db-insert-file'.  We can assume that this function is
-run wihtin a buffer visiting a file being inserted, as
-insert-file is run within `org-roam-with-file' macro."
-    (when-let ((id (org-entry-get 1 "id")))
-      (org-id-add-location id (buffer-file-name))))
+;; (defun my/org-id-update-location-at-org-roam-db-insert-file ()
+;;   "Update `org-id-locations-file' and hash table.
+;; It's meant to be used with `advice-add' :after
+;; `org-roam-db-insert-file'.  We can assume that this function is
+;; run wihtin a buffer visiting a file being inserted, as
+;; insert-file is run within `org-roam-with-file' macro."
+;;     (when-let ((id (org-entry-get 1 "id")))
+;;       (org-id-add-location id (buffer-file-name))))
