@@ -101,7 +101,10 @@
 ;;  :recipe (:host github :repo "jethrokuan/mathpix.el"))
 (package! anki-editor)
 ;;  I don't know if this is needed or redundant. I'm thinking redundant.
-(package! ox-rst)
+
+;; this didn't work, trying the above
+;; (after! org
+;;   (package! ox-rst))
 
 ;;(package! gif-screencast
 ;;  :recipe (:host gitlab :repo "ambrevar/emacs-gif-screencast"))
@@ -125,3 +128,15 @@
   (smartparens-global-mode -1)
   (org-roam-server-mode)
   (smartparens-global-mode 1))
+
+(package! ox-rst
+  :recipe (:host github :repo "msnoigrs/ox-rst"))
+
+(package! org-transclusion
+  :recipe (:host github :repo "nobiot/org-transclusion"))
+
+(after! org
+  ;; (add-to-list 'load-path "path/to/org-transclusion/")
+  (require 'org-transclusion)
+  ;; (define-key global-map (kbd "<f12>") #'org-transclusion-add-at-point)
+  )

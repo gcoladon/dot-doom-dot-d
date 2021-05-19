@@ -8,7 +8,7 @@
 (setq user-full-name "Greg Coladonato")
 
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
-                                  (shell-command-to-string "ifconfig en0 | grep ether"))
+                                     (shell-command-to-string "ifconfig en0 | grep ether"))
            "ether f0:18:98:9a:c9:2c ")
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-dir "~/org/"
@@ -133,10 +133,10 @@ It also checks the following:
          (buf (dired-noselect dir)))
     (select-window
      (display-buffer-in-side-window buf
-                                   '((side . left)
-                                     (window-width . 30)
-                                     (slot . -1)
-                                     (window-parameters . ((mode-line-format . none))))))))
+                                    '((side . left)
+                                      (window-width . 30)
+                                      (slot . -1)
+                                      (window-parameters . ((mode-line-format . none))))))))
 
 ;; Let's see if I prefer this style of search interaction
 ;; (ctrlf-mode +1)
@@ -164,7 +164,7 @@ It also checks the following:
   (interactive)
   (if (equal (format-time-string "%a" (current-time)) "Mon")
       (gc/org-roam-find-weekly "+0")
-          (gc/org-roam-find-weekly "-mon")))
+    (gc/org-roam-find-weekly "-mon")))
 
 (defun gc/org-roam-weekly-last ()
   "Find the weekly-file for last week."
@@ -205,7 +205,6 @@ It also checks the following:
   "Generate a graph that goes out a distance of five edges"
   (interactive)
   (org-roam-graph 5))
-
 
 ;; Why not, I use these functions all the time, a single chord makes sense
 (global-set-key (kbd "s-r") 'org-roam-find-file)
@@ -312,55 +311,55 @@ It also checks the following:
    0))
 
 (defun bibtex-autokey-wrapper (orig-fun &rest args)
-    "Dynamically bind `bibtex-autokey-prefix-string' to current date."
-    (let ((result
-           (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
-             (apply orig-fun args))))
-      (substring result 0 (min 30 (length result)))))
+  "Dynamically bind `bibtex-autokey-prefix-string' to current date."
+  (let ((result
+         (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
+           (apply orig-fun args))))
+    (substring result 0 (min 30 (length result)))))
 
-  (advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
+(advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
 
-  (defun gpc/orb-find-file-open-noter (file)
-    (find-file file)
-    (outline-next-visible-heading 1)
-    (org-noter)
-    (other-window 1)
-    (org-roam)
-    (outline-next-visible-heading -1))
-  (defun gpc/orb-edit-notes (orig-fn &rest args)
-    (let ((org-roam-find-file-function #'gpc/orb-find-file-open-noter))
-      (apply orig-fn args)))
-  (advice-add 'orb-edit-notes :around #'gpc/orb-edit-notes)
+(defun gpc/orb-find-file-open-noter (file)
+  (find-file file)
+  (outline-next-visible-heading 1)
+  (org-noter)
+  (other-window 1)
+  (org-roam)
+  (outline-next-visible-heading -1))
+(defun gpc/orb-edit-notes (orig-fn &rest args)
+  (let ((org-roam-find-file-function #'gpc/orb-find-file-open-noter))
+    (apply orig-fn args)))
+;; (advice-add 'orb-edit-notes :around #'gpc/orb-edit-notes)
 
 (defun gpc/mon_day ()
   (format-time-string "%m %d"))
 
 (defun gpc/orb-my-slug (orig-fn title)
-    "My version of Roam's title-to-slug to prefix data and chop legth"
-    (let* ((today (format-time-string "%y%m%d"))
-           (prefix (substring title 0 (min 6 (length title))))
-           (prefixed_title (if (equal today prefix)
-                               title
-                             (concat today " " title)))
-           (result (apply orig-fn (list prefixed_title)))
-           (subs (substring result 0 (min 30 (length result)))))
-      subs))
+  "My version of Roam's title-to-slug to prefix data and chop legth"
+  (let* ((today (format-time-string "%y%m%d"))
+         (prefix (substring title 0 (min 6 (length title))))
+         (prefixed_title (if (equal today prefix)
+                             title
+                           (concat today " " title)))
+         (result (apply orig-fn (list prefixed_title)))
+         (subs (substring result 0 (min 30 (length result)))))
+    subs))
 (advice-add 'org-roam--title-to-slug :around #'gpc/orb-my-slug)
 
- ;; (use-package! org-noter
- ;;    :after (:any org pdf-view)
- ;;    :config
- ;;    (setq org-noter-always-create-frame nil
- ;;          org-noter-auto-save-last-location t)
- ;;    (defun org-noter-init-pdf-view ()
- ;;      (pdf-view-fit-width-to-window))
- ;;      ;; (pdf-view-auto-slice-minor-mode)
- ;;    (add-hook 'pdf-view-mode-hook 'org-noter-init-pdf-view))
+;; (use-package! org-noter
+;;    :after (:any org pdf-view)
+;;    :config
+;;    (setq org-noter-always-create-frame nil
+;;          org-noter-auto-save-last-location t)
+;;    (defun org-noter-init-pdf-view ()
+;;      (pdf-view-fit-width-to-window))
+;;      ;; (pdf-view-auto-slice-minor-mode)
+;;    (add-hook 'pdf-view-mode-hook 'org-noter-init-pdf-view))
 
 (use-package! org-noter
-    :after pdf-view
-    :config
-    (add-hook 'pdf-view-mode-hook 'pdf-view-fit-width-to-window))
+  :after pdf-view
+  :config
+  (add-hook 'pdf-view-mode-hook 'pdf-view-fit-width-to-window))
 
 (defun gpc/get-arxiv ()
   "Use the defaults for all three variables, don't ask me!!"
@@ -388,13 +387,13 @@ It also checks the following:
 
 ;; Check out all of Doom's templates and see if they are better than mine
 
-  ;; (setq org-capture-templates
-  ;;       '(("t" "Todo" entry (file+headline "" "Inbox")
-  ;;          "* TODO %?\n  %i" :prepend t)
-  ;;         ("T" "Todo w/backlink" entry (file+headline "" "Inbox")
-  ;;          "* TODO %?\n  %i\n  %a" :prepend t)
-  ;;         ("j" "Journal" entry (file+olp+datetree "journal.org" "Journal")
-  ;;          "* %?\nEntered on %U\n  %i\n  %a")))
+;; (setq org-capture-templates
+;;       '(("t" "Todo" entry (file+headline "" "Inbox")
+;;          "* TODO %?\n  %i" :prepend t)
+;;         ("T" "Todo w/backlink" entry (file+headline "" "Inbox")
+;;          "* TODO %?\n  %i\n  %a" :prepend t)
+;;         ("j" "Journal" entry (file+olp+datetree "journal.org" "Journal")
+;;          "* %?\nEntered on %U\n  %i\n  %a")))
 
 
 ;; I think I want to install these. Is there a shortcut?
@@ -418,53 +417,53 @@ It also checks the following:
 ;; I would like to figure out how to make this work again
 ;;
 ;;  (use-package popup)
-  ;; (use-package google-translate
-  ;;   :demand t
-  ;;   :init
-  ;;   (require 'google-translate)
+;; (use-package google-translate
+;;   :demand t
+;;   :init
+;;   (require 'google-translate)
 
-  ;;   :functions (my-google-translate-at-point google-translate--search-tkk)
-  ;;   :custom
-  ;;   (google-translate-backend-method 'curl)
-  ;;   :config
-  ;;   (defun google-translate--search-tkk () "Search TKK." (list 430675 2721866130))
-  ;;   (defun my-google-translate-at-point()
-  ;;     "reverse translate if prefix"
-  ;;     (interactive)
-  ;;     (if current-prefix-arg
-  ;;         (google-translate-at-point)
-  ;;       (google-translate-at-point-reverse)))
-  ;;   (setq google-translate-default-source-language "en"
-  ;;         google-translate-default-target-language "it"))
+;;   :functions (my-google-translate-at-point google-translate--search-tkk)
+;;   :custom
+;;   (google-translate-backend-method 'curl)
+;;   :config
+;;   (defun google-translate--search-tkk () "Search TKK." (list 430675 2721866130))
+;;   (defun my-google-translate-at-point()
+;;     "reverse translate if prefix"
+;;     (interactive)
+;;     (if current-prefix-arg
+;;         (google-translate-at-point)
+;;       (google-translate-at-point-reverse)))
+;;   (setq google-translate-default-source-language "en"
+;;         google-translate-default-target-language "it"))
 
-  (defun gpc/fetch-tasks ()
-    "Run the extractor from Sheets, Open the file, and also open the Sheet"
-    (interactive)
-    (shell-command "~/bin/tasks.sh")
-    (find-file "~/dev/org/incoming.org")
-    (browse-url "https://docs.google.com/spreadsheets/d/1T8qe2m4z9ViJ9W72PJb8COCmpptr5D5312vM6e32iPM/edit#gid=0"))
+(defun gpc/fetch-tasks ()
+  "Run the extractor from Sheets, Open the file, and also open the Sheet"
+  (interactive)
+  (shell-command "~/bin/tasks.sh")
+  (find-file "~/dev/org/incoming.org")
+  (browse-url "https://docs.google.com/spreadsheets/d/1T8qe2m4z9ViJ9W72PJb8COCmpptr5D5312vM6e32iPM/edit#gid=0"))
 
-  (defun gpc/org-table-goto-beginning ()
-    (interactive)
-    (if (org-at-table-p)
-        (goto-char (org-table-begin))
-      (message "Can't go to beginning of table if not inside a table")))
+(defun gpc/org-table-goto-beginning ()
+  (interactive)
+  (if (org-at-table-p)
+      (goto-char (org-table-begin))
+    (message "Can't go to beginning of table if not inside a table")))
 
-  (defun gpc/org-table-goto-end ()
-    (interactive)
-    (if (org-at-table-p)
-        (goto-char (org-table-end))
-      (message "Can't go to end of table if not inside a table")))
+(defun gpc/org-table-goto-end ()
+  (interactive)
+  (if (org-at-table-p)
+      (goto-char (org-table-end))
+    (message "Can't go to end of table if not inside a table")))
 
-  ;; (define-key org-mode-map (kbd "C-c C-g a") #'gpc/org-table-goto-beginning)
-  ;; (define-key org-mode-map (kbd "C-c C-g e") #'gpc/org-table-goto-end)
+;; (define-key org-mode-map (kbd "C-c C-g a") #'gpc/org-table-goto-beginning)
+;; (define-key org-mode-map (kbd "C-c C-g e") #'gpc/org-table-goto-end)
 
-  (defun gpc/clean-slate ()
-    "Go to the top of the page and open just a bit."
-    (interactive)
-    (beginning-of-buffer)
-    (org-shifttab 1)
-    )
+(defun gpc/clean-slate ()
+  "Go to the top of the page and open just a bit."
+  (interactive)
+  (beginning-of-buffer)
+  (org-shifttab 1)
+  )
 
 ;;; ucs-cmds.el --- Create commands to insert Unicode chars. -*- lexical-binding:t -*-
 ;;
@@ -780,8 +779,8 @@ Interactively, or with non-nil MSGP arg, echo confirmation of the
 command creation."
   (interactive
    (list (read-char-by-name "Unicode (name or hex): ")
-     (prefix-numeric-value current-prefix-arg)
-     t
+         (prefix-numeric-value current-prefix-arg)
+         t
          t))
   (unless (characterp character) ; Protect `insert-char' from low-level err.
     (error "No such Unicode character: `%s'" character))
@@ -835,9 +834,9 @@ Return the commands created, as a list of symbols."
 (define-key macron-map (kbd "O") 'latin-capital-letter-o-with-macron)
 (define-key macron-map (kbd "U") 'latin-capital-letter-u-with-macron)
 
-  ;; (global-set-key (kbd "s-t") 'my-google-translate-at-point)
-  ;; (global-set-key (kbd "s-w") 'org-web-tools-insert-web-page-as-entry)
-  ;; (global-set-key (kbd "s-C") 'gpc/clean-slate)
+;; (global-set-key (kbd "s-t") 'my-google-translate-at-point)
+;; (global-set-key (kbd "s-w") 'org-web-tools-insert-web-page-as-entry)
+;; (global-set-key (kbd "s-C") 'gpc/clean-slate)
 
 (defun gpc/makron ()
   "Replace un-macroned letter under point with the corresponding macronized letter"
@@ -864,11 +863,11 @@ Return the commands created, as a list of symbols."
     (goto-char (+ end 6))
     (insert "}}")))
 
-    ;; (global-set-key (kbd "k") 'gpc/makron)
-    ;; (global-set-key (kbd "j") 'gpc/cloze)
-    ;; ;; (global-set-key (kbd "j") 'gpc/cloze-mac)
-    ;; (global-set-key (kbd "k") 'self-insert-command)
-    ;; (global-set-key (kbd "j") 'self-insert-command)
+;; (global-set-key (kbd "k") 'gpc/makron)
+;; (global-set-key (kbd "j") 'gpc/cloze)
+;; ;; (global-set-key (kbd "j") 'gpc/cloze-mac)
+;; (global-set-key (kbd "k") 'self-insert-command)
+;; (global-set-key (kbd "j") 'self-insert-command)
 
 ;; this didn't have the desired effect, but I'm leaving it here for now
 ;;(defadvice! gpc/simplify-todos (&rest _)
@@ -885,3 +884,17 @@ Return the commands created, as a list of symbols."
 ;; (gpc/gen-weekly (current-time))
 
 (global-set-key (kbd "M-=") 'mark-whole-buffer)
+
+;; https://org-roam.discourse.group/t/prototype-transclusion-block-reference-with-emacs-org-mode/830/96?u=gcoladon
+
+(advice-add #'org-roam-db-insert-file :after
+            #'my/org-id-update-location-at-org-roam-db-insert-file))
+
+(defun my/org-id-update-location-at-org-roam-db-insert-file ()
+  "Update `org-id-locations-file' and hash table.
+It's meant to be used with `advice-add' :after
+`org-roam-db-insert-file'.  We can assume that this function is
+run wihtin a buffer visiting a file being inserted, as
+insert-file is run within `org-roam-with-file' macro."
+    (when-let ((id (org-entry-get 1 "id")))
+      (org-id-add-location id (buffer-file-name))))

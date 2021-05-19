@@ -17,7 +17,7 @@
 \\(.+
 \\)+:END:
 #\\+title: ")
- '(deft-use-filename-as-title t)
+ '(deft-use-filename-as-title t t)
  '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 40)))
  '(orb-preformat-keywords
    '(("citekey" . "=key=")
@@ -40,7 +40,7 @@
 :END:
 ")))
  '(org-M-RET-may-split-line t)
- '(org-agenda-files 'gpc/org-agenda-files)
+ '(org-agenda-files gpc/org-agenda-files)
  '(org-id-link-to-org-use-id t)
  '(org-id-method 'ts)
  '(org-id-ts-format "%y%m%d_%H%M%S")
@@ -112,7 +112,8 @@
  '(org-roam-graph-shorten-titles 'wrap)
  '(org-startup-folded nil)
  '(pdf-misc-print-program-executable "/usr/local/bin/gpr")
- '(projectile-project-search-path "~/src"))
+ '(projectile-project-search-path "~/src")
+ '(save-place-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
