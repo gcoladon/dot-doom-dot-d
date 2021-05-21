@@ -263,6 +263,7 @@ It also checks the following:
       ;;; <leader> r --- roam
       (:prefix-map ("r" . "gc/roam bindings")
        :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+       :desc "isbn-to-bibtex"                "B" #'isbn-to-bibtex
        :desc "Capture"                       "c" #'org-roam-capture
        :desc "Find file"                     "f" #'org-roam-find-file
        :desc "Show graph"                    "g" #'org-roam-graph
