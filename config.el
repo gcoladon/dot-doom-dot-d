@@ -254,8 +254,8 @@ It also checks the following:
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
       :desc "org-forward-heading-same-level" "n C-f" #'org-forward-heading-same-level
-      :desc "Go to Greg's notes.org"      "n g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))
-      :desc "HTML-to-Org"                 "n h" (lambda () (interactive) (html2org-clipboard))
+      :desc "Go to Greg's notes.org"      "n g" (cmd! (find-file "~/dev/org/notes.org"))
+      :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
       ;; :desc "Search the elisp index"      "s e" (lambda () (interactive) (elisp-index-search))
       :desc "Bury buffer"                 "w y" #'bury-buffer)
 
