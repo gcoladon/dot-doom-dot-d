@@ -135,7 +135,7 @@
 (package! org-transclusion
   :recipe (:host github :repo "nobiot/org-transclusion"))
 
-(after! org
+(after! org-tranclusion
   ;; (add-to-list 'load-path "path/to/org-transclusion/")
   (require 'org-transclusion)
   ;; (define-key global-map (kbd "<f12>") #'org-transclusion-add-at-point)
