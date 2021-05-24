@@ -49,85 +49,11 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-;; https://org-roam.discourse.group/t/doom-emacs-how-to-upgrade-org-roam/764/9
-;; I'm hoping that this gets me the new node-based org-roam features.
-;; (unpin! org-roam company-org-roam)
-;; (package! org-roam :pin "9b0a45f105a59719e8810bbde236d3d1d4a1c57d")
-
-;; this didn't get me the v2 code!
-;; (package! org-roam :recipe (:branch "v2"))
-;; (package! google-this)
-
-;; Try to figure out how to add a binding to google-this inside the
-;; search keybinding prefix, which is impemented here:
-;; /Users/greg/.emacs.d/modules/config/default/+emacs-bindings.el
-;; (define-key [doom-prefix-map] (kbd "c") 'avy-goto-char)
-
-;; -*- no-byte-compile: t; -*-
-;; (package! ctrlf)
-;;(package! dired-narrow)
-;; (package! deadgrep)
-;;(package! easy-kill)
-;;(package! org-clock-convenience)
-;;(package! company-posframe)
-;;(package! org-roam
-;;  :recipe (:host github :repo "org-roam/org-roam"))
-;;(package! org-roam
-;;  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
-
-(unpin! org-roam)
-;;(package! org-roam
-;;  :recipe (:host github :repo "gcoladon/org-roam"))
-
-(package! org-roam-bibtex
-  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
-
-;; doing this because of: https://github.com/org-roam/org-roam-bibtex
-;; When using org-roam via the `+roam` flag
-
-;; why do neither of these work?
-;; (unpin! org-mode)
-;; (unpin! org)
-
-
-
-;; When using bibtex-completion via the `biblio` module
-(unpin! bibtex-completion helm-bibtex ivy-bibtex)
-
-
 (package! pandoc)
-
-;;(package! mathpix.el
-;;  :recipe (:host github :repo "jethrokuan/mathpix.el"))
 (package! anki-editor)
-;;  I don't know if this is needed or redundant. I'm thinking redundant.
-
-;; this didn't work, trying the above
-;; (after! org
-;;   (package! ox-rst))
-
-;;(package! gif-screencast
-;;  :recipe (:host gitlab :repo "ambrevar/emacs-gif-screencast"))
-;;(package! modus-operandi-theme)
-;;(package! outshine)
 ;;(package! org-download)
 ;;(package! ox-hugo
 ;;  :recipe (:host github :repo "jethrokuan/ox-hugo"))
-;;(package! ox-texinfo+
-;;  :recipe (:host github :repo "tarsius/ox-texinfo-plus"))
-;;(package! nov
-;;  :recipe (:type git :repo "https://depp.brause.cc/nov.el.git"))
-;;(package! git-link)
-;;(package! yaml-mode)
-(package! org-roam-server
-  :recipe (:host github :repo "org-roam/org-roam-server"))
-;;(package! emmet-mode)
-;;(package! citeproc-org)
-
-(after! org-roam
-  (smartparens-global-mode -1)
-  (org-roam-server-mode)
-  (smartparens-global-mode 1))
 
 (package! ox-rst
   :recipe (:host github :repo "msnoigrs/ox-rst"))
