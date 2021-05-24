@@ -298,19 +298,6 @@ It also checks the following:
 
 ;;(doom/increase-font-size 1)
 
-;; following instructions from https://github.com/org-roam/org-roam-bibtex
-(use-package! org-roam-bibtex
-  :after org-roam
-  :hook (org-roam-mode . org-roam-bibtex-mode)
-  :config
-  (require 'org-ref)
-  (bibtex-set-dialect 'BibTeX)
-  (helm-add-action-to-source
-   "Edit org-noter Notes"
-   'helm-bibtex-edit-notes
-   helm-source-bibtex
-   0))
-
 (defun bibtex-autokey-wrapper (orig-fun &rest args)
   "Dynamically bind `bibtex-autokey-prefix-string' to current date."
   (let ((result
@@ -362,9 +349,50 @@ It also checks the following:
   :config
   (add-hook 'pdf-view-mode-hook 'pdf-view-fit-width-to-window))
 
+(use-package! org-transclusion
+  :after-call org-roam-node-find)
+
+(use-package! ox-rst
+  :after-call org-roam-node-find)
+
+;; :after-call org-roam-node-find
+;; :after-call after-find-file
+
+;; (use-package! projectile
+;;   :after-call (pre-command-hook after-find-file dired-before-readin-hook))
+
+;; might be needed to get the org-roam-server to work.
+;; (after! org-roam
+;;   (smartparens-global-mode -1)
+;;   (org-roam-server-mode)
+;;   (smartparens-global-mode 1))
+
+(after! org-roam
+  (org-roam-bibtex-mode))
+
+(use-package! org-roam
+  :config
+  (setq org-roam-directory "/Users/greg/org/")
+  (org-roam-setup))
+
+;; following instructions from https://github.com/org-roam/org-roam-bibtex
+(use-package! org-roam-bibtex
+  ;; :after org-roam
+  ;; :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (require 'org-ref)
+  (bibtex-set-dialect 'BibTeX)
+  (helm-add-action-to-source
+   "Edit org-noter Notes"
+   'helm-bibtex-edit-notes
+   helm-source-bibtex
+   0))
+
 (defun gpc/get-arxiv ()
   "Use the defaults for all three variables, don't ask me!!"
   (interactive)
+  (require 'org-ref)
+  (bibtex-set-dialect 'BibTeX)
   (arxiv-get-pdf-add-bibtex-entry (arxiv-maybe-arxiv-id-from-current-kill)
                                   (car org-ref-default-bibliography)
                                   (concat org-ref-pdf-directory "/")))
@@ -878,7 +906,7 @@ Return the commands created, as a list of symbols."
   (mapconcat
    (lambda (num) (concat "* "
                          (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
-                         "\n** Plan\n** Meetings\n** Notes\n"))
+                         "\n** Plan\n*** TODO Check commits to master\n** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
    (number-sequence -1 5)
    ""))
 
