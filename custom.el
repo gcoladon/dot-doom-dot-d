@@ -9,7 +9,7 @@
  '(bibtex-completion-display-formats
    '((t . "${author:20} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
  '(bibtex-completion-library-path gpc/pdf-dir)
- '(bibtex-completion-notes-path gpc/org-dir)
+ '(bibtex-completion-notes-path (concat gpc/org-dir "roam-stem/"))
  '(bibtex-completion-pdf-field "file")
  '(deft-directory gpc/org-dir)
  '(deft-recursive t)
