@@ -22,8 +22,8 @@
         gpc/org-dir "~/org/"
         gpc/org-agenda-files (list (concat gpc/org-dir "roam-pilot/")
                                    (concat gpc/org-dir "roam-stem/"))
-        gpc/pdf-dir "~/roam-pdfs"
-        gpc/bib-file "~/roam-pdfs/references.bib"
+        gpc/pdf-dir "~/pdfs"
+        gpc/bib-file "~/pdfs/references.bib"
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
 
 (setq user-mail-address gpc/email
