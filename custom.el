@@ -23,22 +23,6 @@
    '(("citekey" . "=key=")
      "url" "file" "author-or-editor-abbrev" "keywords"))
  '(orb-switch-persp t)
- '(orb-templates
-   '(("n" "ref+noter" plain #'org-roam-capture--get-point "" :file-name "roam-stem/${slug}" :head ":PROPERTIES:
-:ID:       %<%y%m%d_%H%M%S>
-:END:
-#+TITLE: ${title}
-#+ROAM_KEY: cite:${citekey}
-#+ROAM_TAGS:
-
-* ${title} %?
-:PROPERTIES:
-:URL: ${url}
-:AUTHOR: ${author-or-editor-abbrev}
-:NOTER_DOCUMENT: ${file}
-:NOTER_PAGE:
-:END:
-")))
  '(org-M-RET-may-split-line t)
  '(org-agenda-files gpc/org-agenda-files)
  '(org-id-link-to-org-use-id t)
@@ -55,25 +39,23 @@
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
  '(org-roam-capture-templates
-   '(("w" "work blank" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
-:ID:       %<%y%m%d_%H%M%S>
-:END:
-#+title: ${title}
-" :unnarrowed t)
-     ("s" "stem blank" plain #'org-roam-capture--get-point "%?" :file-name "roam-stem/${slug}" :head ":PROPERTIES:
-:ID:       %<%y%m%d_%H%M%S>
-:END:
-#+title: ${title}
-" :unnarrowed t)
-     ("h" "home blank" plain #'org-roam-capture--get-point "%?" :file-name "roam-personal/${slug}" :head ":PROPERTIES:
-:ID:       %<%y%m%d_%H%M%S>
-:END:
-#+title: ${title}
-" :unnarrowed t)
-     ("p" "work person" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
-:ID:       %<%y%m%d_%H%M%S>
-:END:
-#+title: ${title}
+   '(("w" "work blank" plain "%?" :if-new
+      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
+
+")
+      :unnarrowed t)
+     ("s" "stem blank" plain "%?" :if-new
+      (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
+
+")
+      :unnarrowed t)
+     ("h" "home blank" plain "%?" :if-new
+      (file+head "roam-personal/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
+
+")
+      :unnarrowed t)
+     ("p" "work person" plain "%?" :if-new
+      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
 
 * Company :: 
 * LinkedIn :: 
@@ -82,26 +64,38 @@
 * Email :: 
 * Phone :: 
 * Notes
-- " :unnarrowed t)
-     ("W" "work weekly" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
-:ID:       %<%y%m%d_%H%M%S>
-:END:
-#+title: ${title}
+- ")
+      :unnarrowed t)
+     ("W" "work weekly" plain "%?" :if-new
+      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
 #+TODO: TODO | DONE
 
 %(gpc/gen-weekly monday-tv)
-" :unnarrowed t)
-     ("m" "work minimal" plain #'org-roam-capture--get-point "%?" :file-name "roam-pilot/${slug}" :head ":PROPERTIES:
-:ID:       %<%y%m%d_%H%M%S>
-:END:
-#+title: ${title}
+")
+      :unnarrowed t)
+     ("m" "work minimal" plain "%?" :if-new
+      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
 
 * Tags :: 
 * URLs :: 
 * Locations :: 
 * Notes
-- " :unnarrowed t)))
- '(org-roam-db-update-method 'immediate)
+- ")
+      :unnarrowed t)
+     ("n" "ref+noter" plain "%?" :if-new
+      (file+head "roam-stem/${citekey}.org" "#+TITLE: ${title}
+#+ROAM_KEY: cite:${citekey}
+#+ROAM_TAGS:
+
+* ${title} %?
+:PROPERTIES:
+:URL: ${url}
+:AUTHOR: ${author-or-editor-abbrev}
+:NOTER_DOCUMENT: ${file}
+:NOTER_PAGE:
+:END:
+")
+      :unnarrowed t)))
  '(org-roam-directory "/Users/greg/org/")
  '(org-roam-graph-edge-extra-config '(("color" . "#333333") ("dir" . "back")))
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude" "_monthly"))
