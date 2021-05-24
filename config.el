@@ -147,7 +147,7 @@ It also checks the following:
   "Find file corresponding to the week beginning with WHICH"
   (setq monday-tv (org-read-date nil t which))
   (let ((monday-str (org-read-date nil nil which)))
-    (org-roam-find-file
+    (org-roam-node-find
      (concat "Week of " monday-str)) nil nil t))
 
 (defun gc/org-roam-monthly ()
@@ -157,7 +157,7 @@ It also checks the following:
    next-first (org-read-date nil t "1")
    first-tv (org-read-date nil t "--m" nil next-first)
    first-str (org-read-date nil nil "--m" nil next-first))
-  (org-roam-find-file (concat "Month of " (substring first-str 0 7))))
+  (org-roam-node-find (concat "Month of " (substring first-str 0 7))))
 
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
@@ -207,8 +207,8 @@ It also checks the following:
   (org-roam-graph 5))
 
 ;; Why not, I use these functions all the time, a single chord makes sense
-(global-set-key (kbd "s-r") 'org-roam-find-file)
-(global-set-key (kbd "s-i") 'org-roam-insert)
+(global-set-key (kbd "s-f") 'org-roam-node-find)
+(global-set-key (kbd "s-i") 'org-roam-node-insert)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 
 (defun org-hide-properties ()
@@ -265,10 +265,10 @@ It also checks the following:
        :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
        :desc "isbn-to-bibtex"                "B" #'isbn-to-bibtex
        :desc "Capture"                       "c" #'org-roam-capture
-       :desc "Find file"                     "f" #'org-roam-find-file
+       :desc "Node find"                     "f" #'org-roam-node-find
        :desc "Show graph"                    "g" #'org-roam-graph
-       :desc "Insert"                        "i" #'org-roam-insert
-       :desc "org-roam-mode"                 "r" #'org-roam-buffer-toggle-display
+       :desc "Insert"                        "i" #'org-roam-node-insert
+       :desc "org-roam-buffer-toggle"        "r" #'org-roam-buffer-toggle
        :desc "Insert last stored link"       "s" #'org-insert-last-stored-link
        :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
        :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
