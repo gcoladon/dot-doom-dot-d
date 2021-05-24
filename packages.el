@@ -5,7 +5,6 @@
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
 
-
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 
@@ -40,7 +39,6 @@
 ;; Use `:pin' to specify a particular commit to install.
 ;(package! builtin-package :pin "1a2b3c4d5e")
 
-
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...
 ;(unpin! pinned-package)
@@ -58,11 +56,20 @@
 (package! ox-rst
   :recipe (:host github :repo "msnoigrs/ox-rst"))
 
+;; Am i working on my own fork? Go fork it!!
+;;(package! org-roam
+;;  :recipe (:host github :repo "gcoladon/org-roam"))
+
+;; I'm actually pinned to a commit right now, but I did it in the repo directly.
+(package! org-roam
+  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
+
+;; (package! helm-bibtex)
+
 (package! org-transclusion
   :recipe (:host github :repo "nobiot/org-transclusion"))
 
-(after! org-tranclusion
-  ;; (add-to-list 'load-path "path/to/org-transclusion/")
-  (require 'org-transclusion)
-  ;; (define-key global-map (kbd "<f12>") #'org-transclusion-add-at-point)
-  )
+(package! command-log-mode)
