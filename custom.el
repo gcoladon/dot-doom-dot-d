@@ -28,6 +28,7 @@
  '(org-id-link-to-org-use-id t)
  '(org-id-method 'ts)
  '(org-id-ts-format "%y%m%d_%H%M%S")
+ '(org-insert-heading-respect-content nil)
  '(org-link-elisp-confirm-function 'y-or-n-p)
  '(org-log-done 'time)
  '(org-log-into-drawer t)
