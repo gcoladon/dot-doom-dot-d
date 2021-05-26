@@ -72,8 +72,8 @@
 ;;(package! company-posframe)
 ;;(package! org-roam
 ;;  :recipe (:host github :repo "org-roam/org-roam"))
-;;(package! org-roam
-;;  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+(package! org-roam
+  :recipe (:host github :repo "gcoladon/org-roam" :branch "v2"))
 
 (unpin! org-roam)
 ;;(package! org-roam
