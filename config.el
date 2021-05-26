@@ -8,22 +8,22 @@
 (setq user-full-name "Greg Coladonato")
 
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
-                                  (shell-command-to-string "ifconfig en0 | grep ether"))
+                                     (shell-command-to-string "ifconfig en0 | grep ether"))
            "ether f0:18:98:9a:c9:2c ")
     (setq gpc/email "gcoladon@gmail.com"
-          gpc/org-dir "~/org-roam/"
-          gpc/org-agenda-files (list (concat gpc/org-dir "roam/roam-personal/")
-                                     (concat gpc/org-dir "roam/roam-stem/"))
+          gpc/org-dir "~/org/"
+          gpc/org-agenda-files (list (concat gpc/org-dir "roam-personal/")
+                                     (concat gpc/org-dir "roam-stem/"))
           gpc/pdf-dir "~/pdfs"
-          gpc/bib-file "~/dev/org/references.bib"
+          gpc/bib-file "~/pdfs/references.bib"
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser")
 
   (setq gpc/email "greg@pilot.ai"
         gpc/org-dir "~/org/"
-        gpc/org-agenda-files (list (concat gpc/org-dir "roam/roam-pilot/")
-                                   (concat gpc/org-dir "roam/roam-stem/"))
+        gpc/org-agenda-files (list (concat gpc/org-dir "roam-pilot/")
+                                   (concat gpc/org-dir "roam-stem/"))
         gpc/pdf-dir "~/pdfs"
-        gpc/bib-file "~/org/references.bib"
+        gpc/bib-file "~/pdfs/references.bib"
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
 
 (setq user-mail-address gpc/email
@@ -133,10 +133,10 @@ It also checks the following:
          (buf (dired-noselect dir)))
     (select-window
      (display-buffer-in-side-window buf
-                                   '((side . left)
-                                     (window-width . 30)
-                                     (slot . -1)
-                                     (window-parameters . ((mode-line-format . none))))))))
+                                    '((side . left)
+                                      (window-width . 30)
+                                      (slot . -1)
+                                      (window-parameters . ((mode-line-format . none))))))))
 
 ;; Let's see if I prefer this style of search interaction
 ;; (ctrlf-mode +1)
@@ -147,7 +147,7 @@ It also checks the following:
   "Find file corresponding to the week beginning with WHICH"
   (setq monday-tv (org-read-date nil t which))
   (let ((monday-str (org-read-date nil nil which)))
-    (org-roam-find-file
+    (org-roam-node-find
      (concat "Week of " monday-str)) nil nil t))
 
 (defun gc/org-roam-monthly ()
@@ -157,12 +157,14 @@ It also checks the following:
    next-first (org-read-date nil t "1")
    first-tv (org-read-date nil t "--m" nil next-first)
    first-str (org-read-date nil nil "--m" nil next-first))
-  (org-roam-find-file (concat "Month of " (substring first-str 0 7))))
+  (org-roam-node-find (concat "Month of " (substring first-str 0 7))))
 
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
   (interactive)
-  (gc/org-roam-find-weekly "-mon"))
+  (if (equal (format-time-string "%a" (current-time)) "Mon")
+      (gc/org-roam-find-weekly "+0")
+    (gc/org-roam-find-weekly "-mon")))
 
 (defun gc/org-roam-weekly-last ()
   "Find the weekly-file for last week."
@@ -204,10 +206,9 @@ It also checks the following:
   (interactive)
   (org-roam-graph 5))
 
-
 ;; Why not, I use these functions all the time, a single chord makes sense
-(global-set-key (kbd "s-r") 'org-roam-find-file)
-(global-set-key (kbd "s-i") 'org-roam-insert)
+(global-set-key (kbd "s-f") 'org-roam-node-find)
+(global-set-key (kbd "s-i") 'org-roam-node-insert)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 
 (defun org-hide-properties ()
@@ -253,8 +254,8 @@ It also checks the following:
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
       :desc "org-forward-heading-same-level" "n C-f" #'org-forward-heading-same-level
-      :desc "Go to Greg's notes.org"      "n g" (lambda () (interactive) (find-file "~/dev/org/notes.org"))
-      :desc "HTML-to-Org"                 "n h" (lambda () (interactive) (html2org-clipboard))
+      :desc "Go to Greg's notes.org"      "n g" (cmd! (find-file "~/dev/org/notes.org"))
+      :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
       ;; :desc "Search the elisp index"      "s e" (lambda () (interactive) (elisp-index-search))
       :desc "Bury buffer"                 "w y" #'bury-buffer)
 
@@ -262,10 +263,12 @@ It also checks the following:
       ;;; <leader> r --- roam
       (:prefix-map ("r" . "gc/roam bindings")
        :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
+       :desc "isbn-to-bibtex"                "B" #'isbn-to-bibtex
        :desc "Capture"                       "c" #'org-roam-capture
-       :desc "Find file"                     "f" #'org-roam-find-file
+       :desc "Node find"                     "f" #'org-roam-node-find
        :desc "Show graph"                    "g" #'org-roam-graph
-       :desc "Insert"                        "i" #'org-roam-insert
+       :desc "Insert"                        "i" #'org-roam-node-insert
+       :desc "org-roam-buffer-toggle"        "r" #'org-roam-buffer-toggle
        :desc "Insert last stored link"       "s" #'org-insert-last-stored-link
        :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
        :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
@@ -295,10 +298,87 @@ It also checks the following:
 
 ;;(doom/increase-font-size 1)
 
+(defun bibtex-autokey-wrapper (orig-fun &rest args)
+  "Dynamically bind `bibtex-autokey-prefix-string' to current date."
+  (let ((result
+         (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
+           (apply orig-fun args))))
+    (substring result 0 (min 30 (length result)))))
+
+(advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
+
+(defun gpc/orb-find-file-open-noter (file)
+  (find-file file)
+  (outline-next-visible-heading 1)
+  (org-noter)
+  (other-window 1)
+  (org-roam)
+  (outline-next-visible-heading -1))
+(defun gpc/orb-edit-notes (orig-fn &rest args)
+  (let ((org-roam-find-file-function #'gpc/orb-find-file-open-noter))
+    (apply orig-fn args)))
+;; (advice-add 'orb-edit-notes :around #'gpc/orb-edit-notes)
+
+(defun gpc/mon_day ()
+  (format-time-string "%m %d"))
+
+(defun gpc/orb-my-slug (orig-fn title)
+  "My version of Roam's title-to-slug to prefix data and chop legth"
+  (let* ((today (format-time-string "%y%m%d"))
+         (prefix (substring title 0 (min 6 (length title))))
+         (prefixed_title (if (equal today prefix)
+                             title
+                           (concat today " " title)))
+         (result (apply orig-fn (list prefixed_title)))
+         (subs (substring result 0 (min 30 (length result)))))
+    subs))
+(advice-add 'org-roam--title-to-slug :around #'gpc/orb-my-slug)
+
+;; (use-package! org-noter
+;;    :after (:any org pdf-view)
+;;    :config
+;;    (setq org-noter-always-create-frame nil
+;;          org-noter-auto-save-last-location t)
+;;    (defun org-noter-init-pdf-view ()
+;;      (pdf-view-fit-width-to-window))
+;;      ;; (pdf-view-auto-slice-minor-mode)
+;;    (add-hook 'pdf-view-mode-hook 'org-noter-init-pdf-view))
+
+(use-package! org-noter
+  :after pdf-view
+  :config
+  (add-hook 'pdf-view-mode-hook 'pdf-view-fit-width-to-window))
+
+(use-package! org-transclusion
+  :after-call org-roam-node-find)
+
+(use-package! ox-rst
+  :after-call org-roam-node-find)
+
+;; :after-call org-roam-node-find
+;; :after-call after-find-file
+
+;; (use-package! projectile
+;;   :after-call (pre-command-hook after-find-file dired-before-readin-hook))
+
+;; might be needed to get the org-roam-server to work.
+;; (after! org-roam
+;;   (smartparens-global-mode -1)
+;;   (org-roam-server-mode)
+;;   (smartparens-global-mode 1))
+
+(after! org-roam
+  (org-roam-bibtex-mode))
+
+(use-package! org-roam
+  :config
+  (setq org-roam-directory "/Users/greg/org/")
+  (org-roam-setup))
+
 ;; following instructions from https://github.com/org-roam/org-roam-bibtex
 (use-package! org-roam-bibtex
-  :after org-roam
-  :hook (org-roam-mode . org-roam-bibtex-mode)
+  ;; :after org-roam
+  ;; :hook (org-roam-mode . org-roam-bibtex-mode)
   :config
   (require 'org-ref)
   (bibtex-set-dialect 'BibTeX)
@@ -308,60 +388,11 @@ It also checks the following:
    helm-source-bibtex
    0))
 
-(defun bibtex-autokey-wrapper (orig-fun &rest args)
-    "Dynamically bind `bibtex-autokey-prefix-string' to current date."
-    (let ((result
-           (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
-             (apply orig-fun args))))
-      (substring result 0 (min 30 (length result)))))
-
-  (advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
-
-  (defun gpc/orb-find-file-open-noter (file)
-    (find-file file)
-    (outline-next-visible-heading 1)
-    (org-noter)
-    (other-window 1)
-    (org-roam)
-    (outline-next-visible-heading -1))
-  (defun gpc/orb-edit-notes (orig-fn &rest args)
-    (let ((org-roam-find-file-function #'gpc/orb-find-file-open-noter))
-      (apply orig-fn args)))
-  (advice-add 'orb-edit-notes :around #'gpc/orb-edit-notes)
-
-(defun gpc/mon_day ()
-  (format-time-string "%m %d"))
-
-(defun gpc/orb-my-slug (orig-fn title)
-    "My version of Roam's title-to-slug to prefix data and chop legth"
-    (let* ((today (format-time-string "%y%m%d"))
-           (prefix (substring title 0 (min 6 (length title))))
-           (prefixed_title (if (equal today prefix)
-                               title
-                             (concat today " " title)))
-           (result (apply orig-fn (list prefixed_title)))
-           (subs (substring result 0 (min 30 (length result)))))
-      subs))
-(advice-add 'org-roam--title-to-slug :around #'gpc/orb-my-slug)
-
- ;; (use-package! org-noter
- ;;    :after (:any org pdf-view)
- ;;    :config
- ;;    (setq org-noter-always-create-frame nil
- ;;          org-noter-auto-save-last-location t)
- ;;    (defun org-noter-init-pdf-view ()
- ;;      (pdf-view-fit-width-to-window))
- ;;      ;; (pdf-view-auto-slice-minor-mode)
- ;;    (add-hook 'pdf-view-mode-hook 'org-noter-init-pdf-view))
-
-(use-package! org-noter
-    :after pdf-view
-    :config
-    (add-hook 'pdf-view-mode-hook 'pdf-view-fit-width-to-window))
-
 (defun gpc/get-arxiv ()
   "Use the defaults for all three variables, don't ask me!!"
   (interactive)
+  (require 'org-ref)
+  (bibtex-set-dialect 'BibTeX)
   (arxiv-get-pdf-add-bibtex-entry (arxiv-maybe-arxiv-id-from-current-kill)
                                   (car org-ref-default-bibliography)
                                   (concat org-ref-pdf-directory "/")))
@@ -385,13 +416,13 @@ It also checks the following:
 
 ;; Check out all of Doom's templates and see if they are better than mine
 
-  ;; (setq org-capture-templates
-  ;;       '(("t" "Todo" entry (file+headline "" "Inbox")
-  ;;          "* TODO %?\n  %i" :prepend t)
-  ;;         ("T" "Todo w/backlink" entry (file+headline "" "Inbox")
-  ;;          "* TODO %?\n  %i\n  %a" :prepend t)
-  ;;         ("j" "Journal" entry (file+olp+datetree "journal.org" "Journal")
-  ;;          "* %?\nEntered on %U\n  %i\n  %a")))
+;; (setq org-capture-templates
+;;       '(("t" "Todo" entry (file+headline "" "Inbox")
+;;          "* TODO %?\n  %i" :prepend t)
+;;         ("T" "Todo w/backlink" entry (file+headline "" "Inbox")
+;;          "* TODO %?\n  %i\n  %a" :prepend t)
+;;         ("j" "Journal" entry (file+olp+datetree "journal.org" "Journal")
+;;          "* %?\nEntered on %U\n  %i\n  %a")))
 
 
 ;; I think I want to install these. Is there a shortcut?
@@ -415,53 +446,53 @@ It also checks the following:
 ;; I would like to figure out how to make this work again
 ;;
 ;;  (use-package popup)
-  ;; (use-package google-translate
-  ;;   :demand t
-  ;;   :init
-  ;;   (require 'google-translate)
+;; (use-package google-translate
+;;   :demand t
+;;   :init
+;;   (require 'google-translate)
 
-  ;;   :functions (my-google-translate-at-point google-translate--search-tkk)
-  ;;   :custom
-  ;;   (google-translate-backend-method 'curl)
-  ;;   :config
-  ;;   (defun google-translate--search-tkk () "Search TKK." (list 430675 2721866130))
-  ;;   (defun my-google-translate-at-point()
-  ;;     "reverse translate if prefix"
-  ;;     (interactive)
-  ;;     (if current-prefix-arg
-  ;;         (google-translate-at-point)
-  ;;       (google-translate-at-point-reverse)))
-  ;;   (setq google-translate-default-source-language "en"
-  ;;         google-translate-default-target-language "it"))
+;;   :functions (my-google-translate-at-point google-translate--search-tkk)
+;;   :custom
+;;   (google-translate-backend-method 'curl)
+;;   :config
+;;   (defun google-translate--search-tkk () "Search TKK." (list 430675 2721866130))
+;;   (defun my-google-translate-at-point()
+;;     "reverse translate if prefix"
+;;     (interactive)
+;;     (if current-prefix-arg
+;;         (google-translate-at-point)
+;;       (google-translate-at-point-reverse)))
+;;   (setq google-translate-default-source-language "en"
+;;         google-translate-default-target-language "it"))
 
-  (defun gpc/fetch-tasks ()
-    "Run the extractor from Sheets, Open the file, and also open the Sheet"
-    (interactive)
-    (shell-command "~/bin/tasks.sh")
-    (find-file "~/dev/org/incoming.org")
-    (browse-url "https://docs.google.com/spreadsheets/d/1T8qe2m4z9ViJ9W72PJb8COCmpptr5D5312vM6e32iPM/edit#gid=0"))
+(defun gpc/fetch-tasks ()
+  "Run the extractor from Sheets, Open the file, and also open the Sheet"
+  (interactive)
+  (shell-command "~/bin/tasks.sh")
+  (find-file "~/dev/org/incoming.org")
+  (browse-url "https://docs.google.com/spreadsheets/d/1T8qe2m4z9ViJ9W72PJb8COCmpptr5D5312vM6e32iPM/edit#gid=0"))
 
-  (defun gpc/org-table-goto-beginning ()
-    (interactive)
-    (if (org-at-table-p)
-        (goto-char (org-table-begin))
-      (message "Can't go to beginning of table if not inside a table")))
+(defun gpc/org-table-goto-beginning ()
+  (interactive)
+  (if (org-at-table-p)
+      (goto-char (org-table-begin))
+    (message "Can't go to beginning of table if not inside a table")))
 
-  (defun gpc/org-table-goto-end ()
-    (interactive)
-    (if (org-at-table-p)
-        (goto-char (org-table-end))
-      (message "Can't go to end of table if not inside a table")))
+(defun gpc/org-table-goto-end ()
+  (interactive)
+  (if (org-at-table-p)
+      (goto-char (org-table-end))
+    (message "Can't go to end of table if not inside a table")))
 
-  ;; (define-key org-mode-map (kbd "C-c C-g a") #'gpc/org-table-goto-beginning)
-  ;; (define-key org-mode-map (kbd "C-c C-g e") #'gpc/org-table-goto-end)
+;; (define-key org-mode-map (kbd "C-c C-g a") #'gpc/org-table-goto-beginning)
+;; (define-key org-mode-map (kbd "C-c C-g e") #'gpc/org-table-goto-end)
 
-  (defun gpc/clean-slate ()
-    "Go to the top of the page and open just a bit."
-    (interactive)
-    (beginning-of-buffer)
-    (org-shifttab 1)
-    )
+(defun gpc/clean-slate ()
+  "Go to the top of the page and open just a bit."
+  (interactive)
+  (beginning-of-buffer)
+  (org-shifttab 1)
+  )
 
 ;;; ucs-cmds.el --- Create commands to insert Unicode chars. -*- lexical-binding:t -*-
 ;;
@@ -777,8 +808,8 @@ Interactively, or with non-nil MSGP arg, echo confirmation of the
 command creation."
   (interactive
    (list (read-char-by-name "Unicode (name or hex): ")
-     (prefix-numeric-value current-prefix-arg)
-     t
+         (prefix-numeric-value current-prefix-arg)
+         t
          t))
   (unless (characterp character) ; Protect `insert-char' from low-level err.
     (error "No such Unicode character: `%s'" character))
@@ -832,9 +863,9 @@ Return the commands created, as a list of symbols."
 (define-key macron-map (kbd "O") 'latin-capital-letter-o-with-macron)
 (define-key macron-map (kbd "U") 'latin-capital-letter-u-with-macron)
 
-  ;; (global-set-key (kbd "s-t") 'my-google-translate-at-point)
-  ;; (global-set-key (kbd "s-w") 'org-web-tools-insert-web-page-as-entry)
-  ;; (global-set-key (kbd "s-C") 'gpc/clean-slate)
+;; (global-set-key (kbd "s-t") 'my-google-translate-at-point)
+;; (global-set-key (kbd "s-w") 'org-web-tools-insert-web-page-as-entry)
+;; (global-set-key (kbd "s-C") 'gpc/clean-slate)
 
 (defun gpc/makron ()
   "Replace un-macroned letter under point with the corresponding macronized letter"
@@ -861,11 +892,11 @@ Return the commands created, as a list of symbols."
     (goto-char (+ end 6))
     (insert "}}")))
 
-    ;; (global-set-key (kbd "k") 'gpc/makron)
-    ;; (global-set-key (kbd "j") 'gpc/cloze)
-    ;; ;; (global-set-key (kbd "j") 'gpc/cloze-mac)
-    ;; (global-set-key (kbd "k") 'self-insert-command)
-    ;; (global-set-key (kbd "j") 'self-insert-command)
+;; (global-set-key (kbd "k") 'gpc/makron)
+;; (global-set-key (kbd "j") 'gpc/cloze)
+;; ;; (global-set-key (kbd "j") 'gpc/cloze-mac)
+;; (global-set-key (kbd "k") 'self-insert-command)
+;; (global-set-key (kbd "j") 'self-insert-command)
 
 ;; this didn't have the desired effect, but I'm leaving it here for now
 ;;(defadvice! gpc/simplify-todos (&rest _)
@@ -875,10 +906,222 @@ Return the commands created, as a list of symbols."
   (mapconcat
    (lambda (num) (concat "* "
                          (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
-                         "\n** Plan\n** Meetings\n** Notes\n"))
+                         "\n** Plan\n*** TODO Check commits to master\n** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
    (number-sequence -1 5)
    ""))
 
 ;; (gpc/gen-weekly (current-time))
 
 (global-set-key (kbd "M-=") 'mark-whole-buffer)
+
+;; https://org-roam.discourse.group/t/prototype-transclusion-block-reference-with-emacs-org-mode/830/96?u=gcoladon
+
+;; (advice-add #'org-roam-db-insert-file :after
+;;             #'my/org-id-update-location-at-org-roam-db-insert-file))
+
+;; (defun my/org-id-update-location-at-org-roam-db-insert-file ()
+;;   "Update `org-id-locations-file' and hash table.
+;; It's meant to be used with `advice-add' :after
+;; `org-roam-db-insert-file'.  We can assume that this function is
+;; run wihtin a buffer visiting a file being inserted, as
+;; insert-file is run within `org-roam-with-file' macro."
+;;     (when-let ((id (org-entry-get 1 "id")))
+;;       (org-id-add-location id (buffer-file-name))))
+
+
+;; https://gist.github.com/d12frosted/a60e8ccb9aceba031af243dff0d19b2e
+
+
+;; (defun vulpea-project-p ()
+;;   "Return non-nil if current buffer has any todo entry.
+;; TODO entries marked as done are ignored, meaning the this
+;; function returns nil if current buffer contains only completed
+;; tasks."
+;;   (seq-find                                 ; (3)
+;;    (lambda (type)
+;;      (eq type 'todo))
+;;    (org-element-map                         ; (2)
+;;        (org-element-parse-buffer 'headline) ; (1)
+;;        'headline
+;;      (lambda (h)
+;;        (org-element-property :todo-type h)))))
+
+;; (defun vulpea-project-update-tag ()
+;;     "Update PROJECT tag in the current buffer."
+;;     (when (and (not (active-minibuffer-window))
+;;                (vulpea-buffer-p))
+;;       (save-excursion
+;;         (goto-char (point-min))
+;;         (let* ((tags (vulpea-buffer-tags-get))
+;;                (original-tags tags))
+;;           (if (vulpea-project-p)
+;;               (setq tags (cons "project" tags))
+;;             (setq tags (remove "project" tags)))
+;;           (unless (eq original-tags tags)
+;;             (apply #'vulpea-buffer-tags-set (seq-uniq tags)))))))
+
+;; (defun vulpea-buffer-p ()
+;;   "Return non-nil if the currently visited buffer is a note."
+;;   (and buffer-file-name
+;;        (string-prefix-p
+;;         (expand-file-name (file-name-as-directory org-roam-directory))
+;;         (file-name-directory buffer-file-name))))
+
+;; (defun vulpea-project-files ()
+;;     "Return a list of note files containing 'project' tag." ;
+;;     (seq-uniq
+;;      (seq-map
+;;       #'car
+;;       (org-roam-db-query
+;;        [:select [nodes:file]
+;;         :from tags
+;;         :left-join nodes
+;;         :on (= tags:node-id nodes:id)
+;;         :where (like tag (quote "%\"project\"%"))]))))
+
+;; (defun vulpea-agenda-files-update (&rest _)
+;;   "Update the value of `org-agenda-files'."
+;;   (setq org-agenda-files (vulpea-project-files)))
+
+;; (add-hook 'find-file-hook #'vulpea-project-update-tag)
+;; (add-hook 'before-save-hook #'vulpea-project-update-tag)
+;; (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
+
+;; (dolist (file (org-roam--list-all-files))
+;;   (message "processing %s" file)
+;;   (with-current-buffer (or (find-buffer-visiting file)
+;;                            (find-file-noselect file))
+;;     (vulpea-project-update-tag)
+;;     (save-buffer)))
+
+(defun vulpea-project-p ()
+  "Return non-nil if current buffer has any todo entry.
+TODO entries marked as done are ignored, meaning the this
+function returns nil if current buffer contains only completed
+tasks."
+  (seq-find                                 ; (3)
+   (lambda (type)
+     (eq type 'todo))
+   (org-element-map                         ; (2)
+       (org-element-parse-buffer 'headline) ; (1)
+       'headline
+     (lambda (h)
+       (org-element-property :todo-type h)))))
+
+(defun vulpea-project-update-tag ()
+    "Update PROJECT tag in the current buffer."
+    (when (and (not (active-minibuffer-window))
+               (vulpea-buffer-p))
+      (save-excursion
+        (goto-char (point-min))
+        (let* ((tags (vulpea-buffer-tags-get))
+               (original-tags tags))
+          (if (vulpea-project-p)
+              (setq tags (cons "project" tags))
+            (setq tags (remove "project" tags)))
+          (unless (eq original-tags tags)
+            (apply #'vulpea-buffer-tags-set (seq-uniq tags)))))))
+
+(defun vulpea-buffer-p ()
+  "Return non-nil if the currently visited buffer is a note."
+  (and buffer-file-name
+       (string-prefix-p
+        (expand-file-name (file-name-as-directory org-roam-directory))
+        (file-name-directory buffer-file-name))))
+
+(defun vulpea-project-files ()
+    "Return a list of note files containing 'project' tag." ;
+    (seq-uniq
+     (seq-map
+      #'car
+      (org-roam-db-query
+       [:select [nodes:file]
+        :from tags
+        :left-join nodes
+        :on (= tags:node-id nodes:id)
+        :where (like tag (quote "%\"project\"%"))]))))
+
+(defun vulpea-agenda-files-update (&rest _)
+  "Update the value of `org-agenda-files'."
+  (setq org-agenda-files (vulpea-project-files)))
+
+(add-hook 'find-file-hook #'vulpea-project-update-tag)
+(add-hook 'before-save-hook #'vulpea-project-update-tag)
+
+(advice-add 'org-agenda :before #'vulpea-agenda-files-update)
+
+;; functions borrowed from `vulpea' library
+;; https://github.com/d12frosted/vulpea/blob/6a735c34f1f64e1f70da77989e9ce8da7864e5ff/vulpea-buffer.el
+
+(defun vulpea-buffer-tags-get ()
+  "Return filetags value in current buffer."
+  (vulpea-buffer-prop-get-list "filetags" " "))
+
+(defun vulpea-buffer-tags-set (&rest tags)
+  "Set TAGS in current buffer.
+If filetags value is already set, replace it."
+  (vulpea-buffer-prop-set "filetags" (string-join tags " ")))
+
+(defun vulpea-buffer-tags-add (tag)
+  "Add a TAG to filetags in current buffer."
+  (let* ((tags (vulpea-buffer-tags-get))
+         (tags (append tags (list tag))))
+    (apply #'vulpea-buffer-tags-set tags)))
+
+(defun vulpea-buffer-tags-remove (tag)
+  "Remove a TAG from filetags in current buffer."
+  (let* ((tags (vulpea-buffer-tags-get))
+         (tags (delete tag tags)))
+    (apply #'vulpea-buffer-tags-set tags)))
+
+(defun vulpea-buffer-prop-set (name value)
+  "Set a file property called NAME to VALUE in buffer file.
+If the property is already set, replace its value."
+  (setq name (downcase name))
+  (org-with-point-at 1
+    (let ((case-fold-search t))
+      (if (re-search-forward (concat "^#\\+" name ":\\(.*\\)")
+                             (point-max) t)
+          (replace-match (concat "#+" name ": " value) 'fixedcase)
+        (while (and (not (eobp))
+                    (looking-at "^[#:]"))
+          (if (save-excursion (end-of-line) (eobp))
+              (progn
+                (end-of-line)
+                (insert "\n"))
+            (forward-line)
+            (beginning-of-line)))
+        (insert "#+" name ": " value "\n")))))
+
+(defun vulpea-buffer-prop-set-list (name values &optional separators)
+  "Set a file property called NAME to VALUES in current buffer.
+VALUES are quoted and combined into single string using
+`combine-and-quote-strings'.
+If SEPARATORS is non-nil, it should be a regular expression
+matching text that separates, but is not part of, the substrings.
+If nil it defaults to `split-string-default-separators', normally
+\"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t.
+If the property is already set, replace its value."
+  (vulpea-buffer-prop-set
+   name (combine-and-quote-strings values separators)))
+
+(defun vulpea-buffer-prop-get (name)
+  "Get a buffer property called NAME as a string."
+  (org-with-point-at 1
+    (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+                             (point-max) t)
+      (buffer-substring-no-properties
+       (match-beginning 1)
+       (match-end 1)))))
+
+(defun vulpea-buffer-prop-get-list (name &optional separators)
+  "Get a buffer property NAME as a list using SEPARATORS.
+If SEPARATORS is non-nil, it should be a regular expression
+matching text that separates, but is not part of, the substrings.
+If nil it defaults to `split-string-default-separators', normally
+\"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t."
+  (let ((value (vulpea-buffer-prop-get name)))
+    (when (and value (not (string-empty-p value)))
+      (split-string-and-unquote value separators))))
+
+(use-package! command-log-mode)
