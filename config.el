@@ -147,7 +147,7 @@ It also checks the following:
   "Find file corresponding to the week beginning with WHICH"
   (setq monday-tv (org-read-date nil t which))
   (let ((monday-str (org-read-date nil nil which)))
-    (org-roam-node-find
+    (org-roam-node-find nil
      (concat "Week of " monday-str)) nil nil t))
 
 (defun gc/org-roam-monthly ()
@@ -157,7 +157,7 @@ It also checks the following:
    next-first (org-read-date nil t "1")
    first-tv (org-read-date nil t "--m" nil next-first)
    first-str (org-read-date nil nil "--m" nil next-first))
-  (org-roam-node-find (concat "Month of " (substring first-str 0 7))))
+  (org-roam-node-find nil (concat "Month of " (substring first-str 0 7))))
 
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
@@ -906,7 +906,7 @@ Return the commands created, as a list of symbols."
   (mapconcat
    (lambda (num) (concat "* "
                          (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
-                         "\n** Plan\n*** TODO Check commits to master\n** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
+                         "\n** Plan\n** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
    (number-sequence -1 5)
    ""))
 
