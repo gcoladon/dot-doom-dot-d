@@ -1062,3 +1062,10 @@ If nil it defaults to `split-string-default-separators', normally
       (split-string-and-unquote value separators))))
 
 (use-package! command-log-mode)
+
+(defun gpc/trim-slug (orig-fun &rest args)
+  "Trim the slug to 23 characters"
+  (let ((full-slug (apply orig-fun args)))
+         (substring full-slug 0 (min 23 (length full-slug)))))
+
+(advice-add 'org-roam-node-slug :around #'gpc/trim-slug)
