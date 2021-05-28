@@ -1069,3 +1069,4 @@ If nil it defaults to `split-string-default-separators', normally
          (substring full-slug 0 (min 23 (length full-slug)))))
 
 (advice-add 'org-roam-node-slug :around #'gpc/trim-slug)
+

@@ -26,7 +26,7 @@
  '(org-M-RET-may-split-line t)
  '(org-agenda-files gpc/org-agenda-files)
  '(org-id-link-to-org-use-id t)
- '(org-id-locations-file "/Users/greg/org-roam-v2/.orgids")
+ '(org-id-locations-file "/Users/greg/org/.orgids")
  '(org-id-method 'ts)
  '(org-id-ts-format "%y%m%d_%H%M%S")
  '(org-insert-heading-respect-content nil)
@@ -98,7 +98,7 @@
 :END:
 ")
       :unnarrowed t)))
- '(org-roam-directory "/Users/greg/org-roam-v2/")
+ '(org-roam-directory "/Users/greg/org/")
  '(org-roam-graph-edge-extra-config '(("color" . "#333333") ("dir" . "back")))
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude" "_monthly"))
  '(org-roam-graph-executable "neato")
