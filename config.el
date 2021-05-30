@@ -1070,3 +1070,7 @@ If nil it defaults to `split-string-default-separators', normally
 
 (advice-add 'org-roam-node-slug :around #'gpc/trim-slug)
 
+(defun gpc/org-agenda-cmp-user-defined (a b)
+  (message "made it!!")
+  nil)
+(setq org-agenda-cmp-user-defined 'gpc/org-agenda-cmp-user-defined)

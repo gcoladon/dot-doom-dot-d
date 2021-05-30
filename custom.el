@@ -25,6 +25,11 @@
  '(orb-switch-persp t)
  '(org-M-RET-may-split-line t)
  '(org-agenda-files gpc/org-agenda-files)
+ '(org-agenda-sorting-strategy
+   '((agenda habit-down time-up priority-down category-keep)
+     (todo priority-down user-defined-down category-keep)
+     (tags priority-down category-keep)
+     (search category-keep)))
  '(org-id-link-to-org-use-id t)
  '(org-id-locations-file "/Users/greg/org/.orgids")
  '(org-id-method 'ts)
