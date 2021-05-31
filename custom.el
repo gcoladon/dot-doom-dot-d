@@ -41,7 +41,7 @@
  '(org-noter-always-create-frame nil)
  '(org-noter-doc-split-fraction '(0.6 . 0.6))
  '(org-ref-default-bibliography (list gpc/bib-file))
- '(org-ref-notes-directory gpc/org-dir)
+ '(org-ref-notes-directory (concat gpc/org-dir "roam-stem/"))
  '(org-ref-pdf-directory gpc/pdf-dir)
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
