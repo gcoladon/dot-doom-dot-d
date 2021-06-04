@@ -863,6 +863,14 @@ Return the commands created, as a list of symbols."
 (define-key macron-map (kbd "O") 'latin-capital-letter-o-with-macron)
 (define-key macron-map (kbd "U") 'latin-capital-letter-u-with-macron)
 
+(define-prefix-command 'algorithms-map)
+(global-set-key (kbd "C-c l a") 'algorithms-map)
+(define-key algorithms-map (kbd "1") (cmd! (insert "$L_{buy}$")))
+(define-key algorithms-map (kbd "2") (cmd! (insert "$L_{sell}$")))
+(define-key algorithms-map (kbd "3") (cmd! (insert "$R_{buy}$")))
+(define-key algorithms-map (kbd "4") (cmd! (insert "$R_{sell}$")))
+
+
 ;; (global-set-key (kbd "s-t") 'my-google-translate-at-point)
 ;; (global-set-key (kbd "s-w") 'org-web-tools-insert-web-page-as-entry)
 ;; (global-set-key (kbd "s-C") 'gpc/clean-slate)
