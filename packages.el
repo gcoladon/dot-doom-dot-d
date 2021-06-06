@@ -54,7 +54,10 @@
 ;;  :recipe (:host github :repo "jethrokuan/ox-hugo"))
 
 (package! org-roam
-  :recipe (:host github :repo "gcoladon/org-roam" :branch "v2"))
+  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+
+;; (package! org-roam
+;;   :recipe (:host github :repo "gcoladon/org-roam" :branch "v2"))
 
 (package! ox-rst
   :recipe (:host github :repo "msnoigrs/ox-rst"))
