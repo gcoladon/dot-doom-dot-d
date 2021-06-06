@@ -249,6 +249,7 @@ It also checks the following:
 ;; (setq before-save-hook nil)
 
 (map! :leader
+      :desc "Toggle edebug"               "t e" (cmd! (eval-defun t))
       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
@@ -1078,8 +1079,23 @@ If nil it defaults to `split-string-default-separators', normally
 
 (advice-add 'org-roam-node-slug :around #'gpc/trim-slug)
 
+;;  this function sorts todos by the yymmdd timestamp in the roam filename
+;;  so the todos in the most recently created files are at the top.
+;;  that works for me!
+(defun <=> (a b)
+  "Compare A and B, returning 1, 0, or -1"
+  (cond ((= a b) 0)
+        ((> a b) 1)
+        ((< a b) -1)))
+
 (defun gpc/org-agenda-cmp-user-defined (a b)
-  (message "made it!!")
-  nil)
+  (let* ((regex "\\(210[0-9][0-9][0-9]\\)")
+         (date-a (if (string-match regex a)
+                     (string-to-number (or (match-string 1 a) "0"))
+                   0))
+         (date-b (if (string-match regex b)
+                     (string-to-number (or (match-string 1 b) "0"))
+                   0)))
+    (<=> date-a date-b)))
 
 (setq org-agenda-cmp-user-defined 'gpc/org-agenda-cmp-user-defined)
