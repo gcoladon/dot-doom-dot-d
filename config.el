@@ -255,6 +255,7 @@ It also checks the following:
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
       :desc "org-forward-heading-same-level" "n C-f" #'org-forward-heading-same-level
+      :desc "Recover this file"           "f v" #'recover-this-file
       :desc "Go to Greg's notes.org"      "n g" (cmd! (find-file "~/dev/org/notes.org"))
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
       ;; :desc "Search the elisp index"      "s e" (lambda () (interactive) (elisp-index-search))
@@ -1081,7 +1082,6 @@ If nil it defaults to `split-string-default-separators', normally
 
 ;;  this function sorts todos by the yymmdd timestamp in the roam filename
 ;;  so the todos in the most recently created files are at the top.
-;;  that works for me!
 (defun <=> (a b)
   "Compare A and B, returning 1, 0, or -1"
   (cond ((= a b) 0)
@@ -1089,7 +1089,8 @@ If nil it defaults to `split-string-default-separators', normally
         ((< a b) -1)))
 
 (defun gpc/org-agenda-cmp-user-defined (a b)
-  (let* ((regex "\\(210[0-9][0-9][0-9]\\)")
+  "Compare two org-agenda-events by their org-roam file prefix datestamp"
+  (let* ((regex "\\(2[0-9][0-9][0-9][0-9][0-9]\\)")
          (date-a (if (string-match regex a)
                      (string-to-number (or (match-string 1 a) "0"))
                    0))
