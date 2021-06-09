@@ -16,7 +16,8 @@
                                      (concat gpc/org-dir "roam-stem/"))
           gpc/pdf-dir "~/pdfs"
           gpc/bib-file "~/pdfs/references.bib"
-          org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser")
+          org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+          gpc/todays-notes-fn 'gc/org-roam-monthly)
 
   (setq gpc/email "greg@pilot.ai"
         gpc/org-dir "~/org/"
@@ -24,7 +25,8 @@
                                    (concat gpc/org-dir "roam-stem/"))
         gpc/pdf-dir "~/pdfs"
         gpc/bib-file "~/pdfs/references.bib"
-        org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
+        org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        gpc/todays-notes-fn 'gc/org-roam-weekly-this))
 
 (setq user-mail-address gpc/email
       org-directory gpc/org-dir)
