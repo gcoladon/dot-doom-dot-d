@@ -212,6 +212,7 @@ It also checks the following:
 (global-set-key (kbd "s-f") 'org-roam-node-find)
 (global-set-key (kbd "s-i") 'org-roam-node-insert)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
+(global-set-key (kbd "s-r") gpc/todays-notes-fn)
 
 (defun org-hide-properties ()
   "Hide all org-mode headline property drawers in buffer. Could be slow if buffer has a lot of overlays."
