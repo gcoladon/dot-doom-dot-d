@@ -253,6 +253,7 @@ It also checks the following:
 
 (map! :leader
       :desc "Toggle edebug"               "t e" (cmd! (eval-defun t))
+      :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
