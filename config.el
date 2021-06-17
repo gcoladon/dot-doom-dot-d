@@ -1121,7 +1121,7 @@ If nil it defaults to `split-string-default-separators', normally
          (fn-name (file-name-nondirectory (car fn-list)))
          (prefixed-fn (concat (format-time-string "%y%m%d_") fn-name))
          (key (substring prefixed-fn 0 (- (length prefixed-fn) 4)))
-         (dest-fn (concat gpc/pdf-dir prefixed-fn)))
+         (dest-fn (concat gpc/pdf-dir "/" prefixed-fn)))
     (dired-create-files #'dired-rename-file "Move" fn-list
                         (lambda (_from) dest-fn) t)
     (save-window-excursion
@@ -1129,14 +1129,12 @@ If nil it defaults to `split-string-default-separators', normally
       (goto-char (point-max))
       (when (not (looking-at "^")) (insert "\n"))
       (insert (concat "@inbook{" key ",\n"
-                      "  title           = {" title "},\n"
-                      "  crossref        = {210517_cs6515_ga_su21}\n}"))
-      ;; Are these lines needed or not?
-      ;; (goto-char (point-max))
-      ;; (when (not (looking-at "^")) (insert "\n"))
+                      "  title           = {{" title "}},\n"
+                      "  crossref        = {210517_cs6515_ga_su21}\n"
+                      "}\n"))
       (save-buffer))
     (setq gpc/save-templates org-roam-capture-templates)
-    (setq gpc/temps org-roam-capture-templates)
+    (setq gpc/temp org-roam-capture-templates)
     (while
         (and (not (eq nil gpc/temp))
              (not (equal "n" (caar gpc/temp))))
