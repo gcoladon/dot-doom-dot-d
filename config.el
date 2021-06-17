@@ -161,6 +161,15 @@ It also checks the following:
    first-str (org-read-date nil nil "--m" nil next-first))
   (org-roam-node-find nil (concat "Month of " (substring first-str 0 7))))
 
+;; (defun gc/org-roam-monthly-visit ()
+;;   "Find the monthly-file for this month."
+;;   (interactive)
+;;   (setq
+;;    next-first (org-read-date nil t "1")
+;;    first-tv (org-read-date nil t "--m" nil next-first)
+;;    first-str (org-read-date nil nil "--m" nil next-first))
+;;   (org-roam-node-visit (concat "Month of " (substring first-str 0 7))))
+
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
   (interactive)
@@ -1104,3 +1113,29 @@ If nil it defaults to `split-string-default-separators', normally
     (<=> date-a date-b)))
 
 (setq org-agenda-cmp-user-defined 'gpc/org-agenda-cmp-user-defined)
+
+(defun gpc/move-pdf-to-bibtex ()
+  "Try to simplify the incorporation of pdfs into org-roam"
+  (interactive)
+  (let* ((fn-list (dired-get-marked-files nil nil nil nil t))
+         (prefix (format-time-string "%y%m%d_"))
+         (full-fn (car fn-list))
+         (dest-dir "/Users/greg/pdfs/")
+         (fn-name (file-name-nondirectory full-fn))
+         (prefixed-fn (concat prefix fn-name))
+         (fn-base (substring prefixed-fn 0 (- (length prefixed-fn) 4)))
+         (dest-fn (concat dest-dir prefixed-fn))
+         (bibfile "/Users/greg/pdfs/references.bib")
+         )
+    (dired-create-files #'dired-rename-file "Move" fn-list
+                        (lambda (_from) dest-fn) t)
+    (save-window-excursion
+      (find-file bibfile)
+      (goto-char (point-max))
+      (when (not (looking-at "^")) (insert "\n"))
+      (insert (concat "@inbook{" fn-base ",\n  title           = {" fn-base "},\n  crossref        = {210517_cs6515_ga_su21}\n}"))
+      (goto-char (point-max))
+      (when (not (looking-at "^")) (insert "\n"))
+      (save-buffer))))
+
+(define-key dired-mode-map "b" 'gpc/move-pdf-to-bibtex)
