@@ -94,7 +94,7 @@
 #+ROAM_KEY: cite:${citekey}
 #+ROAM_TAGS:
 
-* ${title} %?
+* ${title}
 :PROPERTIES:
 :URL: ${url}
 :AUTHOR: ${author-or-editor-abbrev}
