@@ -1114,9 +1114,20 @@ If nil it defaults to `split-string-default-separators', normally
 
 (setq org-agenda-cmp-user-defined 'gpc/org-agenda-cmp-user-defined)
 
-(defun gpc/move-pdf-to-bibtex (title)
+(defun gpc/move-pdf-to-bibtex (title key)
   "Try to simplify the incorporation of pdfs into org-roam"
-  (interactive (list (read-string "Title: " )))
+  (interactive
+   (list
+    (read-string "Title: " )
+    (completing-read
+     "Which class is this document for? "
+     (seq-filter
+      (lambda (elt) (string-match-p "_ga_" elt))
+      (mapcar
+       (lambda (elt) (cdr (assoc "=key=" (cdr elt))))
+       (seq-filter
+        (lambda (elt) (equal "book" (cdr (assoc "=type=" (cdr elt)))))
+        (bibtex-completion-candidates)))))))
   (let* ((fn-list (dired-get-marked-files nil nil nil nil t))
          (fn-name (file-name-nondirectory (car fn-list)))
          (prefixed-fn (concat (format-time-string "%y%m%d_") fn-name))
@@ -1130,7 +1141,7 @@ If nil it defaults to `split-string-default-separators', normally
       (when (not (looking-at "^")) (insert "\n"))
       (insert (concat "@inbook{" key ",\n"
                       "  title           = {{" title "}},\n"
-                      "  crossref        = {210517_cs6515_ga_su21}\n"
+                      "  crossref        = {" key "}\n"
                       "}\n"))
       (save-buffer))
     (setq gpc/save-templates org-roam-capture-templates)
