@@ -1114,6 +1114,14 @@ If nil it defaults to `split-string-default-separators', normally
 
 (setq org-agenda-cmp-user-defined 'gpc/org-agenda-cmp-user-defined)
 
+;; The next few forms implement the ability to go to a directory
+;; in dired and press 'b' to migrate a PDF from one of my classes
+;; into a sub-bibtex entry.
+;;
+;; I think I would also like to have a version that I use for
+;; other people's research papers, which does not make them inbooks
+;; but rather articles of their own. Some other time.
+
 (defun gpc/move-pdfs-to-bibtex (key)
   "Try to simplify the incorporation of pdfs into org-roam"
   (interactive
