@@ -1114,11 +1114,10 @@ If nil it defaults to `split-string-default-separators', normally
 
 (setq org-agenda-cmp-user-defined 'gpc/org-agenda-cmp-user-defined)
 
-(defun gpc/move-pdf-to-bibtex (title key)
+(defun gpc/move-pdfs-to-bibtex (key)
   "Try to simplify the incorporation of pdfs into org-roam"
   (interactive
    (list
-    (read-string "Title: " )
     (completing-read
      "Which class is this document for? "
      (seq-filter
@@ -1128,20 +1127,32 @@ If nil it defaults to `split-string-default-separators', normally
        (seq-filter
         (lambda (elt) (equal "book" (cdr (assoc "=type=" (cdr elt)))))
         (bibtex-completion-candidates)))))))
-  (let* ((fn-list (dired-get-marked-files nil nil nil nil t))
-         (fn-name (file-name-nondirectory (car fn-list)))
-         (prefixed-fn (concat (format-time-string "%y%m%d_") fn-name))
+  (seq-do
+   (lambda (file) (gpc/move-pdf-to-bibtex file key))
+   (dired-get-marked-files nil nil nil nil t)))
+
+(defun gpc/move-pdf-to-bibtex (file crossref)
+  "Try to simplify the incorporation of pdfs into org-roam"
+  (let* ((basename (file-name-nondirectory file))
+         (suffixless (substring basename 0 (- (length basename) 4)))
+         (title-guess (mapconcat 'identity
+                                 (mapcar (lambda (word) (if (< (length word) 4)
+                                                            (upcase word)
+                                                          (capitalize word)))
+                                         (split-string suffixless "_")) " "))
+         (title (read-string "Preferred title for this document: " title-guess))
+         (prefixed-fn (concat (format-time-string "%y%m%d_") basename))
          (key (substring prefixed-fn 0 (- (length prefixed-fn) 4)))
          (dest-fn (concat gpc/pdf-dir "/" prefixed-fn)))
-    (dired-create-files #'dired-rename-file "Move" fn-list
+    (dired-create-files #'dired-rename-file "Move" (list file)
                         (lambda (_from) dest-fn) t)
     (save-window-excursion
       (find-file gpc/bib-file)
       (goto-char (point-max))
       (when (not (looking-at "^")) (insert "\n"))
       (insert (concat "@inbook{" key ",\n"
-                      "  title           = {{" title "}},\n"
-                      "  crossref        = {" key "}\n"
+                      "  title           = \"{{" title "}}\",\n"
+                      "  crossref        = {" crossref "}\n"
                       "}\n"))
       (save-buffer))
     (setq gpc/save-templates org-roam-capture-templates)
@@ -1154,4 +1165,4 @@ If nil it defaults to `split-string-default-separators', normally
     (bibtex-completion-edit-notes (list key))
     (setq org-roam-capture-templates gpc/save-templates)))
 
-(define-key dired-mode-map "b" 'gpc/move-pdf-to-bibtex)
+(define-key dired-mode-map "b" 'gpc/move-pdfs-to-bibtex)
