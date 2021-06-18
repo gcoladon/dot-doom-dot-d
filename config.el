@@ -1122,7 +1122,7 @@ If nil it defaults to `split-string-default-separators', normally
     (completing-read
      "Which class is this document for? "
      (seq-filter
-      (lambda (elt) (string-match-p "_ga_" elt))
+      (lambda (elt) (string-match-p "_oms_cs_" elt))
       (mapcar
        (lambda (elt) (cdr (assoc "=key=" (cdr elt))))
        (seq-filter
