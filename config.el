@@ -267,6 +267,7 @@ It also checks the following:
       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
+      :desc "Toggle tbl-col-width"        "t c" #'org-table-toggle-column-width
       :desc "org-forward-heading-same-level" "n C-f" #'org-forward-heading-same-level
       :desc "Recover this file"           "f v" #'recover-this-file
       :desc "Go to Greg's notes.org"      "n g" (cmd! (find-file "~/dev/org/notes.org"))
@@ -389,6 +390,13 @@ It also checks the following:
   :config
   (setq org-roam-directory "/Users/greg/org/")
   (org-roam-setup))
+
+;; (use-package! org-roam-protocol)
+
+(after! org-protocol
+  (use-package! org-roam-protocol))
+
+  ;; (require org-roam-protocol))
 
 ;; following instructions from https://github.com/org-roam/org-roam-bibtex
 (use-package! org-roam-bibtex
@@ -1173,4 +1181,42 @@ If nil it defaults to `split-string-default-separators', normally
     (bibtex-completion-edit-notes (list key))
     (setq org-roam-capture-templates gpc/save-templates)))
 
+
+
+(defun gpc/move-paper-to-bibtex ()
+  "Try to simplify the incorporation of papers that are distributed
+   by OMS classes into my own org-roam library"
+  (interactive)
+  (let* ((file (car (dired-get-marked-files nil nil nil nil t)))
+         (author (read-string "Author: "))
+         (year (read-string "Year: "))
+         (title (read-string "Title: "))
+         (basename (file-name-nondirectory file))
+         (prefixed-fn (concat (format-time-string "%y%m%d_") basename))
+         (key (substring prefixed-fn 0 (- (length prefixed-fn) 4)))
+         (dest-fn (concat gpc/pdf-dir "/" prefixed-fn)))
+    (dired-create-files #'dired-rename-file "Move" (list file)
+                        (lambda (_from) dest-fn) t)
+    (save-window-excursion
+      (find-file gpc/bib-file)
+      (goto-char (point-max))
+      (when (not (looking-at "^")) (insert "\n"))
+      (insert (concat "@inbook{" key ",\n"
+                      "  title           = \"{{" title "}}\",\n"
+                      "  crossref        = {" crossref "}\n"
+                      "}\n"))
+      (save-buffer))
+    (setq gpc/save-templates org-roam-capture-templates)
+    (setq gpc/temp org-roam-capture-templates)
+    (while
+        (and (not (eq nil gpc/temp))
+             (not (equal "n" (caar gpc/temp))))
+      (setq gpc/temp (cdr gpc/temp)))
+    (setq org-roam-capture-templates gpc/temp)
+    (bibtex-completion-edit-notes (list key))
+    (setq org-roam-capture-templates gpc/save-templates)))
+
+
 (define-key dired-mode-map "b" 'gpc/move-pdfs-to-bibtex)
+
+(define-key dired-mode-map "B" 'gpc/move-paper-to-bibtex)

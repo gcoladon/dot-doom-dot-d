@@ -45,6 +45,10 @@
  '(org-ref-pdf-directory gpc/pdf-dir)
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
+ '(org-roam-capture-ref-templates
+   '(("r" "ref" plain "%?" :if-new
+      (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+title: ${title}")
+      :unnarrowed t)))
  '(org-roam-capture-templates
    '(("w" "work blank" plain "%?" :if-new
       (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
