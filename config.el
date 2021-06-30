@@ -261,6 +261,7 @@ It also checks the following:
 ;; (setq before-save-hook nil)
 
 (map! :leader
+      :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
       :desc "Toggle edebug"               "t e" (cmd! (eval-defun t))
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
@@ -1220,3 +1221,14 @@ If nil it defaults to `split-string-default-separators', normally
 (define-key dired-mode-map "b" 'gpc/move-pdfs-to-bibtex)
 
 (define-key dired-mode-map "B" 'gpc/move-paper-to-bibtex)
+
+;; This was useful when I was converting text into tex for
+;; my CS 6515 GA assignments
+(defun gpc/wrap-region-with-dollars ()
+  "Put a dollar at point-min and also at point-max"
+  (interactive)
+  (save-excursion
+    (goto-char (region-end))
+    (insert "$")
+    (goto-char (region-beginning))
+    (insert "$")))
