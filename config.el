@@ -262,6 +262,7 @@ It also checks the following:
 
 (map! :leader
       :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
+      :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
       :desc "Toggle edebug"               "t e" (cmd! (eval-defun t))
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
@@ -1224,11 +1225,21 @@ If nil it defaults to `split-string-default-separators', normally
 
 ;; This was useful when I was converting text into tex for
 ;; my CS 6515 GA assignments
-(defun gpc/wrap-region-with-dollars ()
+(defun gpc/wrap-region-with-something (before after)
   "Put a dollar at point-min and also at point-max"
   (interactive)
   (save-excursion
     (goto-char (region-end))
-    (insert "$")
+    (insert before)
     (goto-char (region-beginning))
-    (insert "$")))
+    (insert after)))
+
+(defun gpc/wrap-region-with-dollars ()
+  "Put a dollar at point-min and also at point-max"
+  (interactive)
+  (gpc/wrap-region-with-something "$" "$"))
+
+(defun gpc/wrap-region-with-textsc ()
+  "Wrap an algorithm name for Anki"
+  (interactive)
+  (gpc/wrap-region-with-something "} [/$]" "[$] \\textsc{"))
