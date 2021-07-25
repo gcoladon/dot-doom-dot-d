@@ -1233,7 +1233,8 @@ If nil it defaults to `split-string-default-separators', normally
     (goto-char (region-end))
     (insert after)
     (goto-char (region-beginning))
-    (insert before)))
+    (insert before))
+  (forward-char (length after)))
 
 (defun gpc/wrap-region-with-dollars ()
   "Put a dollar at point-min and also at point-max"
