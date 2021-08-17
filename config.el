@@ -1134,7 +1134,7 @@ If nil it defaults to `split-string-default-separators', normally
 ;; but rather articles of their own. Some other time.
 
 (defun gpc/move-pdfs-to-bibtex (key)
-  "Try to simplify the incorporation of pdfs into org-roam"
+  "Choose an _oms_cs_ bibtex entry for which to add one or more inbook entries via gpc/move-pdf-to-bibtex"
   (interactive
    (list
     (completing-read
@@ -1160,7 +1160,10 @@ If nil it defaults to `split-string-default-separators', normally
                                                           (capitalize word)))
                                          (split-string suffixless "_")) " "))
          (title (read-string "Preferred title for this document: " title-guess))
-         (prefixed-fn (concat (format-time-string "%y%m%d_") basename))
+         (pref-basename (read-string "Preferred base filename: " suffixless))
+         (trunc-basename (substring pref-basename 0 (min 23 (length pref-basename))))
+         ;; I kind of would like to trim off trailing _ for aesthetic reasons
+         (prefixed-fn (concat (format-time-string "%y%m%d_") trunc-basename ".pdf"))
          (key (substring prefixed-fn 0 (- (length prefixed-fn) 4)))
          (dest-fn (concat gpc/pdf-dir "/" prefixed-fn)))
     (dired-create-files #'dired-rename-file "Move" (list file)
@@ -1170,6 +1173,7 @@ If nil it defaults to `split-string-default-separators', normally
       (goto-char (point-max))
       (when (not (looking-at "^")) (insert "\n"))
       (insert (concat "@inbook{" key ",\n"
+                      ;; If you try to get away with a single {}, the caps get messed up
                       "  title           = \"{{" title "}}\",\n"
                       "  crossref        = {" crossref "}\n"
                       "}\n"))
@@ -1183,7 +1187,6 @@ If nil it defaults to `split-string-default-separators', normally
     (setq org-roam-capture-templates gpc/temp)
     (bibtex-completion-edit-notes (list key))
     (setq org-roam-capture-templates gpc/save-templates)))
-
 
 
 (defun gpc/move-paper-to-bibtex ()
@@ -1205,7 +1208,7 @@ If nil it defaults to `split-string-default-separators', normally
       (goto-char (point-max))
       (when (not (looking-at "^")) (insert "\n"))
       (insert (concat "@inbook{" key ",\n"
-                      "  title           = \"{{" title "}}\",\n"
+                      "  title           = \"{" title "}\",\n"
                       "  crossref        = {" crossref "}\n"
                       "}\n"))
       (save-buffer))
@@ -1218,7 +1221,6 @@ If nil it defaults to `split-string-default-separators', normally
     (setq org-roam-capture-templates gpc/temp)
     (bibtex-completion-edit-notes (list key))
     (setq org-roam-capture-templates gpc/save-templates)))
-
 
 (define-key dired-mode-map "b" 'gpc/move-pdfs-to-bibtex)
 
