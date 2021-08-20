@@ -177,20 +177,20 @@ It also checks the following:
       (gc/org-roam-find-weekly "+0")
     (gc/org-roam-find-weekly "-mon")))
 
-(defun gc/org-roam-weekly-last ()
-  "Find the weekly-file for last week."
-  (interactive)
-  (gc/org-roam-find-weekly "-2mon"))
+;; (defun gc/org-roam-weekly-last ()
+;;   "Find the weekly-file for last week."
+;;   (interactive)
+;;   (gc/org-roam-find-weekly "-2mon"))
 
-(defun gc/org-roam-weekly-next ()
-  "Find the weekly-file for next week."
-  (interactive)
-  (gc/org-roam-find-weekly "+mon"))
+;; (defun gc/org-roam-weekly-next ()
+;;   "Find the weekly-file for next week."
+;;   (interactive)
+;;   (gc/org-roam-find-weekly "+mon"))
 
-(defun gc/org-roam-weekly-next-next ()
-  "Find the weekly-file for next week."
-  (interactive)
-  (gc/org-roam-find-weekly "+2mon"))
+;; (defun gc/org-roam-weekly-next-next ()
+;;   "Find the weekly-file for next week."
+;;   (interactive)
+;;   (gc/org-roam-find-weekly "+2mon"))
 
 (defun gc/org-roam-graph-1 ()
   "Generate a graph that goes out a distance of one edge"
@@ -302,11 +302,14 @@ It also checks the following:
        :desc "helm-bibtex"                   "h" #'helm-bibtex
        :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
 
-       :desc "This Monthly"                  "m" #'gc/org-roam-monthly
-       :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
-       :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
-       :desc "Next Weekly"                   "w" #'gc/org-roam-weekly-next
-       :desc "Next-Next Weekly"              "W" #'gc/org-roam-weekly-next
+       ;; Don't really use these, so I figure I don't really need them either
+       ;; :desc "This Monthly"                  "m" #'gc/org-roam-monthly
+       ;; :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
+       ;; :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
+       ;; :desc "Next Weekly"                   "w" #'gc/org-roam-weekly-next
+       ;; :desc "Next-Next Weekly"              "W" #'gc/org-roam-weekly-next
+
+       :desc "Copy org subtree"              "t" #'org-copy-subtree
 
        :desc "Graph of 1"                    "1" #'gc/org-roam-graph-1
        :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2
