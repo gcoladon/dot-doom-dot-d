@@ -1143,7 +1143,9 @@ If nil it defaults to `split-string-default-separators', normally
     (completing-read
      "Which class is this document for? "
      (seq-filter
-      (lambda (elt) (string-match-p "_oms_cs_" elt))
+      (lambda (elt) (or (string-match-p "_gatech_cs_" elt)
+                        ;; I would have used stanford but tag got too long
+                        (string-match-p "_stan_cs_" elt)))
       (mapcar
        (lambda (elt) (cdr (assoc "=key=" (cdr elt))))
        (seq-filter
@@ -1151,7 +1153,9 @@ If nil it defaults to `split-string-default-separators', normally
         (bibtex-completion-candidates)))))))
   (seq-do
    (lambda (file) (gpc/move-pdf-to-bibtex file key))
-   (dired-get-marked-files nil nil nil nil t)))
+   ;; I reverse so that when helm-bibtex loads them all up,
+   ;; they are in the right order
+   (reverse (dired-get-marked-files nil nil nil nil t))))
 
 (defun gpc/move-pdf-to-bibtex (file crossref)
   "Try to simplify the incorporation of pdfs into org-roam"
