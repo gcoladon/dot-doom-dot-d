@@ -117,7 +117,7 @@
  '(org-roam-graph-shorten-titles 'wrap)
  '(org-startup-folded nil)
  '(pdf-misc-print-program-executable "/usr/local/bin/gpr")
- '(projectile-project-search-path "~/src")
+ '(projectile-project-search-path '("~/dl" "~/src"))
  '(save-place-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
