@@ -400,10 +400,30 @@ It also checks the following:
 
 ;; (use-package! org-roam-protocol)
 
-(after! org-protocol
-  (use-package! org-roam-protocol))
+(defun gpc/org-roam-protocol-get-pdf (info)
+  "Process an org-protocol://roam-pdf?ref= style url with INFO.
 
-  ;; (require org-roam-protocol))
+It saves the PDF at the target location into ~/pdfs and also
+creates a corresponding org-noter file
+
+  javascript:location.href = \\='org-protocol://roam-pdf?template=r&url=\\='+ \\
+        encodeURIComponent(location.href))"
+
+  (interactive)
+  (unless (plist-get info :url)
+    (user-error "No url provided"))
+  (gpc/move-pdf-to-bibtex-standalone (plist-get info :url)))
+
+(after! org-protocol
+  (use-package! org-roam-protocol)
+
+  ;; This is my attempt at making a capture-PDF-into-org-roam utility,
+  ;; to make it easier to capture research papers that I've been given a URL to
+
+  (push '("org-roam-pdf"
+          :protocol "roam-pdf"
+          :function gpc/org-roam-protocol-get-pdf)
+        org-protocol-protocol-alist))
 
 ;; following instructions from https://github.com/org-roam/org-roam-bibtex
 (use-package! org-roam-bibtex
@@ -424,8 +444,8 @@ It also checks the following:
   (require 'org-ref)
   (bibtex-set-dialect 'BibTeX)
   (arxiv-get-pdf-add-bibtex-entry (arxiv-maybe-arxiv-id-from-current-kill)
-                                  (car org-ref-default-bibliography)
-                                  (concat org-ref-pdf-directory "/")))
+                                  gpc/bib-file
+                                  (concat gpc/pdf-dir "/")))
 
 (defun html2org-clipboard ()
   "Convert clipboard contents from HTML to Org and then paste (yank)."
@@ -1137,8 +1157,9 @@ If nil it defaults to `split-string-default-separators', normally
 ;; other people's research papers, which does not make them inbooks
 ;; but rather articles of their own. Some other time.
 
-(defun gpc/move-pdfs-to-bibtex (key)
-  "Choose an _oms_cs_ bibtex entry for which to add one or more inbook entries via gpc/move-pdf-to-bibtex"
+(defun gpc/move-pdfs-to-bibtex-crossref (key)
+  "Choose an _oms_cs_ bibtex entry for which to add one or more
+inbook entries via gpc/move-pdf-to-bibtex-crossref"
   (interactive
    (list
     (completing-read
@@ -1152,14 +1173,26 @@ If nil it defaults to `split-string-default-separators', normally
        (seq-filter
         (lambda (elt) (equal "book" (cdr (assoc "=type=" (cdr elt)))))
         (bibtex-completion-candidates)))))))
+  (setq org-capture-link-is-already-stored t)
   (seq-do
-   (lambda (file) (gpc/move-pdf-to-bibtex file key))
+   (lambda (file) (gpc/move-pdf-to-bibtex-crossref file key))
    ;; I reverse so that when helm-bibtex loads them all up,
    ;; they are in the right order
    (reverse (dired-get-marked-files nil nil nil nil t))))
 
-(defun gpc/move-pdf-to-bibtex (file crossref)
-  "Try to simplify the incorporation of pdfs into org-roam"
+(defun gpc/capture-noter-file (key)
+  (setq gpc/save-templates org-roam-capture-templates)
+  (setq gpc/temp org-roam-capture-templates)
+  (while
+      (and (not (eq nil gpc/temp))
+           (not (equal "n" (caar gpc/temp))))
+    (setq gpc/temp (cdr gpc/temp)))
+  (setq org-roam-capture-templates gpc/temp)
+  (bibtex-completion-edit-notes (list key))
+  (setq org-roam-capture-templates gpc/save-templates))
+
+(defun gpc/move-pdf-to-bibtex-crossref (file crossref)
+  "Try to simplify the incorporation of pdfs from a class into org-roam"
   (let* ((basename (file-name-nondirectory file))
          (suffixless (substring basename 0 (- (length basename) 4)))
          (title-guess (mapconcat 'identity
@@ -1186,20 +1219,47 @@ If nil it defaults to `split-string-default-separators', normally
                       "  crossref        = {" crossref "}\n"
                       "}\n"))
       (save-buffer))
-    (setq gpc/save-templates org-roam-capture-templates)
-    (setq gpc/temp org-roam-capture-templates)
-    (while
-        (and (not (eq nil gpc/temp))
-             (not (equal "n" (caar gpc/temp))))
-      (setq gpc/temp (cdr gpc/temp)))
-    (setq org-roam-capture-templates gpc/temp)
-    (bibtex-completion-edit-notes (list key))
-    (setq org-roam-capture-templates gpc/save-templates)))
+    (gpc/capture-noter-file key)))
 
+;; Until I get it to work via org-protocol, use this!
+;; (gpc/move-pdf-to-bibtex-standalone "https://www.nature.com/articles/nature14539.pdf")
 
-(defun gpc/move-paper-to-bibtex ()
+(defun gpc/move-pdf-to-bibtex-standalone (pdf-url)
+  "Try to simplify the incorporation of pdfs from a class into org-roam"
+  (let* ((pdf-author (read-string "Author: "))
+         (pdf-title (read-string "Title: "))
+         (pdf-year (read-string "Year: "))
+         (prefixed-fn (concat (format-time-string "%y%m%d_")
+                              (downcase pdf-author)
+                              (substring pdf-year 2)
+                              ".pdf"))
+         (bibtex-key (substring prefixed-fn 0 (- (length prefixed-fn) 4)))
+         (dest-fn (concat gpc/pdf-dir "/" prefixed-fn)))
+    (url-copy-file pdf-url dest-fn)
+    (save-window-excursion
+      (find-file gpc/bib-file)
+      (goto-char (point-max))
+      (when (not (looking-at "^")) (insert "\n"))
+      (insert (concat "@article{" bibtex-key ",\n"
+                      "  author          = {" pdf-author "},\n"
+                      "  title           = {" pdf-title "},\n"
+                      "  year            = {" pdf-year "},\n"
+                      "  url             = {" pdf-url "}\n"
+                      "}\n"))
+      (save-buffer))
+    (gpc/capture-noter-file bibtex-key)))
+
+(defun gpc/move-paper-to-bibtex-crossref ()
   "Try to simplify the incorporation of papers that are distributed
-   by OMS classes into my own org-roam library"
+   by OMS classes into my own org-roam library
+
+This function doesn't really work yet. I'm not even sure if it
+has a real use case? I think maybe when I have a PDF that didn't come
+from the internet, I could somehow use this in conjunction with the
+one that pulls from the internet?
+
+Work this out next time I try to incorporate a bunch of PDFs that I
+download en masse from canvas or someplace."
   (interactive)
   (let* ((file (car (dired-get-marked-files nil nil nil nil t)))
          (author (read-string "Author: "))
@@ -1230,9 +1290,9 @@ If nil it defaults to `split-string-default-separators', normally
     (bibtex-completion-edit-notes (list key))
     (setq org-roam-capture-templates gpc/save-templates)))
 
-(define-key dired-mode-map "b" 'gpc/move-pdfs-to-bibtex)
+(define-key dired-mode-map "b" 'gpc/move-pdfs-to-bibtex-crossref)
 
-(define-key dired-mode-map "B" 'gpc/move-paper-to-bibtex)
+(define-key dired-mode-map "B" 'gpc/move-paper-to-bibtex-crossref)
 
 ;; This was useful when I was converting text into tex for
 ;; my CS 6515 GA assignments
@@ -1260,3 +1320,4 @@ If nil it defaults to `split-string-default-separators', normally
   "Wrap an algorithm name for Anki"
   (interactive)
   (gpc/wrap-region-with-something "[$]\\textsc{" "}[/$]"))
+
