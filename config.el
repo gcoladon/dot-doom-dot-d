@@ -195,7 +195,8 @@ It also checks the following:
 (defun gc/org-roam-graph-1 ()
   "Generate a graph that goes out a distance of one edge"
   (interactive)
-  (org-roam-graph 1))
+  (let ((current-prefix-arg 1))
+    (org-roam-graph)))
 
 (defun gc/org-roam-graph-2 ()
   "Generate a graph that goes out a distance of two edges"
@@ -1222,7 +1223,7 @@ inbook entries via gpc/move-pdf-to-bibtex-crossref"
     (gpc/capture-noter-file key)))
 
 ;; Until I get it to work via org-protocol, use this!
-;; (gpc/move-pdf-to-bibtex-standalone "https://www.nature.com/articles/nature14539.pdf")
+;; (gpc/move-pdf-to-bibtex-standalone "https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf")
 
 (defun gpc/move-pdf-to-bibtex-standalone (pdf-url)
   "Try to simplify the incorporation of pdfs from a class into org-roam"
@@ -1242,7 +1243,7 @@ inbook entries via gpc/move-pdf-to-bibtex-crossref"
       (when (not (looking-at "^")) (insert "\n"))
       (insert (concat "@article{" bibtex-key ",\n"
                       "  author          = {" pdf-author "},\n"
-                      "  title           = {" pdf-title "},\n"
+                      "  title           = {{" pdf-title "}},\n"
                       "  year            = {" pdf-year "},\n"
                       "  url             = {" pdf-url "}\n"
                       "}\n"))
