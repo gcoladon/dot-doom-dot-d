@@ -7,6 +7,9 @@
 ;; clients, file templates and snippets.
 (setq user-full-name "Greg Coladonato")
 
+;; So that org capturing doesn't insert the ID of the captured file at point
+(setq org-capture-link-is-already-stored t)
+
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
                                      (shell-command-to-string "ifconfig en0 | grep ether"))
            "ether f0:18:98:9a:c9:2c ")
