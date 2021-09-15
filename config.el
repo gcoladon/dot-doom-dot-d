@@ -266,6 +266,7 @@ It also checks the following:
 ;; (setq before-save-hook nil)
 
 (map! :leader
+      :desc "Count words region"          "l =" #'count-words-region
       :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
       :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
       :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
