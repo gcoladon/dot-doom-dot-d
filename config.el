@@ -269,8 +269,8 @@ It also checks the following:
       :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
       :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
       :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
-      :desc "Toggle edebug"               "t e" (cmd! (eval-defun t))
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
+      :desc "JSON pretty print buffer"    "t j" #'json-pretty-print-buffer
       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
