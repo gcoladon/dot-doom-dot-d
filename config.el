@@ -419,6 +419,26 @@ creates a corresponding org-noter file
     (user-error "No url provided"))
   (gpc/move-pdf-to-bibtex-standalone (plist-get info :url)))
 
+;;  Doesn't work yet! Not sure why.
+;;  In the mean time I just store-link, and then C-c r x, and that works
+(defun gpc/org-roam-protocol-get-arxiv (info)
+  "Process an org-protocol://roam-arxiv?ref= style url with INFO.
+
+It saves the PDF at the target location into ~/pdfs and also
+creates a corresponding org-noter file
+
+  javascript:location.href = \\='org-protocol://roam-arxiv?url=\\='+ \\
+        encodeURIComponent(location.href))"
+
+  (interactive)
+  (unless (plist-get info :url)
+    (user-error "No url provided"))
+  (require 'org-ref)
+  (bibtex-set-dialect 'BibTeX)
+  (arxiv-get-pdf-add-bibtex-entry (plist-get info :url)
+                                  gpc/bib-file
+                                  (concat gpc/pdf-dir "/")))
+
 (after! org-protocol
   (use-package! org-roam-protocol)
 
@@ -428,7 +448,12 @@ creates a corresponding org-noter file
   (push '("org-roam-pdf"
           :protocol "roam-pdf"
           :function gpc/org-roam-protocol-get-pdf)
+        org-protocol-protocol-alist)
+  (push '("org-roam-arxiv"
+          :protocol "roam-arxiv"
+          :function gpc/org-roam-protocol-get-arxiv)
         org-protocol-protocol-alist))
+
 
 ;; following instructions from https://github.com/org-roam/org-roam-bibtex
 (use-package! org-roam-bibtex
