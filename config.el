@@ -267,6 +267,7 @@ It also checks the following:
 
 (map! :leader
       :desc "Count words region"          "l =" #'count-words-region
+      :desc "Search on arXiv"             "s a" #'gpc/search-on-arxiv
       :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
       :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
       :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
@@ -1351,3 +1352,12 @@ download en masse from canvas or someplace."
   (interactive)
   (gpc/wrap-region-with-something "[$]\\textsc{" "}[/$]"))
 
+;; https://www.emacswiki.org/emacs/ParenthesisMatching
+;; Needed to do this to better natch
+(modify-syntax-entry ?“ "(”")
+(modify-syntax-entry ?” ")“")
+
+(defun gpc/search-on-arxiv (start end)
+  "Get the region, add arxiv to it, and search for it"
+  (interactive "r")
+  (+lookup/online (concat "arxiv " (buffer-substring-no-properties start end)) "Google"))
