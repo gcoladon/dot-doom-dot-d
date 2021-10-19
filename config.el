@@ -462,12 +462,14 @@ creates a corresponding org-noter file
   ;; :hook (org-roam-mode . org-roam-bibtex-mode)
   :config
   (require 'org-ref)
+  ;; (require 'helm-bibtex)
   (bibtex-set-dialect 'BibTeX)
-  (helm-add-action-to-source
-   "Edit org-noter Notes"
-   'helm-bibtex-edit-notes
-   helm-source-bibtex
-   0))
+  ;; (helm-add-action-to-source
+  ;;  "Edit org-noter Notes"
+  ;;  'helm-bibtex-edit-notes
+  ;;  helm-source-bibtex
+  ;;  0)
+)
 
 (defun gpc/get-arxiv ()
   "Use the defaults for all three variables, don't ask me!!"

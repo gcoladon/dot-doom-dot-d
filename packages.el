@@ -71,3 +71,5 @@
   :recipe (:host github :repo "nobiot/org-transclusion"))
 
 (package! command-log-mode)
+
+(package! citeproc)
