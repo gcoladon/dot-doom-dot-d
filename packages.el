@@ -73,3 +73,4 @@
 (package! command-log-mode)
 
 (package! citeproc)
+(package! helm-bibtex)
