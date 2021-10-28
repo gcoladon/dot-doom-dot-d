@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(+org-roam-open-buffer-on-find-file nil t)
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
- '(bibtex-completion-bibliography gpc/bib-file)
+ '(bibtex-completion-bibliography (list gpc/bib-file))
  '(bibtex-completion-display-formats
    '((t . "${author:20} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
  '(bibtex-completion-library-path gpc/pdf-dir)
@@ -21,7 +21,7 @@
  '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 40)))
  '(orb-preformat-keywords
    '(("citekey" . "=key=")
-     "url" "file" "author-or-editor-abbrev" "keywords"))
+     "url" "file" "author-or-editor-abbrev" "keywords" "abstract" "author" "year"))
  '(orb-switch-persp t)
  '(org-M-RET-may-split-line t)
  '(org-agenda-files gpc/org-agenda-files)
@@ -40,9 +40,7 @@
  '(org-log-into-drawer t)
  '(org-noter-always-create-frame nil)
  '(org-noter-doc-split-fraction '(0.6 . 0.6))
- '(bibtex-completion-bibliography (list gpc/bib-file))
  '(org-ref-notes-directory (concat gpc/org-dir "roam-stem/"))
- '(bibtex-completion-library-path gpc/pdf-dir)
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
  '(org-roam-capture-ref-templates
@@ -94,17 +92,19 @@
 - ")
       :unnarrowed t)
      ("n" "ref+noter" plain "%?" :if-new
-      (file+head "roam-stem/${citekey}.org" "#+TITLE: ${title}
+      (file+head "roam-stem/${citekey}.org" "#+TITLE: %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}
 #+ROAM_KEY: cite:${citekey}
 #+ROAM_TAGS:
 
-* ${title}
+* %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}
 :PROPERTIES:
 :URL: ${url}
 :AUTHOR: ${author-or-editor-abbrev}
 :NOTER_DOCUMENT: ${file}
 :NOTER_PAGE:
 :END:
+** Abstract
+${abstract}
 ")
       :unnarrowed t)))
  '(org-roam-directory "/Users/greg/org/")
