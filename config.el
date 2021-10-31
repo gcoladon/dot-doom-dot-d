@@ -332,7 +332,7 @@ It also checks the following:
   (let ((result
          (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
            (apply orig-fun args))))
-    (substring result 0 (min 30 (length result)))))
+    (substring result 0 (min 31 (length result)))))
 
 (advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
 
@@ -480,7 +480,22 @@ creates a corresponding org-noter file
   (bibtex-set-dialect 'BibTeX)
   (arxiv-get-pdf-add-bibtex-entry (arxiv-maybe-arxiv-id-from-current-kill)
                                   gpc/bib-file
-                                  (concat gpc/pdf-dir "/")))
+                                  (concat gpc/pdf-dir "/"))
+  (save-window-excursion
+    (find-file "~/pdfs/references.bib")
+    (goto-char (point-max))
+    (bibtex-beginning-of-entry)
+    (re-search-forward bibtex-entry-maybe-empty-head)
+    (if (match-beginning bibtex-key-in-head)
+        (gpc/capture-noter-file (buffer-substring-no-properties
+                                 (match-beginning bibtex-key-in-head)
+                                 (match-end bibtex-key-in-head))))))
+
+;; Ask what's up with these errors lately
+;; error in process sentinel: async-handle-result: Cannot open load file: No such file or directory, dash
+;; error in process sentinel: Cannot open load file: No such file or directory, dash
+;; (setq doi-utils-async-download nil)
+;; Fixed by https://github.com/jkitchin/org-ref/issues/923
 
 (defun html2org-clipboard ()
   "Convert clipboard contents from HTML to Org and then paste (yank)."
