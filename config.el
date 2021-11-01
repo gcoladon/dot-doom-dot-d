@@ -1015,7 +1015,7 @@ Return the commands created, as a list of symbols."
    (lambda (num) (concat "* "
                          (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
                          "\n** Plan\n** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
-   (number-sequence -1 5)
+   (number-sequence 0 4)
    ""))
 
 ;; (gpc/gen-weekly (current-time))
