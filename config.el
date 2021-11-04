@@ -399,10 +399,10 @@ It also checks the following:
 (after! org-roam
   (org-roam-bibtex-mode))
 
-(use-package! org-roam
-  :config
-  (setq org-roam-directory "/Users/greg/org/")
-  (org-roam-setup))
+;; (use-package! org-roam
+;;   :config
+;;   (setq org-roam-directory "/Users/greg/org/")
+;;   (org-roam-setup))
 
 ;; (use-package! org-roam-protocol)
 
