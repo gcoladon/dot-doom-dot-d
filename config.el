@@ -10,6 +10,11 @@
 ;; So that org capturing doesn't insert the ID of the captured file at point
 (setq org-capture-link-is-already-stored t)
 
+;; trying to debug the cache problem
+(setq org-element--cache-self-verify 'backtrace)
+(setq org-element-use-cache nil)
+(setq org-roam-v2-ack t)
+
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
                                      (shell-command-to-string "ifconfig en0 | grep ether"))
            "ether f0:18:98:9a:c9:2c ")
@@ -1233,6 +1238,9 @@ inbook entries via gpc/move-pdf-to-bibtex-crossref"
 (defun gpc/capture-noter-file (key)
   (setq gpc/save-templates org-roam-capture-templates)
   (setq gpc/temp org-roam-capture-templates)
+  ;; Does this logic only work as long as the desired template
+  ;; is the last one in the list? If so, I may need to enhance this
+  ;; logic at some point if that ever fails to hold true.
   (while
       (and (not (eq nil gpc/temp))
            (not (equal "n" (caar gpc/temp))))
