@@ -281,6 +281,7 @@ It also checks the following:
       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
+      :desc "Toggle/set a variable"       "t v" #'set-variable
       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
       :desc "Toggle tbl-col-width"        "t c" #'org-table-toggle-column-width
       :desc "org-forward-heading-same-level" "n C-f" #'org-forward-heading-same-level
