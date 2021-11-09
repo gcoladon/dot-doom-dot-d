@@ -487,15 +487,20 @@ creates a corresponding org-noter file
   (arxiv-get-pdf-add-bibtex-entry (arxiv-maybe-arxiv-id-from-current-kill)
                                   gpc/bib-file
                                   (concat gpc/pdf-dir "/"))
-  (save-window-excursion
-    (find-file "~/pdfs/references.bib")
-    (goto-char (point-max))
-    (bibtex-beginning-of-entry)
-    (re-search-forward bibtex-entry-maybe-empty-head)
-    (if (match-beginning bibtex-key-in-head)
-        (gpc/capture-noter-file (buffer-substring-no-properties
-                                 (match-beginning bibtex-key-in-head)
-                                 (match-end bibtex-key-in-head))))))
+  (gpc/capture-noter-file
+   (save-window-excursion
+     (find-file "~/pdfs/references.bib")
+     (goto-char (point-max))
+     (bibtex-beginning-of-entry)
+     (re-search-forward bibtex-entry-maybe-empty-head)
+     (if (match-beginning bibtex-key-in-head)
+         (buffer-substring-no-properties
+          (match-beginning bibtex-key-in-head)
+          (match-end bibtex-key-in-head)))))
+  (org-capture-finalize t)
+  (end-of-buffer)
+  (org-noter)
+  (org-noter-create-skeleton))
 
 ;; Ask what's up with these errors lately
 ;; error in process sentinel: async-handle-result: Cannot open load file: No such file or directory, dash
