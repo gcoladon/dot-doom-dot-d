@@ -500,7 +500,9 @@ creates a corresponding org-noter file
   (org-capture-finalize t)
   (end-of-buffer)
   (org-noter)
-  (org-noter-create-skeleton))
+  ;; (other-window)
+  ;; (org-noter-create-skeleton)
+  )
 
 ;; Ask what's up with these errors lately
 ;; error in process sentinel: async-handle-result: Cannot open load file: No such file or directory, dash
