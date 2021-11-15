@@ -273,6 +273,7 @@ It also checks the following:
 (map! :leader
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Search on arXiv"             "s a" #'gpc/search-on-arxiv
+      :desc "Search on scopus"            "s C" #'scopus-basic-search
       :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
       :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
       :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
@@ -335,10 +336,15 @@ It also checks the following:
 
 (defun bibtex-autokey-wrapper (orig-fun &rest args)
   "Dynamically bind `bibtex-autokey-prefix-string' to current date."
-  (let ((result
-         (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
-           (apply orig-fun args))))
-    (substring result 0 (min 31 (length result)))))
+  (let* ((result
+          (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
+            (apply orig-fun args)))
+         (draft
+          (substring result 0 (min 31 (length result))))
+         (len (length draft))
+         (final (if (eq (substring draft (- len 1) len) "_")
+                    (substring draft 0 (- len 1))
+                  draft)))))
 
 (advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
 
