@@ -272,6 +272,8 @@ It also checks the following:
 
 (map! :leader
       :desc "Count words region"          "l =" #'count-words-region
+      :desc "Flush lines"                 "l f" #'flush-lines
+      :desc "Keep lines"                  "l k" #'keep-lines
       :desc "Search on arXiv"             "s a" #'gpc/search-on-arxiv
       :desc "Search on scopus"            "s C" #'scopus-basic-search
       :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
