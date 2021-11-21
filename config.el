@@ -338,15 +338,19 @@ It also checks the following:
 
 (defun bibtex-autokey-wrapper (orig-fun &rest args)
   "Dynamically bind `bibtex-autokey-prefix-string' to current date."
-  (let* ((result
-          (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
-            (apply orig-fun args)))
-         (draft
-          (substring result 0 (min 31 (length result))))
-         (len (length draft))
-         (final (if (eq (substring draft (- len 1) len) "_")
-                    (substring draft 0 (- len 1))
-                  draft)))))
+  (let ((result
+         (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
+           (apply orig-fun args))))
+    (substring result 0 (min 31 (length result)))))
+  ;; (let* ((result
+  ;;         (let ((bibtex-autokey-prefix-string (format-time-string "%y%m%d_")))
+  ;;           (apply orig-fun args)))
+  ;;        (draft
+  ;;         (substring result 0 (min 31 (length result))))
+  ;;        (len (length draft))
+  ;;        (final (if (eq (substring draft (- len 1) len) "_")
+  ;;                   (substring draft 0 (- len 1))
+  ;;                 draft)))))
 
 (advice-add 'bibtex-generate-autokey :around #'bibtex-autokey-wrapper)
 
