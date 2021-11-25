@@ -272,6 +272,7 @@ It also checks the following:
 
 (map! :leader
       :desc "Count words region"          "l =" #'count-words-region
+      :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "Search on arXiv"             "s a" #'gpc/search-on-arxiv
