@@ -70,6 +70,9 @@
 (package! org-transclusion
   :recipe (:host github :repo "nobiot/org-transclusion"))
 
+;; (package! org-noter
+;;   :recipe (:host github :repo "c1-g/org-noter-plus-djvu"))
+
 (package! command-log-mode)
 
 (package! citeproc)
