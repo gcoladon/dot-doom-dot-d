@@ -109,6 +109,7 @@ ${abstract}
       :unnarrowed t)))
  '(org-roam-directory "/Users/greg/org/")
  '(org-roam-graph-edge-extra-config '(("color" . "#333333") ("dir" . "back")))
+ ;; This variable is gone! Consider trying to add it back..
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude" "_monthly"))
  '(org-roam-graph-executable "neato")
  '(org-roam-graph-extra-config '(("overlap" . "false")))

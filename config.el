@@ -185,46 +185,10 @@ It also checks the following:
       (gc/org-roam-find-weekly "+0")
     (gc/org-roam-find-weekly "-mon")))
 
-;; (defun gc/org-roam-weekly-last ()
-;;   "Find the weekly-file for last week."
-;;   (interactive)
-;;   (gc/org-roam-find-weekly "-2mon"))
-
 ;; (defun gc/org-roam-weekly-next ()
 ;;   "Find the weekly-file for next week."
 ;;   (interactive)
 ;;   (gc/org-roam-find-weekly "+mon"))
-
-;; (defun gc/org-roam-weekly-next-next ()
-;;   "Find the weekly-file for next week."
-;;   (interactive)
-;;   (gc/org-roam-find-weekly "+2mon"))
-
-(defun gc/org-roam-graph-1 ()
-  "Generate a graph that goes out a distance of one edge"
-  (interactive)
-  (let ((current-prefix-arg 1))
-    (org-roam-graph)))
-
-(defun gc/org-roam-graph-2 ()
-  "Generate a graph that goes out a distance of two edges"
-  (interactive)
-  (org-roam-graph 2))
-
-(defun gc/org-roam-graph-3 ()
-  "Generate a graph that goes out a distance of three edges"
-  (interactive)
-  (org-roam-graph 3))
-
-(defun gc/org-roam-graph-4 ()
-  "Generate a graph that goes out a distance of four edges"
-  (interactive)
-  (org-roam-graph 4))
-
-(defun gc/org-roam-graph-5 ()
-  "Generate a graph that goes out a distance of five edges"
-  (interactive)
-  (org-roam-graph 5))
 
 ;; Why not, I use these functions all the time, a single chord makes sense
 (global-set-key (kbd "s-f") 'org-roam-node-find)
@@ -288,11 +252,10 @@ It also checks the following:
       :desc "Toggle/set a variable"       "t v" #'set-variable
       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
       :desc "Toggle tbl-col-width"        "t c" #'org-table-toggle-column-width
-      :desc "org-forward-heading-same-level" "n C-f" #'org-forward-heading-same-level
+      :desc "org-fwd-heading-same-level"  "n C-f" #'org-forward-heading-same-level
       :desc "Recover this file"           "f v" #'recover-this-file
       :desc "Go to Greg's notes.org"      "n g" (cmd! (find-file "~/dev/org/notes.org"))
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
-      ;; :desc "Search the elisp index"      "s e" (lambda () (interactive) (elisp-index-search))
       :desc "Bury buffer"                 "w y" #'bury-buffer)
 
 (map! :leader
@@ -309,31 +272,14 @@ It also checks the following:
        :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
        :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
        :desc "Toggle property visibility"    "p" #'org-toggle-properties
-
        :desc "gpc/get-arxiv"                 "x" #'gpc/get-arxiv
-       :desc "doi-utils-get-bibtex-entry-pdf" "d" #'doi-utils-get-bibtex-entry-pdf
-
+       :desc "doi-utils-get-bibtex-pdf"      "d" #'doi-utils-get-bibtex-entry-pdf
        :desc "orb-note-actions"              "a" #'orb-note-actions
        :desc "org-noter-create-skeleton"     "k" #'org-noter-create-skeleton
        :desc "org-noter"                     "n" #'org-noter
        :desc "helm-bibtex"                   "h" #'helm-bibtex
        :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
-
-       ;; Don't really use these, so I figure I don't really need them either
-       ;; :desc "This Monthly"                  "m" #'gc/org-roam-monthly
-       ;; :desc "This Weekly"                   "t" #'gc/org-roam-weekly-this
-       ;; :desc "Last Weekly"                   "l" #'gc/org-roam-weekly-last
-       ;; :desc "Next Weekly"                   "w" #'gc/org-roam-weekly-next
-       ;; :desc "Next-Next Weekly"              "W" #'gc/org-roam-weekly-next
-
-       :desc "Copy org subtree"              "t" #'org-copy-subtree
-
-       :desc "Graph of 1"                    "1" #'gc/org-roam-graph-1
-       :desc "Graph of 2"                    "2" #'gc/org-roam-graph-2
-       :desc "Graph of 3"                    "3" #'gc/org-roam-graph-3
-       :desc "Graph of 4"                    "4" #'gc/org-roam-graph-4
-       :desc "Graph of 5"                    "5" #'gc/org-roam-graph-5)
-      )
+       :desc "Copy org subtree"              "t" #'org-copy-subtree))
 
 ;;(doom/increase-font-size 1)
 
