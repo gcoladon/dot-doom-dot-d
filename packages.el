@@ -62,13 +62,13 @@
 (package! ox-rst
   :recipe (:host github :repo "msnoigrs/ox-rst"))
 
-(package! org-roam-bibtex
-  :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
+(package! org-roam-bibtex)
+  ;; :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
 
 ;; (package! helm-bibtex)
 
-(package! org-transclusion
-  :recipe (:host github :repo "nobiot/org-transclusion"))
+;; (package! org-transclusion
+;;   :recipe (:host github :repo "nobiot/org-transclusion"))
 
 ;; (package! org-noter
 ;;   :recipe (:host github :repo "c1-g/org-noter-plus-djvu"))
