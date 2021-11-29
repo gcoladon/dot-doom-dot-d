@@ -236,6 +236,7 @@ It also checks the following:
 
 (map! :leader
       :desc "Count words region"          "l =" #'count-words-region
+      :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
@@ -364,13 +365,6 @@ It also checks the following:
 (after! org-roam
   (org-roam-bibtex-mode))
 
-;; (use-package! org-roam
-;;   :config
-;;   (setq org-roam-directory "/Users/greg/org/")
-;;   (org-roam-setup))
-
-;; (use-package! org-roam-protocol)
-
 (defun gpc/org-roam-protocol-get-pdf (info)
   "Process an org-protocol://roam-pdf?ref= style url with INFO.
 
@@ -381,29 +375,14 @@ creates a corresponding org-noter file
         encodeURIComponent(location.href))"
 
   (interactive)
-  (unless (plist-get info :url)
-    (user-error "No url provided"))
-  (gpc/move-pdf-to-bibtex-standalone (plist-get info :url)))
-
-;;  Doesn't work yet! Not sure why.
-;;  In the mean time I just store-link, and then C-c r x, and that works
-(defun gpc/org-roam-protocol-get-arxiv (info)
-  "Process an org-protocol://roam-arxiv?ref= style url with INFO.
-
-It saves the PDF at the target location into ~/pdfs and also
-creates a corresponding org-noter file
-
-  javascript:location.href = \\='org-protocol://roam-arxiv?url=\\='+ \\
-        encodeURIComponent(location.href))"
-
-  (interactive)
-  (unless (plist-get info :url)
-    (user-error "No url provided"))
-  (require 'org-ref)
-  (bibtex-set-dialect 'BibTeX)
-  (arxiv-get-pdf-add-bibtex-entry (plist-get info :url)
-                                  gpc/bib-file
-                                  (concat gpc/pdf-dir "/")))
+  (let ((url (plist-get info :url)))
+    (unless url
+      (user-error "No url provided"))
+    (if (string-match-p "arxiv.org" url)
+        (progn
+          (kill-new url)
+          (gpc/get-arxiv))
+      (gpc/move-pdf-to-bibtex-standalone (plist-get info :url)))))
 
 (after! org-protocol
   (use-package! org-roam-protocol)
@@ -414,12 +393,7 @@ creates a corresponding org-noter file
   (push '("org-roam-pdf"
           :protocol "roam-pdf"
           :function gpc/org-roam-protocol-get-pdf)
-        org-protocol-protocol-alist)
-  (push '("org-roam-arxiv"
-          :protocol "roam-arxiv"
-          :function gpc/org-roam-protocol-get-arxiv)
         org-protocol-protocol-alist))
-
 
 (use-package! helm-bibtex)
 
@@ -1370,3 +1344,11 @@ download en masse from canvas or someplace."
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+
+(defun gpc/copy-todos-from-email ()
+  (with-temp-buffer
+    (clipboard-yank)
+    (mark-whole-buffer)
+    (flush-lines "gcoladon")
+    (flush-lines "^$")
+    (kill-ring-save (point-min) (point-max))))
