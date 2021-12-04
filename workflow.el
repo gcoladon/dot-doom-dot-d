@@ -269,3 +269,28 @@ inbook entries via gpc/move-pdf-to-bibtex-crossref"
 ;;     (setq org-roam-capture-templates gpc/temp)
 ;;     (bibtex-completion-edit-notes (list key))
 ;;     (setq org-roam-capture-templates gpc/save-templates)))
+
+;; I think this may be more complicated than I hoped it would be
+;;
+;; (setq org-id-method 'ts
+;;       orb-preformat-keywords
+;;       '(("citekey" . "=key=")
+;;         "url" "file" "author-or-editor-abbrev" "keywords" "abstract" "author" "year")
+;;       org-id-link-to-org-use-id t
+;;       org-id-ts-format "%y%m%d_%H%M%S")
+
+;; (add-to-list 'org-roam-capture-templates '(("n" "ref+noter" plain "%?" :if-new
+;;       (file+head "roam-stem/${citekey}.org" "#+TITLE: %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}
+;; #+ROAM_KEY: cite:${citekey}
+;; #+ROAM_TAGS:
+
+;; * %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}
+;; :PROPERTIES:
+;; :URL: ${url}
+;; :AUTHOR: ${author-or-editor-abbrev}
+;; :NOTER_DOCUMENT: ${file}
+;; :NOTER_PAGE:
+;; :END:
+;; ** Abstract
+;; ${abstract}
+;; ") :unnarrowed t)))
