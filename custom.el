@@ -49,22 +49,22 @@
       (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+title: ${title}")
       :unnarrowed t)))
  '(org-roam-capture-templates
-   '(("w" "work blank" plain "%?" :if-new
+   '(("w" "work" plain "%?" :if-new
       (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
 
 ")
       :unnarrowed t)
-     ("s" "stem blank" plain "%?" :if-new
+     ("s" "stem" plain "%?" :if-new
       (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
 
 ")
       :unnarrowed t)
-     ("h" "home blank" plain "%?" :if-new
+     ("p" "personal" plain "%?" :if-new
       (file+head "roam-personal/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
 
 ")
       :unnarrowed t)
-     ("p" "work person" plain "%?" :if-new
+     ("c" "customer" plain "%?" :if-new
       (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
 
 * Company :: 
@@ -82,15 +82,6 @@
 
 %(gpc/gen-weekly monday-tv)
 ")
-      :unnarrowed t)
-     ("m" "work minimal" plain "%?" :if-new
-      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
-
-* Tags :: 
-* URLs :: 
-* Locations :: 
-* Notes
-- ")
       :unnarrowed t)
      ("n" "ref+noter" plain "%?" :if-new
       (file+head "roam-stem/${citekey}.org" "#+TITLE: %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}
