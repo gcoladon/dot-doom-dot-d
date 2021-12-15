@@ -237,14 +237,23 @@ It also checks the following:
 ;; (setq before-save-hook nil)
 
 (map! :leader
+      :desc "Recover this file"           "f v" #'recover-this-file
+
+      :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
+      :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
+      :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
+
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
-      :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
-      :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
-      :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
+      :desc "JQ interactively"            "l j" #'jq-interactively
+
+      :desc "org-fwd-heading-same-level"  "n C-f" #'org-forward-heading-same-level
+      :desc "Go to Greg's notes.org"      "n g" (cmd! (find-file "~/dev/org/notes.org"))
+      :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
+
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
       :desc "JSON pretty print buffer"    "t j" #'json-pretty-print-buffer
       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
@@ -253,10 +262,7 @@ It also checks the following:
       :desc "Toggle/set a variable"       "t v" #'set-variable
       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
       :desc "Toggle tbl-col-width"        "t c" #'org-table-toggle-column-width
-      :desc "org-fwd-heading-same-level"  "n C-f" #'org-forward-heading-same-level
-      :desc "Recover this file"           "f v" #'recover-this-file
-      :desc "Go to Greg's notes.org"      "n g" (cmd! (find-file "~/dev/org/notes.org"))
-      :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
+
       :desc "Bury buffer"                 "w y" #'bury-buffer)
 
 (map! :leader
@@ -609,3 +615,5 @@ It also checks the following:
 (define-key macron-map (kbd "U") 'latin-capital-letter-u-with-macron)
 
 (define-key dired-mode-map "b" 'gpc/move-pdfs-to-bibtex-crossref)
+
+(use-package! jq-mode)
