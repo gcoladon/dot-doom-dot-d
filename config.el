@@ -250,8 +250,6 @@ It also checks the following:
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
 
-      :desc "org-fwd-heading-same-level"  "n C-f" #'org-forward-heading-same-level
-      :desc "Go to Greg's notes.org"      "n g" (cmd! (find-file "~/dev/org/notes.org"))
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
 
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
