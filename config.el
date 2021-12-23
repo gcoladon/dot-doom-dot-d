@@ -198,6 +198,7 @@ It also checks the following:
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 (global-set-key (kbd "s-r") gpc/todays-notes-fn)
 (global-set-key (kbd "s-d") (cmd! (find-file "~/org/roam-stem/210820_dl_syllabus.org")))
+(global-set-key (kbd "C-c &") 'org-mark-ring-goto)
 
 ;; (defun org-hide-properties ()
 ;;   "Hide all org-mode headline property drawers in buffer. Could be slow if buffer has a lot of overlays."
