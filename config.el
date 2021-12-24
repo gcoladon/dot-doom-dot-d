@@ -613,6 +613,4 @@ It also checks the following:
 (define-key macron-map (kbd "O") 'latin-capital-letter-o-with-macron)
 (define-key macron-map (kbd "U") 'latin-capital-letter-u-with-macron)
 
-(define-key dired-mode-map "b" 'gpc/move-pdfs-to-bibtex-crossref)
-
 (use-package! jq-mode)

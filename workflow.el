@@ -137,7 +137,7 @@ creates a corresponding org-noter file
       (find-file gpc/bib-file)
       (goto-char (point-max))
       (when (not (looking-at "^")) (insert "\n"))
-      (insert (concat "@article{" bibtex-key ",\n"
+      (insert (concat "@misc{" bibtex-key ",\n"
                       "  author          = {" pdf-author "},\n"
                       "  title           = {{" pdf-title "}},\n"
                       "  year            = {" pdf-year "},\n"
@@ -172,8 +172,78 @@ creates a corresponding org-noter file
    0)
 )
 
-(defun gpc/move-pdfs-to-bibtex-crossref (key)
-  "Choose an _oms_cs_ bibtex entry for which to add one or more
+(define-key dired-mode-map "b" 'gpc/dispatch-pdf-capture)
+
+(defun gpc/dispatch-pdf-capture (type)
+  "Find out whether we're capturing a PDF that's distributed with a course
+or a chapter of a book"
+  (interactive
+   (list
+    (completing-read "What are these PDFs part of?: "
+                     '("new book" "existing class" "existing key"))))
+  (cond ((equal type "existing class")
+         (gpc/move-pdfs-into-existing-class))
+        ((equal type "new book")
+         (gpc/move-pdfs-into-new-book))
+        ((equal type "existing key")
+         (gpc/move-pdfs-into-existing-key))))
+
+(defun gpc/move-pdfs-into-existing-key ()
+  "Ask which key to move this PDF into as a chapter"
+  (let ((key (completing-read
+             "Which book shall this PDF be a chapter of? "
+             (mapcar
+              (lambda (elt)
+                (concat
+                 (cdr (assoc "author" (cdr elt)))
+                 " - "
+                 (cdr (assoc "title" (cdr elt)))))
+              (seq-filter
+               (lambda (elt) (equal "book" (cdr (assoc "=type=" (cdr elt)))))
+               (bibtex-completion-candidates))))))
+    (setq org-capture-link-is-already-stored t)
+    (seq-do
+     (lambda (file) (gpc/move-pdf-to-bibtex-crossref file key))
+     ;; I reverse so that when helm-bibtex loads them all up,
+     ;; they are in the right order
+     (reverse (dired-get-marked-files nil nil nil nil t)))))
+
+(defun gpc/move-pdfs-into-new-book ()
+  "Inquire for the values that go into a book's bibtex entry, create the bibtex
+entry, and pass that key into move-pdf-to-bibtex-crossref along with each of the
+marked files"
+  (let* ((author (read-string "Author (last, first): "))
+         (title (read-string "Book title: "))
+         (year (read-string "Year: "))
+         (pub (read-string "Publisher: "))
+         (address (read-string "Publisher address or city: "))
+         (isbn (read-string "ISBN: "))
+         (pref-key (read-string "Bibtex key root: "))
+         (trunc-key (substring pref-key 0 (min 23 (length pref-key))))
+         (key (concat (format-time-string "%y%m%d_") trunc-key)))
+    (save-window-excursion
+      (find-file gpc/bib-file)
+      (goto-char (point-max))
+      (when (not (looking-at "^")) (insert "\n"))
+      (insert (concat "@book{" key ",\n"
+                      ;; If you try to get away with a single {}, the caps get messed up
+                      "  author          = {" author "},\n"
+                      "  title           = {" title "},\n"
+                      "  year            = " year ",\n"
+                      "  publisher       = {" pub "},\n"
+                      "  address         = {" address "},\n"
+                      "  isbn            = {" isbn "}\n"
+                      "}\n"))
+      (save-buffer))
+    (setq org-capture-link-is-already-stored t)
+    (seq-do
+     (lambda (file) (gpc/move-pdf-to-bibtex-crossref file key))
+     ;; I reverse so that when helm-bibtex loads them all up,
+     ;; they are in the right order
+     (reverse (dired-get-marked-files nil nil nil nil t)))))
+
+(defun gpc/move-pdfs-into-existing-class (key)
+  "Choose a _gatech_cs_ or _stan_cs_ bibtex entry for which to add one or more
 inbook entries via gpc/move-pdf-to-bibtex-crossref"
   (interactive
    (list
@@ -227,48 +297,6 @@ inbook entries via gpc/move-pdf-to-bibtex-crossref"
 
 ;; Until I get it to work via org-protocol, use this!
 ;; (gpc/move-pdf-to-bibtex-standalone "https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf")
-
-
-;; (defun gpc/move-paper-to-bibtex-crossref ()
-;;   "Try to simplify the incorporation of papers that are distributed
-;;    by OMS classes into my own org-roam library
-
-;; This function doesn't really work yet. I'm not even sure if it
-;; has a real use case? I think maybe when I have a PDF that didn't come
-;; from the internet, I could somehow use this in conjunction with the
-;; one that pulls from the internet?
-
-;; Work this out next time I try to incorporate a bunch of PDFs that I
-;; download en masse from canvas or someplace."
-;;   (interactive)
-;;   (let* ((file (car (dired-get-marked-files nil nil nil nil t)))
-;;          (author (read-string "Author: "))
-;;          (year (read-string "Year: "))
-;;          (title (read-string "Title: "))
-;;          (basename (file-name-nondirectory file))
-;;          (prefixed-fn (concat (format-time-string "%y%m%d_") basename))
-;;          (key (substring prefixed-fn 0 (- (length prefixed-fn) 4)))
-;;          (dest-fn (concat gpc/pdf-dir "/" prefixed-fn)))
-;;     (dired-create-files #'dired-rename-file "Move" (list file)
-;;                         (lambda (_from) dest-fn) t)
-;;     (save-window-excursion
-;;       (find-file gpc/bib-file)
-;;       (goto-char (point-max))
-;;       (when (not (looking-at "^")) (insert "\n"))
-;;       (insert (concat "@inbook{" key ",\n"
-;;                       "  title           = \"{" title "}\",\n"
-;;                       "  crossref        = {" crossref "}\n"
-;;                       "}\n"))
-;;       (save-buffer))
-;;     (setq gpc/save-templates org-roam-capture-templates)
-;;     (setq gpc/temp org-roam-capture-templates)
-;;     (while
-;;         (and (not (eq nil gpc/temp))
-;;              (not (equal "n" (caar gpc/temp))))
-;;       (setq gpc/temp (cdr gpc/temp)))
-;;     (setq org-roam-capture-templates gpc/temp)
-;;     (bibtex-completion-edit-notes (list key))
-;;     (setq org-roam-capture-templates gpc/save-templates)))
 
 ;; I think this may be more complicated than I hoped it would be
 ;;
