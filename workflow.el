@@ -190,20 +190,22 @@ or a chapter of a book"
 
 (defun gpc/move-pdfs-into-existing-key ()
   "Ask which key to move this PDF into as a chapter"
-  (let ((key (completing-read
-             "Which book shall this PDF be a chapter of? "
-             (mapcar
-              (lambda (elt)
-                (concat
-                 (cdr (assoc "author" (cdr elt)))
-                 " - "
-                 (cdr (assoc "title" (cdr elt)))))
-              (seq-filter
-               (lambda (elt) (equal "book" (cdr (assoc "=type=" (cdr elt)))))
-               (bibtex-completion-candidates))))))
+  (let ((key-author-title (completing-read
+                           "Which book shall this PDF be a chapter of? "
+                           (mapcar
+                            (lambda (elt)
+                              (concat
+                               (cdr (assoc "=key=" (cdr elt)))
+                               ": "
+                               (cdr (assoc "author" (cdr elt)))
+                               " - "
+                               (cdr (assoc "title" (cdr elt)))))
+                            (seq-filter
+                             (lambda (elt) (equal "book" (cdr (assoc "=type=" (cdr elt)))))
+                             (bibtex-completion-candidates))))))
     (setq org-capture-link-is-already-stored t)
     (seq-do
-     (lambda (file) (gpc/move-pdf-to-bibtex-crossref file key))
+     (lambda (file) (gpc/move-pdf-to-bibtex-crossref file (car (split-string key-author-title ":"))))
      ;; I reverse so that when helm-bibtex loads them all up,
      ;; they are in the right order
      (reverse (dired-get-marked-files nil nil nil nil t)))))
@@ -264,6 +266,7 @@ inbook entries via gpc/move-pdf-to-bibtex-crossref"
    ;; I reverse so that when helm-bibtex loads them all up,
    ;; they are in the right order
    (reverse (dired-get-marked-files nil nil nil nil t))))
+
 
 (defun gpc/move-pdf-to-bibtex-crossref (file crossref)
   "Try to simplify the incorporation of pdfs from a class into org-roam"
