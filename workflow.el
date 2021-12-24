@@ -244,28 +244,26 @@ marked files"
      ;; they are in the right order
      (reverse (dired-get-marked-files nil nil nil nil t)))))
 
-(defun gpc/move-pdfs-into-existing-class (key)
+(defun gpc/move-pdfs-into-existing-class ()
   "Choose a _gatech_cs_ or _stan_cs_ bibtex entry for which to add one or more
 inbook entries via gpc/move-pdf-to-bibtex-crossref"
-  (interactive
-   (list
-    (completing-read
-     "Which class is this document for? "
-     (seq-filter
-      (lambda (elt) (or (string-match-p "_gatech_cs_" elt)
-                        ;; I would have used stanford but tag got too long
-                        (string-match-p "_stan_cs_" elt)))
-      (mapcar
-       (lambda (elt) (cdr (assoc "=key=" (cdr elt))))
-       (seq-filter
-        (lambda (elt) (equal "book" (cdr (assoc "=type=" (cdr elt)))))
-        (bibtex-completion-candidates)))))))
-  (setq org-capture-link-is-already-stored t)
-  (seq-do
-   (lambda (file) (gpc/move-pdf-to-bibtex-crossref file key))
-   ;; I reverse so that when helm-bibtex loads them all up,
-   ;; they are in the right order
-   (reverse (dired-get-marked-files nil nil nil nil t))))
+  (let ((key (completing-read
+              "Which class is this document for? "
+              (seq-filter
+               (lambda (elt) (or (string-match-p "_gatech_cs_" elt)
+                                 ;; I would have used stanford but tag got too long
+                                 (string-match-p "_stan_cs_" elt)))
+               (mapcar
+                (lambda (elt) (cdr (assoc "=key=" (cdr elt))))
+                (seq-filter
+                 (lambda (elt) (equal "book" (cdr (assoc "=type=" (cdr elt)))))
+                 (bibtex-completion-candidates)))))))
+    (setq org-capture-link-is-already-stored t)
+    (seq-do
+     (lambda (file) (gpc/move-pdf-to-bibtex-crossref file key))
+     ;; I reverse so that when helm-bibtex loads them all up,
+     ;; they are in the right order
+     (reverse (dired-get-marked-files nil nil nil nil t)))))
 
 
 (defun gpc/move-pdf-to-bibtex-crossref (file crossref)
