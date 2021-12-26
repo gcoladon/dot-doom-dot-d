@@ -238,11 +238,12 @@ marked files"
                       "}\n"))
       (save-buffer))
     (setq org-capture-link-is-already-stored t)
-    (seq-do
-     (lambda (file) (gpc/move-pdf-to-bibtex-crossref file key))
-     ;; I reverse so that when helm-bibtex loads them all up,
-     ;; they are in the right order
-     (reverse (dired-get-marked-files nil nil nil nil t)))))
+    (let ((result (seq-map
+                   (lambda (file) (gpc/move-pdf-to-bibtex-crossref file key))
+                   ;; I reverse so that when helm-bibtex loads them all up,
+                   ;; they are in the right order
+                   (reverse (dired-get-marked-files nil nil nil nil t))) ))
+      (message (concat  "Result from seq-map was " result)))))
 
 (defun gpc/move-pdfs-into-existing-class ()
   "Choose a _gatech_cs_ or _stan_cs_ bibtex entry for which to add one or more
