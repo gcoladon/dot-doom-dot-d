@@ -108,7 +108,7 @@ creates a corresponding org-noter file
         (progn
           (kill-new url)
           (gpc/get-arxiv))
-      (gpc/move-pdf-to-bibtex-standalone (plist-get info :url)))))
+      (gpc/move-pdf-from-url-to-bibtex-standalone (plist-get info :url)))))
 
 (after! org-protocol
   (use-package! org-roam-protocol)
@@ -121,7 +121,7 @@ creates a corresponding org-noter file
           :function gpc/org-roam-protocol-get-pdf)
         org-protocol-protocol-alist))
 
-(defun gpc/move-pdf-to-bibtex-standalone (pdf-url)
+(defun gpc/move-pdf-from-url-to-bibtex-standalone (pdf-url)
   "Try to simplify the incorporation of pdfs from a class into org-roam"
   (let* ((pdf-author (read-string "Author: "))
          (pdf-title (read-string "Title: "))
@@ -142,6 +142,36 @@ creates a corresponding org-noter file
                       "  title           = {{" pdf-title "}},\n"
                       "  year            = {" pdf-year "},\n"
                       "  url             = {" pdf-url "}\n"
+                      "}\n"))
+      (save-buffer))
+    (gpc/capture-noter-file bibtex-key)))
+
+(defun gpc/move-pdf-from-file-to-bibtex-standalone (filename)
+  "Try to simplify the incorporation of multiple articles by different authors into org-roam"
+  (let* ((basename (car (reverse (split-string filename "/"))))
+         (prompt (concat "Author(s) (last, first) for " basename ": "))
+         (pdf-author (read-string prompt))
+         (pdf-title (read-string "Article title: "))
+         (pdf-year (read-string "Year: "))
+         (pdf-journal (read-string "Journal: "))
+         (key-slug (read-string "Key slug: "))
+         (pref-key (concat (format-time-string "%y%m%d_")
+                           (downcase (car (split-string pdf-author ",")))
+                           (substring pdf-year 2)
+                           "_" key-slug))
+         (bibtex-key (substring pref-key 0 (min 30 (length pref-key))))
+         (dest-fn (concat gpc/pdf-dir "/" bibtex-key ".pdf")))
+    (dired-create-files #'dired-rename-file "Move" (list filename)
+                        (lambda (_from) dest-fn) t)
+    (save-window-excursion
+      (find-file gpc/bib-file)
+      (goto-char (point-max))
+      (when (not (looking-at "^")) (insert "\n"))
+      (insert (concat "@article{" bibtex-key ",\n"
+                      "  author          = {" pdf-author "},\n"
+                      (unless (equal pdf-journal "") (concat "  journal            = {" pdf-journal "},\n"))
+                      (when pdf-year (concat "  year            = {" pdf-year "},\n"))
+                      "  title           = \"{{" pdf-title "}}\"\n"
                       "}\n"))
       (save-buffer))
     (gpc/capture-noter-file bibtex-key)))
@@ -180,11 +210,13 @@ or a chapter of a book"
   (interactive
    (list
     (completing-read "What are these PDFs part of?: "
-                     '("new book" "existing class" "existing key"))))
+                     '("new book" "existing class" "existing key" "new articles"))))
   (cond ((equal type "existing class")
          (gpc/move-pdfs-into-existing-class))
         ((equal type "new book")
          (gpc/move-pdfs-into-new-book))
+        ((equal type "new articles")
+         (gpc/move-pdfs-from-files-into-new-articles))
         ((equal type "existing key")
          (gpc/move-pdfs-into-existing-key))))
 
@@ -210,11 +242,12 @@ or a chapter of a book"
      ;; they are in the right order
      (reverse (dired-get-marked-files nil nil nil nil t)))))
 
+
 (defun gpc/move-pdfs-into-new-book ()
   "Inquire for the values that go into a book's bibtex entry, create the bibtex
 entry, and pass that key into move-pdf-to-bibtex-crossref along with each of the
 marked files"
-  (let* ((author (read-string "Author (last, first): "))
+  (let* ((author (read-string "Author(s) (last, first): "))
          (title (read-string "Book title: "))
          (year (read-string "Year: "))
          (pub (read-string "Publisher: "))
@@ -244,6 +277,15 @@ marked files"
                    ;; they are in the right order
                    (reverse (dired-get-marked-files nil nil nil nil t))) ))
       (message (concat  "Result from seq-map was " result)))))
+
+
+(defun gpc/move-pdfs-from-files-into-new-articles ()
+  (seq-do
+   (lambda (file) (gpc/move-pdf-from-file-to-bibtex-standalone file))
+   ;; I reverse so that when helm-bibtex loads them all up,
+   ;; they are in the right order
+   (reverse (dired-get-marked-files nil nil nil nil t))))
+
 
 (defun gpc/move-pdfs-into-existing-class ()
   "Choose a _gatech_cs_ or _stan_cs_ bibtex entry for which to add one or more
@@ -298,7 +340,7 @@ inbook entries via gpc/move-pdf-to-bibtex-crossref"
     (gpc/capture-noter-file key)))
 
 ;; Until I get it to work via org-protocol, use this!
-;; (gpc/move-pdf-to-bibtex-standalone "https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf")
+;; (gpc/move-pdf-from-url-to-bibtex-standalone "https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf")
 
 ;; I think this may be more complicated than I hoped it would be
 ;;
