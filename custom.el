@@ -4,6 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(+org-roam-open-buffer-on-find-file nil t)
+ '(anki-editor-org-tags-as-anki-tags nil)
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
  '(bibtex-completion-bibliography (list gpc/bib-file))
  '(bibtex-completion-display-formats
@@ -17,7 +18,7 @@
 \\(.+
 \\)+:END:
 #\\+title: ")
- '(deft-use-filename-as-title t t)
+ '(deft-use-filename-as-title t)
  '(helm-case-fold-search t)
  '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 40)))
  '(orb-preformat-keywords

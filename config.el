@@ -590,12 +590,21 @@ It also checks the following:
           org-roam-ui-open-on-start t))
 
 (defun gpc/copy-todos-from-email ()
-  (with-temp-buffer
-    (clipboard-yank)
-    (mark-whole-buffer)
-    (flush-lines "gcoladon")
-    (flush-lines "^$")
-    (kill-ring-save (point-min) (point-max))))
+  (interactive)
+  (let ((org-todo-keywords '((sequence "TODO" "DONE"))))
+    (with-temp-buffer
+      (clipboard-yank)
+      (mark-whole-buffer)
+      (flush-lines "gcoladon")
+      (mark-whole-buffer)
+      (flush-lines "^$")
+      (org-mode)
+      (mark-whole-buffer)
+      (org-ctrl-c-star)
+      (mark-whole-buffer)
+      (org-todo)
+      (kill-ring-save (point-min) (point-max))))
+  (yank))
 
 (load! "ucs-cmds.el")
 (load! "vulpea.el")
