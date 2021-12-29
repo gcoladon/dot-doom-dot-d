@@ -243,6 +243,7 @@ It also checks the following:
       :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
       :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
       :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
+      :desc "Insert Anki note"            "i a" #'gpc/insert-anki-basic-note
 
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
@@ -252,6 +253,7 @@ It also checks the following:
       :desc "JQ interactively"            "l j" #'jq-interactively
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
+      :desc "Push Anki notes"             "n p" #'anki-editor-push-notes
 
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
       :desc "JSON pretty print buffer"    "t j" #'json-pretty-print-buffer
@@ -614,3 +616,19 @@ It also checks the following:
 (define-key macron-map (kbd "U") 'latin-capital-letter-u-with-macron)
 
 (use-package! jq-mode)
+
+(defun gpc/insert-anki-basic-note ()
+  "Insert an Anki 'Basic' note at point,
+relying on deck and tags to be set at a higher heading"
+  (interactive)
+  (let* ((card-front (read-string "Front: "))
+         (card-back (read-string "Back: ")))
+    (org-insert-heading)
+    (insert "Anki note\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Basic\n:END:")
+    (org-insert-heading)
+    (org-cycle)
+    (insert "Front\n")
+    (insert card-front)
+    (org-insert-heading)
+    (insert "Back\n")
+    (insert card-back)))
