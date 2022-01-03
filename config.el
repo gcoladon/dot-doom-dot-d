@@ -253,7 +253,8 @@ It also checks the following:
       :desc "JQ interactively"            "l j" #'jq-interactively
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
-      :desc "Push Anki notes"             "n p" #'anki-editor-push-notes
+      :desc "Push simple Anki notes"      "n p" #'gpc/push-to-anki
+      :desc "Push complex Anki notes"     "n P" #'anki-editor-push-notesgpc/push-to-anki
 
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
       :desc "JSON pretty print buffer"    "t j" #'json-pretty-print-buffer
@@ -633,11 +634,57 @@ relying on deck and tags to be set at a higher heading"
   (let* ((card-front (read-string "Front: "))
          (card-back (read-string "Back: ")))
     (org-insert-heading)
-    (insert "Anki note\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Basic\n:END:")
+    (org-cycle)
+    (insert (concat card-front
+                    " "
+                    card-back
+                    "\n:PROPERTIES:\n"
+                    ":ANKI_NOTE_TYPE: Basic\n"
+                    ":CREATED: "
+                    (format-time-string (org-time-stamp-format 'long 'inactive)
+                                        (org-current-effective-time))
+                    "\n:END:\n"))
     (org-insert-heading)
     (org-cycle)
     (insert "Front\n")
     (insert card-front)
     (org-insert-heading)
     (insert "Back\n")
-    (insert card-back)))
+    (insert card-back)
+    (outline-up-heading 1)))
+
+(setq +org-capture-journal-file "211230_journal.org")
+
+(defun gpc/push-to-anki ()
+  "Process each line in the buffer one by one looking for Q&A of the simple form [WHI]...? ....,
+that can be pushed to Anki without needing a tree of headings."
+  (interactive)
+  (anki-editor-mode)
+  (save-excursion
+    (let* ((acc 0))
+      (goto-char (point-min))
+      (while (not (eobp))
+        (let* ((line (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+          (if (string-match "^\\([WIH].*\\?\\) \\(.*\\)\." line)
+              (let* ((front (match-string-no-properties 1 line))
+                     (back (match-string-no-properties 2 line))
+                     (org-trust-scanner-tags t)
+                     (deck (org-entry-get-with-inheritance anki-editor-prop-deck))
+                     (note-id "-1")
+                     (note-type (org-entry-get-with-inheritance anki-editor-prop-note-type))
+                     (tags (anki-editor--get-tags))
+                     (fields `(("Front" . ,front) ("Back" . ,back))))
+                ;; (defun anki-editor--set-note-id () nil)
+                (unless deck (error "Deck property not found"))
+                (unless note-type (error "Note type property not found"))
+                (unless fields (error "Card fields not found"))
+                (message (concat "Pushing note #" (cl-incf acc) ": " front))
+                (anki-editor--create-note
+                 `((deck . ,deck)
+                   (note-id . "-1")
+                   (note-type . ,note-type)
+                   (tags . ,tags)
+                   (fields . ,fields)))
+                (insert "ANKIFIED "))))
+        (forward-line 1))))
+  (message (concat "Pushed " acc " notes to Anki.")))
