@@ -48,7 +48,6 @@
 ;(unpin! t)
 
 (package! pandoc)
-(package! anki-editor)
 ;;(package! org-download)
 ;;(package! ox-hugo
 ;;  :recipe (:host github :repo "jethrokuan/ox-hugo"))
@@ -62,7 +61,6 @@
 (package! ox-rst
   :recipe (:host github :repo "msnoigrs/ox-rst"))
 
-(package! org-roam-bibtex)
   ;; :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
 
 ;; (package! helm-bibtex)
@@ -74,14 +72,6 @@
 ;;   :recipe (:host github :repo "c1-g/org-noter-plus-djvu"))
 
 (package! command-log-mode)
-
-(package! citeproc)
-(package! helm-bibtex)
-
-;; (unpin! org-roam)
-(package! websocket)
-(package! org-roam-ui
-  :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
 
 (package! jq-mode
   :recipe (:host github :repo "ljos/jq-mode"))

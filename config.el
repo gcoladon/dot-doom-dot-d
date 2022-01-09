@@ -24,8 +24,8 @@
           gpc/org-dir "~/org/"
           gpc/org-agenda-files (list (concat gpc/org-dir "roam-personal/")
                                      (concat gpc/org-dir "roam-stem/"))
-          gpc/pdf-dir "~/pdfs"
-          gpc/bib-file "~/pdfs/references.bib"
+          my/pdf-dir "~/pdfs"
+          my/bib-file "~/pdfs/references.bib"
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/todays-notes-fn 'gc/org-roam-monthly)
 
@@ -33,8 +33,8 @@
         gpc/org-dir "~/org/"
         gpc/org-agenda-files (list (concat gpc/org-dir "roam-pilot/")
                                    (concat gpc/org-dir "roam-stem/"))
-        gpc/pdf-dir "~/pdfs"
-        gpc/bib-file "~/pdfs/references.bib"
+        my/pdf-dir "~/pdfs"
+        my/bib-file "~/pdfs/references.bib"
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         gpc/todays-notes-fn 'gc/org-roam-weekly-this))
 
@@ -197,7 +197,7 @@ It also checks the following:
 (global-set-key (kbd "s-i") 'org-roam-node-insert)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 (global-set-key (kbd "s-r") gpc/todays-notes-fn)
-(global-set-key (kbd "s-d") (cmd! (find-file "~/org/roam-stem/210820_dl_syllabus.org")))
+;; (global-set-key (kbd "s-d") (cmd! (find-file "~/org/roam-stem/210820_dl_syllabus.org")))
 (global-set-key (kbd "C-c &") 'org-mark-ring-goto)
 
 ;; (defun org-hide-properties ()
@@ -243,7 +243,6 @@ It also checks the following:
       :desc "Insert $ around"             "i $" #'gpc/wrap-region-with-dollars
       :desc "Insert \textsc around"       "i \\" #'gpc/wrap-region-with-textsc
       :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
-      :desc "Insert Anki note"            "i a" #'gpc/insert-anki-basic-note
 
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
@@ -253,8 +252,6 @@ It also checks the following:
       :desc "JQ interactively"            "l j" #'jq-interactively
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
-      :desc "Push simple Anki notes"      "n p" #'gpc/push-to-anki
-      :desc "Push complex Anki notes"     "n P" #'anki-editor-push-notesgpc/push-to-anki
 
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
       :desc "JSON pretty print buffer"    "t j" #'json-pretty-print-buffer
@@ -269,20 +266,21 @@ It also checks the following:
 
 (map! :leader
       ;;; <leader> r --- roam
-      (:prefix-map ("r" . "gc/roam bindings")
-       :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
-       :desc "isbn-to-bibtex"                "B" #'isbn-to-bibtex
-       :desc "Capture"                       "c" #'org-roam-capture
-       :desc "Node find"                     "f" #'org-roam-node-find
-       :desc "Show graph"                    "g" #'org-roam-graph
-       :desc "Insert"                        "i" #'org-roam-node-insert
-       :desc "org-roam-buffer-toggle"        "r" #'org-roam-buffer-toggle
-       :desc "Insert last stored link"       "s" #'org-insert-last-stored-link
-       :desc "Insert (skipping org-cap)"     "I" #'org-roam-insert-immediate
-       :desc "Jump to Index"                 "j" #'org-roam-jump-to-index
-       :desc "Toggle property visibility"    "p" #'org-toggle-properties
-       :desc "org-ref-helm-insert-cite"      "H" #'helm-bibtex-with-notes
-       :desc "Copy org subtree"              "t" #'org-copy-subtree))
+      ;; (:prefix-map ("r" . "gc/roam bindings")
+       :desc "Switch to buffer"              "r b" #'org-roam-switch-to-buffer
+       :desc "isbn-to-bibtex"                "r B" #'isbn-to-bibtex
+       :desc "Capture"                       "r c" #'org-roam-capture
+       :desc "Node find"                     "r f" #'org-roam-node-find
+       :desc "Show graph"                    "r g" #'org-roam-graph
+       :desc "Insert"                        "r i" #'org-roam-node-insert
+       :desc "org-roam-buffer-toggle"        "r r" #'org-roam-buffer-toggle
+       :desc "Insert last stored link"       "r s" #'org-insert-last-stored-link
+       :desc "Insert (skipping org-cap)"     "r I" #'org-roam-insert-immediate
+       :desc "Jump to Index"                 "r j" #'org-roam-jump-to-index
+       :desc "Toggle property visibility"    "r p" #'org-toggle-properties
+       :desc "org-ref-helm-insert-cite"      "r H" #'helm-bibtex-with-notes
+       :desc "Copy org subtree"              "r t" #'org-copy-subtree)
+;; )
 
 ;;(doom/increase-font-size 1)
 
@@ -353,7 +351,6 @@ It also checks the following:
      (setq org-map-continue-from (org-element-property :begin (org-element-at-point)))) "/DONE" 'file))
 
 (setq org-archive-location (concat org-directory "/archive.org::datetree/"))
-
 
 ;; Check out all of Doom's templates and see if they are better than mine
 
@@ -428,12 +425,12 @@ It also checks the following:
 ;; (define-key org-mode-map (kbd "C-c C-g a") #'gpc/org-table-goto-beginning)
 ;; (define-key org-mode-map (kbd "C-c C-g e") #'gpc/org-table-goto-end)
 
-(defun gpc/clean-slate ()
-  "Go to the top of the page and open just a bit."
-  (interactive)
-  (beginning-of-buffer)
-  (org-shifttab 1)
-  )
+;; (defun gpc/clean-slate ()
+;;   "Go to the top of the page and open just a bit."
+;;   (interactive)
+;;   (beginning-of-buffer)
+;;   (org-shifttab 1)
+;;   )
 
 ;; I used these keystrokes for a GA homework or something?
 ;; (define-prefix-command 'algorithms-map)
@@ -603,13 +600,15 @@ It also checks the following:
       (mark-whole-buffer)
       (org-ctrl-c-star)
       (mark-whole-buffer)
+      (org-metaright)
+      (mark-whole-buffer)
       (org-todo)
       (kill-ring-save (point-min) (point-max))))
   (yank))
 
 (load! "ucs-cmds.el")
 (load! "vulpea.el")
-(load! "workflow.el")
+;; (load! "workflow.el")
 
 (ucsc-make-commands "Latin.* letter [a-z]+ with macron$")
 (define-prefix-command 'macron-map)
@@ -627,64 +626,4 @@ It also checks the following:
 
 (use-package! jq-mode)
 
-(defun gpc/insert-anki-basic-note ()
-  "Insert an Anki 'Basic' note at point,
-relying on deck and tags to be set at a higher heading"
-  (interactive)
-  (let* ((card-front (read-string "Front: "))
-         (card-back (read-string "Back: ")))
-    (org-insert-heading)
-    (org-cycle)
-    (insert (concat card-front
-                    " "
-                    card-back
-                    "\n:PROPERTIES:\n"
-                    ":ANKI_NOTE_TYPE: Basic\n"
-                    ":CREATED: "
-                    (format-time-string (org-time-stamp-format 'long 'inactive)
-                                        (org-current-effective-time))
-                    "\n:END:\n"))
-    (org-insert-heading)
-    (org-cycle)
-    (insert "Front\n")
-    (insert card-front)
-    (org-insert-heading)
-    (insert "Back\n")
-    (insert card-back)
-    (outline-up-heading 1)))
-
 (setq +org-capture-journal-file "211230_journal.org")
-
-(defun gpc/push-to-anki ()
-  "Process each line in the buffer one by one looking for Q&A of the simple form [WHI]...? ....,
-that can be pushed to Anki without needing a tree of headings."
-  (interactive)
-  (anki-editor-mode)
-  (save-excursion
-    (let* ((acc 0))
-      (goto-char (point-min))
-      (while (not (eobp))
-        (let* ((line (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
-          (if (string-match "^\\([WIH].*\\?\\) \\(.*\\)\." line)
-              (let* ((front (match-string-no-properties 1 line))
-                     (back (match-string-no-properties 2 line))
-                     (org-trust-scanner-tags t)
-                     (deck (org-entry-get-with-inheritance anki-editor-prop-deck))
-                     (note-id "-1")
-                     (note-type (org-entry-get-with-inheritance anki-editor-prop-note-type))
-                     (tags (anki-editor--get-tags))
-                     (fields `(("Front" . ,front) ("Back" . ,back))))
-                ;; (defun anki-editor--set-note-id () nil)
-                (unless deck (error "Deck property not found"))
-                (unless note-type (error "Note type property not found"))
-                (unless fields (error "Card fields not found"))
-                (message (concat "Pushing note #" (cl-incf acc) ": " front))
-                (anki-editor--create-note
-                 `((deck . ,deck)
-                   (note-id . "-1")
-                   (note-type . ,note-type)
-                   (tags . ,tags)
-                   (fields . ,fields)))
-                (insert "ANKIFIED "))))
-        (forward-line 1))))
-  (message (concat "Pushed " acc " notes to Anki.")))
