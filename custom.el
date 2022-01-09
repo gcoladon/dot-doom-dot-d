@@ -6,10 +6,8 @@
  '(+org-roam-open-buffer-on-find-file nil t)
  '(anki-editor-org-tags-as-anki-tags nil)
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
- '(bibtex-completion-bibliography (list my/bib-file))
  '(bibtex-completion-display-formats
    '((t . "${author:20} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
- '(bibtex-completion-library-path my/pdf-dir)
  '(bibtex-completion-notes-path (concat gpc/org-dir "roam-stem/"))
  '(bibtex-completion-pdf-field "file")
  '(deft-directory gpc/org-dir)

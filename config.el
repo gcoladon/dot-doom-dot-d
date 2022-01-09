@@ -13,9 +13,12 @@
 (setq org-capture-link-is-already-stored t)
 
 ;; trying to debug the cache problem
-(setq org-element--cache-self-verify 'backtrace)
-(setq org-element-use-cache nil)
-(setq org-roam-v2-ack t)
+;; (setq org-element--cache-self-verify 'backtrace)
+;; (setq org-element-use-cache nil)
+;; (setq org-roam-v2-ack t)
+
+(setq bibtex-completion-library-path "~/pdfs"
+      bibtex-completion-bibliography (list "~/pdfs/references.bib"))
 
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
                                      (shell-command-to-string "ifconfig en0 | grep ether"))
@@ -24,8 +27,6 @@
           gpc/org-dir "~/org/"
           gpc/org-agenda-files (list (concat gpc/org-dir "roam-personal/")
                                      (concat gpc/org-dir "roam-stem/"))
-          my/pdf-dir "~/pdfs"
-          my/bib-file "~/pdfs/references.bib"
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/todays-notes-fn 'gc/org-roam-monthly)
 
@@ -33,8 +34,6 @@
         gpc/org-dir "~/org/"
         gpc/org-agenda-files (list (concat gpc/org-dir "roam-pilot/")
                                    (concat gpc/org-dir "roam-stem/"))
-        my/pdf-dir "~/pdfs"
-        my/bib-file "~/pdfs/references.bib"
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         gpc/todays-notes-fn 'gc/org-roam-weekly-this))
 
@@ -86,75 +85,12 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-
-;;; I think I like the look of this.
-;;; And I *almost* like how it works, but it changes point to the
-;;; buffers instead of staying in the dired. Hmm, how to fix that?
-;;; https://org-roam.discourse.group/t/org-roam-dailies-how-to-browse-through-previous-days/1018
-;;; Dired
-(defun my/check-org-roam-buffer-p (buf)
-  "Return non-nil if BUF is org-roam-buffer that can be refleshed.
-It also checks the following:
-- `org-roam' is indeed loaded
-- BUF is visiting an Org-roam file
-- org-roam-buffer exists"
-  (and (functionp #'org-roam--org-roam-file-p)
-       (org-roam--org-roam-file-p (buffer-file-name buf))
-       (not (eq (org-roam-buffer--visibility) 'none))))
-
-;;;###autoload
-(defun my/dired-display-next-file ()
-  "In Dired directory, go to the next file, and open it.
-            If `org-roam-mode' is active, update the org-roam-buffer."
-  (interactive)
-  (dired-next-line 1)
-  (let ((buf (find-file-noselect (dired-get-file-for-visit))))
-    (display-buffer buf t)
-    (when (my/check-org-roam-buffer-p buf)
-      (with-current-buffer buf
-        (setq org-roam--current-buffer buf)
-        (org-roam-buffer-update)))))
-
-;;;###autoload
-;; (defun my/dired-display-prev-file ()
-;;   "In Dired directory, go to the previous file, and open it.
-;;             If `org-roam-mode' is active, update the org-roam-buffer."
-;;   (interactive)
-;;   (dired-previous-line 1)
-;;   (let ((buf (find-file-noselect (dired-get-file-for-visit))))
-;;     (display-buffer buf t)
-;;     (when (my/check-org-roam-buffer-p buf)
-;;       (with-current-buffer buf
-;;         (setq org-roam--current-buffer buf)
-;;         (org-roam-buffer-update)))))
-
-;; (add-hook 'dired-mode-hook
-;;           (lambda ()
-;;             (dired-hide-details-mode 1)
-;;             ;; I don't use dired-subtree at the moment
-;;             ;;(define-key dired-mode-map (kbd "<tab>") #'dired-subtree-toggle)
-;;             ;;(define-key dired-mode-map (kbd "<C-tab>") #'dired-subtree-cycle)
-;;             (define-key dired-mode-map (kbd "<SPC>") #'my/dired-display-next-file)
-;;             (define-key dired-mode-map (kbd "<down>") #'my/dired-display-next-file)
-;;             (define-key dired-mode-map (kbd "<up>") #'my/dired-display-prev-file)))
-
-;; (defun my/dired-in-side-buffer ()
-;;   "Display Dired in a side window."
-;;   (interactive)
-;;   (let* ((dir (read-directory-name "Directory: "))
-;;          (buf (dired-noselect dir)))
-;;     (select-window
-;;      (display-buffer-in-side-window buf
-;;                                     '((side . left)
-;;                                       (window-width . 30)
-;;                                       (slot . -1)
-;;                                       (window-parameters . ((mode-line-format . none))))))))
-
 ;; Let's see if I prefer this style of search interaction
 ;; (ctrlf-mode +1)
 
 ;; https://sachachua.com/blog/2015/08/org-mode-date-arithmetic/
 ;; Thanks Sacha!
+
 (defun gc/org-roam-find-weekly (which)
   "Find file corresponding to the week beginning with WHICH"
   (setq monday-tv (org-read-date nil t which))
