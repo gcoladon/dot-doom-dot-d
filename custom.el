@@ -8,9 +8,9 @@
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
  '(bibtex-completion-display-formats
    '((t . "${author:20} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
- '(bibtex-completion-notes-path (concat gpc/org-dir "roam-stem/"))
+ '(bibtex-completion-notes-path (concat org-directory "roam-stem/"))
  '(bibtex-completion-pdf-field "file")
- '(deft-directory gpc/org-dir)
+ '(deft-directory org-directory)
  '(deft-recursive t)
  '(deft-strip-summary-regexp ":PROPERTIES:
 \\(.+
@@ -40,7 +40,7 @@
  '(org-log-into-drawer t)
  '(org-noter-always-create-frame nil)
  '(org-noter-doc-split-fraction '(0.6 . 0.6))
- '(org-ref-notes-directory (concat gpc/org-dir "roam-stem/"))
+ '(org-ref-notes-directory (concat org-directory "roam-stem/"))
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
  '(org-roam-capture-ref-templates

@@ -18,27 +18,25 @@
 ;; (setq org-roam-v2-ack t)
 
 (setq bibtex-completion-library-path "~/pdfs"
-      bibtex-completion-bibliography (list "~/pdfs/references.bib"))
+      bibtex-completion-bibliography (list "~/pdfs/references.bib")
+      org-directory "~/org/")
 
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
                                      (shell-command-to-string "ifconfig en0 | grep ether"))
            "ether f0:18:98:9a:c9:2c ")
     (setq gpc/email "gcoladon@gmail.com"
-          gpc/org-dir "~/org/"
-          gpc/org-agenda-files (list (concat gpc/org-dir "roam-personal/")
-                                     (concat gpc/org-dir "roam-stem/"))
+          gpc/org-agenda-files (list (concat org-directory "roam-personal/")
+                                     (concat org-directory "roam-stem/"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/todays-notes-fn 'gc/org-roam-monthly)
 
   (setq gpc/email "greg@pilot.ai"
-        gpc/org-dir "~/org/"
-        gpc/org-agenda-files (list (concat gpc/org-dir "roam-pilot/")
-                                   (concat gpc/org-dir "roam-stem/"))
+        gpc/org-agenda-files (list (concat org-directory "roam-pilot/")
+                                   (concat org-directory "roam-stem/"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         gpc/todays-notes-fn 'gc/org-roam-weekly-this))
 
-(setq user-mail-address gpc/email
-      org-directory gpc/org-dir)
+(setq user-mail-address gpc/email)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
