@@ -11,6 +11,7 @@
 
 ;; So that org capturing doesn't insert the ID of the captured file at point
 (setq org-capture-link-is-already-stored t)
+(setq debug-on-quit t)
 
 ;; trying to debug the cache problem
 ;; (setq org-element--cache-self-verify 'backtrace)
@@ -541,7 +542,12 @@
   (yank))
 
 (load! "ucs-cmds.el")
-(load! "vulpea.el")
+
+;;  I just commented out vulpea because of these errors:
+;; Error (find-file-hook): Error running hook "vulpea-project-update-tag" because: (error rx ‘**’ range error)
+;; Error (window-setup-hook): Error running hook "doom-load-session" because: (doom-hook-error find-file-hook vulpea-project-update-tag (error rx ‘**’ range error))
+;; (load! "vulpea.el")
+
 ;; (load! "workflow.el")
 
 (ucsc-make-commands "Latin.* letter [a-z]+ with macron$")
