@@ -11,7 +11,9 @@
 
 ;; So that org capturing doesn't insert the ID of the captured file at point
 (setq org-capture-link-is-already-stored t)
-(setq debug-on-quit t)
+
+;; I turned this on to try to figure out why my file saves were hanging. But I never really figured that out.
+;; (setq debug-on-quit t)
 
 ;; trying to debug the cache problem
 ;; (setq org-element--cache-self-verify 'backtrace)
