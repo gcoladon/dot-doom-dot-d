@@ -56,11 +56,13 @@
       :unnarrowed t)
      ("s" "stem" plain "%?" :if-new
       (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
+#+TODO: TODO | DONE
 
 ")
       :unnarrowed t)
      ("p" "personal" plain "%?" :if-new
       (file+head "roam-personal/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
+#+TODO: TODO | DONE
 
 ")
       :unnarrowed t)

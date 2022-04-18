@@ -137,6 +137,23 @@
 ;; (global-set-key (kbd "s-d") (cmd! (find-file "~/org/roam-stem/210820_dl_syllabus.org")))
 (global-set-key (kbd "C-c &") 'org-mark-ring-goto)
 
+(global-set-key (kbd "s-<up>") 'beginning-of-buffer)
+(global-set-key (kbd "s-<down>") 'end-of-buffer)
+
+;; I want to be able to open the URL associated with a roam-ref created file in a single keystroke
+(defun gpc/open-node-roam-ref-url ()
+  "Open the URL in this node's ROAM_REFS property, if one exists"
+  (interactive)
+  (when-let ((ref-url (org-entry-get-with-inheritance "ROAM_REFS")))
+    (browse-url ref-url)))
+
+;; I hate that I always have to delete the newline that gets added after I insert a stored link
+(defun org-insert-last-stored-link (arg)
+  "Insert the last link stored in `org-stored-links'."
+  (interactive "p")
+  (org-insert-all-links arg "" " "))
+
+
 ;; (defun org-hide-properties ()
 ;;   "Hide all org-mode headline property drawers in buffer. Could be slow if buffer has a lot of overlays."
 ;;   (interactive)
@@ -210,6 +227,7 @@
        :desc "Node find"                     "r f" #'org-roam-node-find
        :desc "Show graph"                    "r g" #'org-roam-graph
        :desc "Insert"                        "r i" #'org-roam-node-insert
+       :desc "Open node ROAM_REFS url"       "r o" #'gpc/open-node-roam-ref-url
        :desc "org-roam-buffer-toggle"        "r r" #'org-roam-buffer-toggle
        :desc "Insert last stored link"       "r s" #'org-insert-last-stored-link
        :desc "Insert (skipping org-cap)"     "r I" #'org-roam-insert-immediate
