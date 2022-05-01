@@ -75,3 +75,6 @@
 
 (package! jq-mode
   :recipe (:host github :repo "ljos/jq-mode"))
+
+(unpin! org-roam)
+(package! org-roam-ui)
