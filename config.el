@@ -297,7 +297,11 @@
 (defun html2org-clipboard ()
   "Convert clipboard contents from HTML to Org and then paste (yank)."
   (interactive)
-  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | pandoc -f json -t org --wrap=none")
+  ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | pandoc -f json -t org --wrap=none")
+  ;; I think this is better, somehow it trims down the obnoxiousness of the properties, but I would like to take it a steo further and suppress the properties section completely
+  ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json |  jq . | sed '/text-decoration-thickness/s/.*/\"\"/' | pandoc -f json -t org --wrap=none")
+  ;; Ahh, this one seems to do it, just trash every line beginning with a colon.
+  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | pandoc -f json -t org --wrap=none | grep -v '^ *:'")
   (kill-new (shell-command-to-string cmd))
   (yank))
 
