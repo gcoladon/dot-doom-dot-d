@@ -15,6 +15,9 @@
 ;; I turned this on to try to figure out why my file saves were hanging. But I never really figured that out.
 ;; (setq debug-on-quit t)
 
+;; I tried this to try to figure out why my org-roam database is getting cleared on startup.
+;; (emacsql-enable-debugging (org-roam-db--get-connection))
+
 ;; trying to debug the cache problem
 ;; (setq org-element--cache-self-verify 'backtrace)
 ;; (setq org-element-use-cache nil)
