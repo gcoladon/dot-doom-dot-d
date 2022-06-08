@@ -12,6 +12,9 @@
 ;; So that org capturing doesn't insert the ID of the captured file at point
 (setq org-capture-link-is-already-stored t)
 
+;; this is almost what I want, but I want something that will write out each function name invoked
+;; (open-dribble-file "~/emacs_dribble.txt")
+
 ;; I turned this on to try to figure out why my file saves were hanging. But I never really figured that out.
 ;; (setq debug-on-quit t)
 
@@ -29,7 +32,8 @@
 
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
                                      (shell-command-to-string "ifconfig en0 | grep ether"))
-           "ether f0:18:98:9a:c9:2c ")
+           "ether b0:be:83:69:04:b3 ")
+
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-agenda-files (list (concat org-directory "roam-personal/")
                                      (concat org-directory "roam-stem/"))
@@ -593,4 +597,6 @@
 
 (use-package! jq-mode)
 
-(setq +org-capture-journal-file "211230_journal.org")
+(setq +org-capture-journal-file "~/org/roam-personal/220531_personal_journal.org")
+
+(use-package! org-protocol)
