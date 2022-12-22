@@ -450,7 +450,9 @@
   (mapconcat
    (lambda (num) (concat "* "
                          (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
-                         "\n** Plan\n** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
+                         "\n** Plan\n"
+                         (if (= num 0) "*** TODO Pull Chevron POS data\n*** TODO Check Ethan's and Spencer's calendars for meetings I should join\n")
+                         "** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
    (number-sequence 0 4)
    ""))
 
