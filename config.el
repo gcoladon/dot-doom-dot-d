@@ -451,7 +451,7 @@
    (lambda (num) (concat "* "
                          (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
                          "\n** Plan\n"
-                         (if (= num 0) "*** TODO Pull Chevron POS data\n*** TODO Check Ethan's and Spencer's calendars for meetings I should join\n")
+                         (if (= num 0) "*** TODO Pull Chevron POS data\n*** TODO Don't forget about [[id:230122_175647][Some projects I would like to work on]]!\n*** TODO What to do for Assa Abloy/Apical, Pradco/Sercomm, Sennheiser/Tymphany, Palantir\n*** TODO Check Ethan's and Spencer's calendars for meetings I should join\n")
                          "** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
    (number-sequence 0 4)
    ""))
