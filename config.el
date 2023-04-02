@@ -17,10 +17,6 @@
 
 ;; I turned this on to try to figure out why my file saves were hanging. But I never really figured that out.
 ;; (setq debug-on-quit t)
-
-;; I tried this to try to figure out why my org-roam database is getting cleared on startup.
-;; (emacsql-enable-debugging (org-roam-db--get-connection))
-
 ;; trying to debug the cache problem
 ;; (setq org-element--cache-self-verify 'backtrace)
 ;; (setq org-element-use-cache nil)
@@ -35,8 +31,7 @@
            "ether b0:be:83:69:04:b3 ")
 
     (setq gpc/email "gcoladon@gmail.com"
-          gpc/org-agenda-files (list (concat org-directory "roam-personal/")
-                                     (concat org-directory "roam-stem/"))
+          gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam-personal/230*_monthly.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/todays-notes-fn 'gc/org-roam-monthly)
 
@@ -141,6 +136,10 @@
 (global-set-key (kbd "s-i") 'org-roam-node-insert)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 (global-set-key (kbd "s-r") gpc/todays-notes-fn)
+(global-set-key (kbd "s-2") (cmd! (org-todo-list 2)))
+(global-set-key (kbd "s-3") (cmd! (org-todo-list 3)))
+(global-set-key (kbd "s-4") (cmd! (org-todo-list 4)))
+
 ;; (global-set-key (kbd "s-d") (cmd! (find-file "~/org/roam-stem/210820_dl_syllabus.org")))
 (global-set-key (kbd "C-c &") 'org-mark-ring-goto)
 
@@ -211,6 +210,7 @@
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
+      :desc "Move TODO to top"            "l m" #'gpc/move-todo-to-top
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
 
@@ -555,7 +555,7 @@
 
 (defun gpc/copy-todos-from-email ()
   (interactive)
-  (let ((org-todo-keywords '((sequence "TODO" "DONE"))))
+  (let ((org-todo-keywords '((sequence "IDEA" "DONE"))))
     (with-temp-buffer
       (clipboard-yank)
       (mark-whole-buffer)
@@ -594,6 +594,17 @@
 (define-key macron-map (kbd "I") 'latin-capital-letter-i-with-macron)
 (define-key macron-map (kbd "O") 'latin-capital-letter-o-with-macron)
 (define-key macron-map (kbd "U") 'latin-capital-letter-u-with-macron)
+
+
+(defun gpc/move-todo-to-top ()
+  "Move a todo at point to the top of the file, for killing and yanking into current month"
+  (interactive)
+  (save-excursion
+    (org-mark-element)
+    (kill-region (point) (mark))
+    (beginning-of-buffer)
+    (next-line 5)
+    (yank)))
 
 (use-package! jq-mode)
 
