@@ -4,7 +4,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(+org-roam-open-buffer-on-find-file nil t)
- ;; '(after-save-hook nil)
  '(anki-editor-org-tags-as-anki-tags nil)
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
  '(bibtex-completion-display-formats
@@ -25,6 +24,7 @@
      "url" "file" "author-or-editor-abbrev" "keywords" "abstract" "author" "year"))
  '(orb-switch-persp t)
  '(org-M-RET-may-split-line t)
+ '(org-agenda-file-regexp "\\`[^.].*monthly.*\\.org\\'")
  '(org-agenda-files gpc/org-agenda-files)
  '(org-agenda-sorting-strategy
    '((agenda habit-down time-up priority-down category-keep)
@@ -110,6 +110,7 @@ ${abstract}
  '(org-roam-graph-max-title-length 25)
  '(org-roam-graph-shorten-titles 'wrap)
  '(org-startup-folded nil)
+ '(package-selected-packages '(impatient-mode))
  '(pdf-misc-print-program-executable "/usr/local/bin/gpr")
  '(projectile-project-search-path '("~/dl" "~/src"))
  '(save-place-mode nil))
