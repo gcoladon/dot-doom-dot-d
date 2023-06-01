@@ -35,9 +35,8 @@
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/todays-notes-fn 'gc/org-roam-monthly)
 
-  (setq gpc/email "greg@pilot.ai"
-        gpc/org-agenda-files (list (concat org-directory "roam-pilot/")
-                                   (concat org-directory "roam-stem/"))
+  (setq gpc/email "greg@syntiant.com"
+        gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam-pilot/230[3-9]*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         gpc/todays-notes-fn 'gc/org-roam-weekly-this))
 
@@ -134,6 +133,7 @@
 ;; Why not, I use these functions all the time, a single chord makes sense
 (global-set-key (kbd "s-f") 'org-roam-node-find)
 (global-set-key (kbd "s-i") 'org-roam-node-insert)
+(global-set-key (kbd "s-s") (cmd!  (find-file "~/repos/master/Source/")))
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 (global-set-key (kbd "s-r") gpc/todays-notes-fn)
 (global-set-key (kbd "s-2") (cmd! (org-todo-list 2)))
@@ -451,7 +451,7 @@
    (lambda (num) (concat "* "
                          (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
                          "\n** Plan\n"
-                         (if (= num 0) "*** TODO Pull Chevron POS data\n*** TODO Don't forget about [[id:230122_175647][Some projects I would like to work on]]!\n*** TODO What to do for Assa Abloy/Apical, Pradco/Sercomm, Sennheiser/Tymphany, Palantir\n*** TODO Check Ethan's and Spencer's calendars for meetings I should join\n")
+                         (if (= num 0) "*** TODO Pull Chevron POS data\n*** TODO Don't forget about [[id:230122_175647][Some projects I would like to work on]]!\n*** TODO What to do for Assa Abloy/Apical, Pradco/Sercomm, Sennheiser/Tymphany\n*** TODO Check Ethan's and Spencer's calendars for meetings I should join\n*** TODO Check [[http://control1/releases/latest/][Latest]] to see if things built\n")
                          "** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
    (number-sequence 0 4)
    ""))
