@@ -23,7 +23,9 @@
 ;; (setq org-roam-v2-ack t)
 
 (setq bibtex-completion-library-path "~/pdfs"
-      bibtex-completion-bibliography (list "~/pdfs/references.bib")
+      ;; Changed from list to string to get org-roam-bibtext helm-edit-note to work
+      ;; bibtex-completion-bibliography (list "~/pdfs/references.bib")
+      bibtex-completion-bibliography "~/pdfs/references.bib"
       org-directory "~/org/")
 
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
