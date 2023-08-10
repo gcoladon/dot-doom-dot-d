@@ -28,6 +28,8 @@
       bibtex-completion-bibliography "~/pdfs/references.bib"
       org-directory "~/org/")
 
+(setq org-babel-awk-command "gawk")
+
 (if (equal (replace-regexp-in-string "[\t|\n]" ""
                                      (shell-command-to-string "ifconfig en0 | grep ether"))
            "ether b0:be:83:69:04:b3 ")
@@ -105,10 +107,9 @@
 (defun gc/org-roam-monthly ()
   "Find the monthly-file for this month."
   (interactive)
-  (setq
-   next-first (org-read-date nil t "1")
-   first-tv (org-read-date nil t "--m" nil next-first)
-   first-str (org-read-date nil nil "--m" nil next-first))
+  (setq next-first (org-read-date nil t "1"))
+  (setq first-tv (org-read-date nil t "--m" nil next-first))
+  (setq first-str (org-read-date nil nil "--m" nil next-first))
   (org-roam-node-find nil (concat "Month of " (substring first-str 0 7))))
 
 ;; (defun gc/org-roam-monthly-visit ()
@@ -292,8 +293,6 @@
 ;;   (org-roam-server-mode)
 ;;   (smartparens-global-mode 1))
 
-
-
 ;; Ask what's up with these errors lately
 ;; error in process sentinel: async-handle-result: Cannot open load file: No such file or directory, dash
 ;; error in process sentinel: Cannot open load file: No such file or directory, dash
@@ -303,13 +302,13 @@
 (defun html2org-clipboard ()
   "Convert clipboard contents from HTML to Org and then paste (yank)."
   (interactive)
-  ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | pandoc -f json -t org --wrap=none")
-  ;; I think this is better, somehow it trims down the obnoxiousness of the properties, but I would like to take it a steo further and suppress the properties section completely
-  ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json |  jq . | sed '/text-decoration-thickness/s/.*/\"\"/' | pandoc -f json -t org --wrap=none")
-  ;; Ahh, this one seems to do it, just trash every line beginning with a colon.
-  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | pandoc -f json -t org --wrap=none | grep -v '^ *:'")
+  ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | tee ~/$$_html.txt | pandoc -f html -t org --wrap=none --filter /Users/greg/dev/python/filter_pandoc.py | grep -v '^ *:'")
+  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | tee /Users/greg/dev/python/pandoc_$$.json | pandoc -f json -t org --wrap=none --filter /Users/greg/dev/python/filter_pandoc.py | grep -v '^ *:'")
+  ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | tee ~/$$.json | pandoc -f json -t org --wrap=none | grep -v '^ *:'")
   (kill-new (shell-command-to-string cmd))
-  (yank))
+  (yank)
+  ;; get rid of that newline that gets printed
+  (delete-backward-char 1))
 
 (defun gpc/org-archive-done-tasks ()
   (interactive)
@@ -608,6 +607,7 @@
     (kill-region (point) (mark))
     (beginning-of-buffer)
     (next-line 5)
+    (beginning-of-line)
     (yank)))
 
 (use-package! jq-mode)
@@ -615,3 +615,55 @@
 (setq +org-capture-journal-file "~/org/roam-personal/220531_personal_journal.org")
 
 (use-package! org-protocol)
+
+;;;###autoload
+
+;; Call with, after copying the ID to the clipboard
+  ;; (gpc/nature-get-pdf-add-bibtex-entry (arxiv-maybe-arxiv-id-from-current-kill)
+  ;;                                 bibtex-completion-bibliography
+  ;;                                 (concat bibtex-completion-library-path "/"))
+
+
+(defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
+  "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
+Remove troublesome chars from the bibtex key, retrieve a pdf
+for ARTICLE-NUMBER and save it to PDFDIR with the same name of the
+key."
+  (interactive)
+
+  (arxiv-add-bibtex-entry article-number bibfile)
+
+  (save-window-excursion
+    (let ((key ""))
+      (find-file bibfile)
+      (goto-char (point-max))
+      (bibtex-beginning-of-entry)
+      (re-search-forward bibtex-entry-maybe-empty-head)
+      (if (match-beginning bibtex-key-in-head)
+          (progn
+            (setq key (delete-and-extract-region
+                       (match-beginning bibtex-key-in-head)
+                       (match-end bibtex-key-in-head)))
+            ;; remove potentially troublesome characters from key
+            ;; as it will be used as  a filename
+            (setq key (replace-regexp-in-string   "\"\\|\\*\\|/\\|:\\|<\\|>\\|\\?\\|\\\\\\||\\|\\+\\|,\\|\\.\\|;\\|=\\|\\[\\|]\\|!\\|@"
+                                                  "" key))
+            ;; check if the key is in the buffer
+            (when (save-excursion
+                    (bibtex-search-entry key))
+              (save-excursion
+                (bibtex-search-entry key)
+                (bibtex-copy-entry-as-kill)
+                (switch-to-buffer-other-window "*duplicate entry*")
+                (bibtex-yank))
+              (setq key (bibtex-read-key "Duplicate Key found, edit: " key))))
+        (setq key (bibtex-read-key "Key not found, insert: ")))
+      (insert key)
+      (arxiv-get-pdf arxiv-number (concat pdfdir key ".pdf"))
+      ;; Check that it worked, and insert a field for it.
+      (when (file-exists-p (concat pdfdir key ".pdf"))
+	(bibtex-end-of-entry)
+	(backward-char)
+	(insert (format "  file = {%s}\n  " (concat pdfdir key ".pdf")))))))
+
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
