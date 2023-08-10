@@ -101,7 +101,6 @@
 ${abstract}
 ")
       :unnarrowed t)))
- ;; '(org-roam-directory "/Users/greg/org/")
  '(org-roam-graph-edge-extra-config '(("color" . "#333333") ("dir" . "back")))
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude" "_monthly"))
  '(org-roam-graph-executable "neato")
@@ -110,7 +109,7 @@ ${abstract}
  '(org-roam-graph-max-title-length 25)
  '(org-roam-graph-shorten-titles 'wrap)
  '(org-startup-folded nil)
- '(package-selected-packages '(impatient-mode))
+ '(package-selected-packages '(nov impatient-mode))
  '(pdf-misc-print-program-executable "/usr/local/bin/gpr")
  '(projectile-project-search-path '("~/dl" "~/src"))
  '(save-place-mode nil))
