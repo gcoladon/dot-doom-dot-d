@@ -107,6 +107,10 @@
 (defun gc/org-roam-monthly ()
   "Find the monthly-file for this month."
   (interactive)
+  ;; Well, this only worked on the first, not the second, for some reason!
+  ;; THis logic produces November on 10/2!
+  ;; (setq next-first-str (org-read-date nil nil "1" nil (org-read-date nil t "-1")))
+
   (setq next-first (org-read-date nil t "1"))
   (setq first-tv (org-read-date nil t "--m" nil next-first))
   (setq first-str (org-read-date nil nil "--m" nil next-first))
