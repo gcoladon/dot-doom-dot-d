@@ -577,6 +577,8 @@
       (mark-whole-buffer)
       (org-metaright)
       (mark-whole-buffer)
+      (reverse-region (point-min) (point-max))
+      (mark-whole-buffer)
       (org-todo)
       (kill-ring-save (point-min) (point-max))))
   (yank))
