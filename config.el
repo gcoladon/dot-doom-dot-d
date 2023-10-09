@@ -146,6 +146,7 @@
 (global-set-key (kbd "s-2") (cmd! (org-todo-list 2)))
 (global-set-key (kbd "s-3") (cmd! (org-todo-list 3)))
 (global-set-key (kbd "s-4") (cmd! (org-todo-list 4)))
+(global-set-key (kbd "s-J") (cmd! (org-capture nil "j")))
 
 ;; (global-set-key (kbd "s-d") (cmd! (find-file "~/org/roam-stem/210820_dl_syllabus.org")))
 (global-set-key (kbd "C-c &") 'org-mark-ring-goto)
@@ -616,7 +617,7 @@
 
 (use-package! jq-mode)
 
-(setq +org-capture-journal-file "~/org/roam-personal/220531_personal_journal.org")
+(setq +org-capture-journal-file "~/org/roam/roam-personal/220531_personal_journal.org")
 
 (use-package! org-protocol)
 
