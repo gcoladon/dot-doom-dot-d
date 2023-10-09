@@ -219,6 +219,7 @@
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
       :desc "Move TODO to top"            "l m" #'gpc/move-todo-to-top
+      :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
 
