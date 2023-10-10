@@ -107,6 +107,10 @@
 (defun gc/org-roam-monthly ()
   "Find the monthly-file for this month."
   (interactive)
+  ;; Well, this only worked on the first, not the second, for some reason!
+  ;; THis logic produces November on 10/2!
+  ;; (setq next-first-str (org-read-date nil nil "1" nil (org-read-date nil t "-1")))
+
   (setq next-first (org-read-date nil t "1"))
   (setq first-tv (org-read-date nil t "--m" nil next-first))
   (setq first-str (org-read-date nil nil "--m" nil next-first))
@@ -143,6 +147,7 @@
 (global-set-key (kbd "s-2") (cmd! (org-todo-list 2)))
 (global-set-key (kbd "s-3") (cmd! (org-todo-list 3)))
 (global-set-key (kbd "s-4") (cmd! (org-todo-list 4)))
+(global-set-key (kbd "s-J") (cmd! (org-capture nil "j")))
 
 ;; (global-set-key (kbd "s-d") (cmd! (find-file "~/org/roam-stem/210820_dl_syllabus.org")))
 (global-set-key (kbd "C-c &") 'org-mark-ring-goto)
@@ -215,6 +220,7 @@
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
       :desc "Move TODO to top"            "l m" #'gpc/move-todo-to-top
+      :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
 
@@ -572,6 +578,8 @@
       (mark-whole-buffer)
       (org-metaright)
       (mark-whole-buffer)
+      (reverse-region (point-min) (point-max))
+      (mark-whole-buffer)
       (org-todo)
       (kill-ring-save (point-min) (point-max))))
   (yank))
@@ -613,7 +621,7 @@
 
 (use-package! jq-mode)
 
-(setq +org-capture-journal-file "~/org/roam-personal/220531_personal_journal.org")
+(setq +org-capture-journal-file "~/org/roam/roam-personal/220531_personal_journal.org")
 
 (use-package! org-protocol)
 
@@ -625,46 +633,58 @@
   ;;                                 (concat bibtex-completion-library-path "/"))
 
 
-(defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
-  "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
+(defun gpc/insert-today-node ()
+  "Add a line to an org-mode file I'm using for taking notes"
+  (interactive)
+
+  (progn
+    (insert "* ")
+    (insert (format-time-string "%Y-%m-%d" (current-time)))
+    (insert " ")
+    (insert (format-time-string "%A" (current-time)))
+    (insert "\n")))
+
+
+    (defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
+      "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
 Remove troublesome chars from the bibtex key, retrieve a pdf
 for ARTICLE-NUMBER and save it to PDFDIR with the same name of the
 key."
-  (interactive)
+      (interactive)
 
-  (arxiv-add-bibtex-entry article-number bibfile)
+      (arxiv-add-bibtex-entry article-number bibfile)
 
-  (save-window-excursion
-    (let ((key ""))
-      (find-file bibfile)
-      (goto-char (point-max))
-      (bibtex-beginning-of-entry)
-      (re-search-forward bibtex-entry-maybe-empty-head)
-      (if (match-beginning bibtex-key-in-head)
-          (progn
-            (setq key (delete-and-extract-region
-                       (match-beginning bibtex-key-in-head)
-                       (match-end bibtex-key-in-head)))
-            ;; remove potentially troublesome characters from key
-            ;; as it will be used as  a filename
-            (setq key (replace-regexp-in-string   "\"\\|\\*\\|/\\|:\\|<\\|>\\|\\?\\|\\\\\\||\\|\\+\\|,\\|\\.\\|;\\|=\\|\\[\\|]\\|!\\|@"
-                                                  "" key))
-            ;; check if the key is in the buffer
-            (when (save-excursion
-                    (bibtex-search-entry key))
-              (save-excursion
-                (bibtex-search-entry key)
-                (bibtex-copy-entry-as-kill)
-                (switch-to-buffer-other-window "*duplicate entry*")
-                (bibtex-yank))
-              (setq key (bibtex-read-key "Duplicate Key found, edit: " key))))
-        (setq key (bibtex-read-key "Key not found, insert: ")))
-      (insert key)
-      (arxiv-get-pdf arxiv-number (concat pdfdir key ".pdf"))
-      ;; Check that it worked, and insert a field for it.
-      (when (file-exists-p (concat pdfdir key ".pdf"))
-	(bibtex-end-of-entry)
-	(backward-char)
-	(insert (format "  file = {%s}\n  " (concat pdfdir key ".pdf")))))))
+      (save-window-excursion
+        (let ((key ""))
+          (find-file bibfile)
+          (goto-char (point-max))
+          (bibtex-beginning-of-entry)
+          (re-search-forward bibtex-entry-maybe-empty-head)
+          (if (match-beginning bibtex-key-in-head)
+              (progn
+                (setq key (delete-and-extract-region
+                           (match-beginning bibtex-key-in-head)
+                           (match-end bibtex-key-in-head)))
+                ;; remove potentially troublesome characters from key
+                ;; as it will be used as  a filename
+                (setq key (replace-regexp-in-string   "\"\\|\\*\\|/\\|:\\|<\\|>\\|\\?\\|\\\\\\||\\|\\+\\|,\\|\\.\\|;\\|=\\|\\[\\|]\\|!\\|@"
+                                                      "" key))
+                ;; check if the key is in the buffer
+                (when (save-excursion
+                        (bibtex-search-entry key))
+                  (save-excursion
+                    (bibtex-search-entry key)
+                    (bibtex-copy-entry-as-kill)
+                    (switch-to-buffer-other-window "*duplicate entry*")
+                    (bibtex-yank))
+                  (setq key (bibtex-read-key "Duplicate Key found, edit: " key))))
+            (setq key (bibtex-read-key "Key not found, insert: ")))
+          (insert key)
+          (arxiv-get-pdf arxiv-number (concat pdfdir key ".pdf"))
+          ;; Check that it worked, and insert a field for it.
+          (when (file-exists-p (concat pdfdir key ".pdf"))
+	    (bibtex-end-of-entry)
+	    (backward-char)
+	    (insert (format "  file = {%s}\n  " (concat pdfdir key ".pdf")))))))
 
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
