@@ -137,6 +137,7 @@
 (global-set-key (kbd "s-f") 'org-roam-node-find)
 (global-set-key (kbd "s-i") 'org-roam-node-insert)
 (global-set-key (kbd "s-s") (cmd!  (find-file "~/repos/master/Source/")))
+(global-set-key (kbd "s-p") (cmd!  (find-file "~/repos/personal/Personal/greg")))
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 (global-set-key (kbd "s-r") gpc/todays-notes-fn)
 (global-set-key (kbd "s-2") (cmd! (org-todo-list 2)))
