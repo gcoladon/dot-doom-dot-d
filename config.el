@@ -37,11 +37,13 @@
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*_monthly.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
-          gpc/todays-notes-fn 'gc/org-roam-monthly)
+          gpc/bump-todo-item 'gpc/move-todo-to-top
+          gpc/todays-notes-fn 'gpc/org-roam-monthly)
 
   (setq gpc/email "greg@syntiant.com"
         gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-pilot/23*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        gpc/bump-todo-item 'gpc/move-todo-to-tomorrow-plan
         gpc/todays-notes-fn 'gc/org-roam-weekly-this))
 
 (setq user-mail-address gpc/email)
@@ -104,7 +106,7 @@
     (org-roam-node-find nil
      (concat "Week of " monday-str)) nil nil t))
 
-(defun gc/org-roam-monthly ()
+(defun gpc/org-roam-monthly ()
   "Find the monthly-file for this month."
   (interactive)
   ;; Well, this only worked on the first, not the second, for some reason!
@@ -116,7 +118,7 @@
   (setq first-str (org-read-date nil nil "--m" nil next-first))
   (org-roam-node-find nil (concat "Month of " (substring first-str 0 7))))
 
-;; (defun gc/org-roam-monthly-visit ()
+;; (defun gpc/org-roam-monthly-visit ()
 ;;   "Find the monthly-file for this month."
 ;;   (interactive)
 ;;   (setq
@@ -219,7 +221,7 @@
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
-      :desc "Move TODO to top"            "l m" #'gpc/move-todo-to-top
+      :desc "Move TODO to top"            "l m" #'gpc/bump-todo-item
       :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
@@ -606,7 +608,6 @@
 (define-key macron-map (kbd "I") 'latin-capital-letter-i-with-macron)
 (define-key macron-map (kbd "O") 'latin-capital-letter-o-with-macron)
 (define-key macron-map (kbd "U") 'latin-capital-letter-u-with-macron)
-
 
 (defun gpc/move-todo-to-top ()
   "Move a todo at point to the top of the file, for killing and yanking into current month"
