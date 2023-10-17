@@ -35,12 +35,12 @@
            "ether b0:be:83:69:04:b3 ")
 
     (setq gpc/email "gcoladon@gmail.com"
-          gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam-personal/230*_monthly.org"))
+          gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*_monthly.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/todays-notes-fn 'gc/org-roam-monthly)
 
   (setq gpc/email "greg@syntiant.com"
-        gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam-pilot/230[3-9]*_weekly.org"))
+        gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-pilot/23*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         gpc/todays-notes-fn 'gc/org-roam-weekly-this))
 
