@@ -644,9 +644,21 @@
     (insert (format-time-string "%A" (current-time)))
     (insert "\n")))
 
+(defun gpc/org-agenda-month-insert ()
+  "Put agenda items for this month into this new buffer."
+  (interactive)
+  (let ((orig-buffer (current-buffer)))
+       (save-window-excursion
+         (org-agenda-list nil nil 'month' nil)
+         (set-buffer org-agenda-buffer-name)
+         (read-only-mode -1)
+         (keep-lines "TODO")
+         (let ((agenda-content (buffer-string)))
+              (set-buffer orig-buffer)
+              (insert agenda-content)))))
 
-    (defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
-      "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
+(defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
+  "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
 Remove troublesome chars from the bibtex key, retrieve a pdf
 for ARTICLE-NUMBER and save it to PDFDIR with the same name of the
 key."
