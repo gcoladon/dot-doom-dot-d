@@ -662,41 +662,41 @@
 Remove troublesome chars from the bibtex key, retrieve a pdf
 for ARTICLE-NUMBER and save it to PDFDIR with the same name of the
 key."
-      (interactive)
+  (interactive)
 
-      (arxiv-add-bibtex-entry article-number bibfile)
+  (arxiv-add-bibtex-entry article-number bibfile)
 
-      (save-window-excursion
-        (let ((key ""))
-          (find-file bibfile)
-          (goto-char (point-max))
-          (bibtex-beginning-of-entry)
-          (re-search-forward bibtex-entry-maybe-empty-head)
-          (if (match-beginning bibtex-key-in-head)
-              (progn
-                (setq key (delete-and-extract-region
-                           (match-beginning bibtex-key-in-head)
-                           (match-end bibtex-key-in-head)))
-                ;; remove potentially troublesome characters from key
-                ;; as it will be used as  a filename
-                (setq key (replace-regexp-in-string   "\"\\|\\*\\|/\\|:\\|<\\|>\\|\\?\\|\\\\\\||\\|\\+\\|,\\|\\.\\|;\\|=\\|\\[\\|]\\|!\\|@"
-                                                      "" key))
-                ;; check if the key is in the buffer
-                (when (save-excursion
-                        (bibtex-search-entry key))
-                  (save-excursion
-                    (bibtex-search-entry key)
-                    (bibtex-copy-entry-as-kill)
-                    (switch-to-buffer-other-window "*duplicate entry*")
-                    (bibtex-yank))
-                  (setq key (bibtex-read-key "Duplicate Key found, edit: " key))))
-            (setq key (bibtex-read-key "Key not found, insert: ")))
-          (insert key)
-          (arxiv-get-pdf arxiv-number (concat pdfdir key ".pdf"))
-          ;; Check that it worked, and insert a field for it.
-          (when (file-exists-p (concat pdfdir key ".pdf"))
-	    (bibtex-end-of-entry)
-	    (backward-char)
-	    (insert (format "  file = {%s}\n  " (concat pdfdir key ".pdf")))))))
+  (save-window-excursion
+    (let ((key ""))
+      (find-file bibfile)
+      (goto-char (point-max))
+      (bibtex-beginning-of-entry)
+      (re-search-forward bibtex-entry-maybe-empty-head)
+      (if (match-beginning bibtex-key-in-head)
+          (progn
+            (setq key (delete-and-extract-region
+                       (match-beginning bibtex-key-in-head)
+                       (match-end bibtex-key-in-head)))
+            ;; remove potentially troublesome characters from key
+            ;; as it will be used as  a filename
+            (setq key (replace-regexp-in-string   "\"\\|\\*\\|/\\|:\\|<\\|>\\|\\?\\|\\\\\\||\\|\\+\\|,\\|\\.\\|;\\|=\\|\\[\\|]\\|!\\|@"
+                                                  "" key))
+            ;; check if the key is in the buffer
+            (when (save-excursion
+                    (bibtex-search-entry key))
+              (save-excursion
+                (bibtex-search-entry key)
+                (bibtex-copy-entry-as-kill)
+                (switch-to-buffer-other-window "*duplicate entry*")
+                (bibtex-yank))
+              (setq key (bibtex-read-key "Duplicate Key found, edit: " key))))
+        (setq key (bibtex-read-key "Key not found, insert: ")))
+      (insert key)
+      (arxiv-get-pdf arxiv-number (concat pdfdir key ".pdf"))
+      ;; Check that it worked, and insert a field for it.
+      (when (file-exists-p (concat pdfdir key ".pdf"))
+	(bibtex-end-of-entry)
+	(backward-char)
+	(insert (format "  file = {%s}\n  " (concat pdfdir key ".pdf")))))))
 
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
