@@ -40,6 +40,7 @@
           gpc/bump-todo-item 'gpc/move-todo-to-top
           gpc/todays-notes-fn 'gpc/org-roam-monthly)
 
+
   (setq gpc/email "greg@syntiant.com"
         gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-pilot/23*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -221,7 +222,7 @@
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
-      :desc "Move TODO to top"            "l m" #'gpc/bump-todo-item
+      :desc "Move TODO to top"            "l m" gpc/bump-todo-item
       :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
@@ -570,6 +571,8 @@
   (let ((org-todo-keywords '((sequence "IDEA" "DONE"))))
     (with-temp-buffer
       (clipboard-yank)
+      (beginning-of-buffer)
+      (replace-regexp "^[ >]*" "")
       (mark-whole-buffer)
       (flush-lines "gcoladon")
       (mark-whole-buffer)
