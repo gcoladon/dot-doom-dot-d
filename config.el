@@ -733,7 +733,8 @@ It puts a todo to read this article near the top of the hackernews node."
       (org-forward-heading-same-level 1)
       (next-line 1)
       (beginning-of-line)
-      (insert (concat "** TODO [[" url "][" title "]]\n")))))
+      (insert (concat "** TODO [[" url "][" title "]]\n"))
+      (backward-char))))
 
 (after! org-roam-protocol
   (push '("org-roam-hn"
