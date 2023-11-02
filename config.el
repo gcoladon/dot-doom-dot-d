@@ -716,3 +716,27 @@ key."
 	(insert (format "  file = {%s}\n  " (concat pdfdir key ".pdf")))))))
 
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+;; Try to make a capture link that will save right to my HN node
+
+(defun gpc/org-roam-protocol-get-hackernews (info)
+  "Process an org-protocol://roam-hn?ref= style url with INFO.
+It puts a todo to read this article near the top of the hackernews node."
+  (interactive)
+  (let ((url (plist-get info :url))
+        (title (plist-get info :title)))
+    (unless url
+      (user-error "No url provided"))
+    (save-excursion
+      (org-roam-node-visit (org-roam-node-from-title-or-alias "Hacker News"))
+      (beginning-of-buffer)
+      (org-forward-heading-same-level 1)
+      (next-line 1)
+      (beginning-of-line)
+      (insert (concat "** TODO [[" url "][" title "]]\n")))))
+
+(after! org-roam-protocol
+  (push '("org-roam-hn"
+          :protocol "roam-hn"
+          :function gpc/org-roam-protocol-get-hackernews)
+        org-protocol-protocol-alist))
