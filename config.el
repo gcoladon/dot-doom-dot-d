@@ -224,6 +224,7 @@
       :desc "JQ interactively"            "l j" #'jq-interactively
       :desc "Move TODO to top"            "l m" gpc/bump-todo-item
       :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
+      :desc "Insert birthday props"       "l b" #'gpc/add-birthday
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
 
@@ -716,3 +717,15 @@ key."
 	(insert (format "  file = {%s}\n  " (concat pdfdir key ".pdf")))))))
 
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+
+(defun gpc/add-birthday ()
+  "Ask for Month and Day and then add as properties of the current item"
+  (interactive)
+  (end-of-line)
+  (org-insert-subheading nil)
+  (insert "Birthday")
+  (let* ((month (read-string "Month: "))
+         (day (read-string "Day: ")))
+    (org-set-property "MONTH" month)
+    (org-set-property "DAY" day)))
