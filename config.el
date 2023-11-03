@@ -752,3 +752,17 @@ It puts a todo to read this article near the top of the hackernews node."
          (day (read-string "Day: ")))
     (org-set-property "MONTH" month)
     (org-set-property "DAY" day)))
+
+;; I would like to make it so my yanks of org to rich text don't have tables of
+;; contents or numbered items. See if this works to do that
+(defun gpc/export-rich-text (orig-fun &rest args)
+  "Turn off TOCs and numbering in these exports"
+  (setq org-export-with-section-numbers-bak org-export-with-section-numbers
+        org-export-with-toc-bak org-export-with-toc)
+  (setq org-export-with-section-numbers nil
+        org-export-with-toc nil)
+  (apply orig-fun args)
+  (setq org-export-with-section-numbers org-export-with-section-numbers-bak
+        org-export-with-toc org-export-with-toc-bak))
+
+(advice-add '+org/export-to-clipboard-as-rich-text :around #'gpc/export-rich-text)
