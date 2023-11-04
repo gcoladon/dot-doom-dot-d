@@ -31,6 +31,8 @@
      (todo priority-down user-defined-down category-keep)
      (tags priority-down category-keep)
      (search category-keep)))
+ '(org-export-with-section-numbers nil)
+ '(org-export-with-toc nil)
  '(org-id-link-to-org-use-id t)
  '(org-id-locations-file "/Users/greg/org/.orgids")
  '(org-id-method 'ts)
