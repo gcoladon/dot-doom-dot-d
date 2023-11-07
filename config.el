@@ -35,7 +35,7 @@
            "ether b0:be:83:69:04:b3 ")
 
     (setq gpc/email "gcoladon@gmail.com"
-          gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*_monthly.org"))
+          gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/bump-todo-item 'gpc/move-todo-to-top
           gpc/todays-notes-fn 'gpc/org-roam-monthly)
@@ -218,6 +218,7 @@
 
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
+      :desc "gpc/org-agenda-month-insert" "l i" #'gpc/org-agenda-month-insert
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
@@ -225,6 +226,7 @@
       :desc "Move TODO to top"            "l m" gpc/bump-todo-item
       :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
       :desc "Insert birthday props"       "l b" #'gpc/add-birthday
+      :desc "pdb.set_trace()"             "l p" (cmd! (insert "import pdb; pdb.set_trace()"))
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
 
@@ -661,18 +663,25 @@
     (insert (format-time-string "%A" (current-time)))
     (insert "\n")))
 
+;; This is my attempt to make it so when I open a new month file, I get a set of
+;; agenda items that I scheduled for this month a long time ago.
 (defun gpc/org-agenda-month-insert ()
   "Put agenda items for this month into this new buffer."
   (interactive)
   (let ((orig-buffer (current-buffer)))
-       (save-window-excursion
-         (org-agenda-list nil nil 'month' nil)
-         (set-buffer org-agenda-buffer-name)
-         (read-only-mode -1)
-         (keep-lines "TODO")
-         (let ((agenda-content (buffer-string)))
-              (set-buffer orig-buffer)
-              (insert agenda-content)))))
+    (save-window-excursion
+      (org-agenda-list nil nil 'month' nil)
+      (set-buffer org-agenda-buffer-name)
+      (read-only-mode -1)
+      (beginning-of-buffer)
+      (keep-lines "TODO")
+      (beginning-of-buffer)
+      (flush-lines "x: ")
+      (replace-string "  231215_birthdays:Scheduled: " "**")
+      (beginning-of-buffer)
+      (let ((agenda-content (buffer-string)))
+        (set-buffer orig-buffer)
+        (insert agenda-content)))))
 
 (defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
   "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
@@ -753,16 +762,18 @@ It puts a todo to read this article near the top of the hackernews node."
     (org-set-property "MONTH" month)
     (org-set-property "DAY" day)))
 
-;; I would like to make it so my yanks of org to rich text don't have tables of
-;; contents or numbered items. See if this works to do that
-(defun gpc/export-rich-text (orig-fun &rest args)
-  "Turn off TOCs and numbering in these exports"
-  (setq org-export-with-section-numbers-bak org-export-with-section-numbers
-        org-export-with-toc-bak org-export-with-toc)
-  (setq org-export-with-section-numbers nil
-        org-export-with-toc nil)
-  (apply orig-fun args)
-  (setq org-export-with-section-numbers org-export-with-section-numbers-bak
-        org-export-with-toc org-export-with-toc-bak))
+;; ;; I would like to make it so my yanks of org to rich text don't have tables of
+;; ;; contents or numbered items. See if this works to do that
+;; (defun gpc/export-rich-text (orig-fun &rest args)
+;;   "Turn off TOCs and numbering in these exports"
+;;   (setq org-export-with-section-numbers-bak org-export-with-section-numbers
+;;         org-export-with-toc-bak org-export-with-toc)
+;;   (setq org-export-with-section-numbers nil
+;;         org-export-with-toc nil)
+;;   (apply orig-fun args)
+;;   (setq org-export-with-section-numbers org-export-with-section-numbers-bak
+;;         org-export-with-toc org-export-with-toc-bak))
 
-(advice-add '+org/export-to-clipboard-as-rich-text :around #'gpc/export-rich-text)
+;; ;; This did work, but since it seemed kludgy and I can't imagine ever wanting
+;; ;; those TOCs or numbers, I just customized that variable, so I Don't need this now
+;; (advice-add '+org/export-to-clipboard-as-rich-text :around #'gpc/export-rich-text)
