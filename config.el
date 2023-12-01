@@ -110,22 +110,7 @@
 (defun gpc/org-roam-monthly ()
   "Find the monthly-file for this month."
   (interactive)
-  (if (string-equal (substring (org-read-date nil nil "") 8) "01")
-      (org-roam-node-find nil (concat "Month of " (substring (org-read-date nil nil "") 0 7)))
-    (progn
-      (setq next-first (org-read-date nil t "1"))
-      (setq first-tv (org-read-date nil t "--m" nil next-first))
-      (setq first-str (org-read-date nil nil "--m" nil next-first))
-      (org-roam-node-find nil (concat "Month of " (substring first-str 0 7))))))
-
-;; (defun gpc/org-roam-monthly-visit ()
-;;   "Find the monthly-file for this month."
-;;   (interactive)
-;;   (setq
-;;    next-first (org-read-date nil t "1")
-;;    first-tv (org-read-date nil t "--m" nil next-first)
-;;    first-str (org-read-date nil nil "--m" nil next-first))
-;;   (org-roam-node-visit (concat "Month of " (substring first-str 0 7))))
+  (org-roam-node-find nil (concat "Month of " (substring (org-read-date nil nil "") 0 7))))
 
 (defun gc/org-roam-weekly-this ()
   "Find the weekly-file for this week."
@@ -133,11 +118,6 @@
   (if (equal (format-time-string "%a" (current-time)) "Mon")
       (gc/org-roam-find-weekly "+0")
     (gc/org-roam-find-weekly "-mon")))
-
-;; (defun gc/org-roam-weekly-next ()
-;;   "Find the weekly-file for next week."
-;;   (interactive)
-;;   (gc/org-roam-find-weekly "+mon"))
 
 ;; Why not, I use these functions all the time, a single chord makes sense
 (global-set-key (kbd "s-f") 'org-roam-node-find)
