@@ -61,7 +61,17 @@
 (package! ox-rst
   :recipe (:host github :repo "msnoigrs/ox-rst"))
 
-  ;; :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
+;; (use-package rainbow-fart
+;;   :straight (rainbow-fart :type git
+;;                           :host github
+;;                           :repo "DogLooksGood/rainbow-fart.el"
+;;                           :files ("*.el" "voice")))
+
+;; Try to get this working some time
+;; (package! rainbow-fart
+;;   :recipe (:host github :repo "DogLooksGood/rainbow-fart.el"))
+
+;; :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
 
 ;; (package! helm-bibtex)
 
