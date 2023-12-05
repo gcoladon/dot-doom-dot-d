@@ -617,6 +617,18 @@
     (beginning-of-line)
     (yank)))
 
+(defun gpc/move-todo-to-tomorrow ()
+  "Move a todo from today's hedline to tomorrow's in personal notes"
+  (interactive)
+  (save-excursion
+    (org-mark-element)
+    (kill-region (point) (mark))
+    (outline-up-heading 1)
+    (org-forward-heading-same-level 1)
+    (org-next-visible-heading 1)
+    (beginning-of-line)
+    (yank)))
+
 (use-package! jq-mode)
 
 (setq +org-capture-journal-file "~/org/roam/roam-personal/220531_personal_journal.org")
