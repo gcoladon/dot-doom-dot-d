@@ -656,7 +656,7 @@
       (keep-lines "TODO")
       (beginning-of-buffer)
       (flush-lines "x: ")
-      (replace-string "  231215_birthdays:Scheduled: " "**")
+      (replace-regexp "  2[34][0-9]*_.*:Scheduled: " "**")
       (beginning-of-buffer)
       (let ((agenda-content (buffer-string)))
         (set-buffer orig-buffer)
@@ -721,7 +721,7 @@ It puts a todo to read this article near the top of the hackernews node."
       (org-forward-heading-same-level 1)
       (next-line 1)
       (beginning-of-line)
-      (insert (concat "** TODO [[" url "][" title "]]\n"))
+      (insert (concat "** TODO " (format-time-string "%Y-%m-%d" (current-time)) " [[" url "][" title "]]\n"))
       (backward-char))))
 
 (after! org-roam-protocol
@@ -756,3 +756,8 @@ It puts a todo to read this article near the top of the hackernews node."
 ;; ;; This did work, but since it seemed kludgy and I can't imagine ever wanting
 ;; ;; those TOCs or numbers, I just customized that variable, so I Don't need this now
 ;; (advice-add '+org/export-to-clipboard-as-rich-text :around #'gpc/export-rich-text)
+
+;; I couldn't get this to work -- did the package load work correctly?
+;; https://repo.or.cz/emacs-rainbow-fart.git
+;; https://github.com/DogLooksGood/rainbow-fart.el
+;; (rainbow-fart-mode 1)
