@@ -605,6 +605,15 @@
     (beginning-of-line)
     (yank)))
 
+(defun gpc/move-todo-to-bottom ()
+  "Move a day's worth of todos at point to the bottom of the file"
+  (interactive)
+  (save-excursion
+    (org-mark-element)
+    (kill-region (point) (mark))
+    (end-of-buffer)
+    (yank)))
+
 (defun gpc/move-todo-to-tomorrow-plan ()
   "Move a todo at tomorrow's plan in a work notes"
   (interactive)
