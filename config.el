@@ -37,7 +37,7 @@
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
-          gpc/bump-todo-item 'gpc/move-todo-to-top
+          gpc/bump-todo-item 'gpc/move-todo-to-tomorrow
           gpc/todays-notes-fn 'gpc/org-roam-monthly)
 
 
@@ -204,6 +204,8 @@
       :desc "JQ interactively"            "l j" #'jq-interactively
       :desc "Move TODO to top"            "l m" gpc/bump-todo-item
       :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
+      :desc "Move todo/day to bottom"     "l >" #'gpc/move-todo-to-bottom
+      :desc "Move todo to top"            "l <" #'gpc/move-todo-to-top
       :desc "Insert birthday props"       "l b" #'gpc/add-birthday
       :desc "pdb.set_trace()"             "l p" (cmd! (insert "import pdb; pdb.set_trace()"))
 
@@ -609,6 +611,7 @@
   "Move a day's worth of todos at point to the bottom of the file"
   (interactive)
   (save-excursion
+    (outline-up-heading 1)
     (org-mark-element)
     (kill-region (point) (mark))
     (end-of-buffer)
@@ -627,16 +630,17 @@
     (yank)))
 
 (defun gpc/move-todo-to-tomorrow ()
-  "Move a todo from today's hedline to tomorrow's in personal notes"
+  "Move a todo at tomorrow's heading in personal notes"
   (interactive)
   (save-excursion
     (org-mark-element)
     (kill-region (point) (mark))
-    (outline-up-heading 1)
+    (outline-up-heading 2)
     (org-forward-heading-same-level 1)
     (org-next-visible-heading 1)
     (beginning-of-line)
     (yank)))
+
 
 (use-package! jq-mode)
 
