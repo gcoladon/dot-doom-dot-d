@@ -443,15 +443,18 @@
 
 (defun gpc/gen-weekly (monday-tv)
   (mapconcat
-   (lambda (num) (concat "* "
-                         (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60)))
-                         "\n** Plan\n"
+   (lambda (num) (concat "* " (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60))) "\n"
+                         (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --date "
+                                                           (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))
+                         "** Plan\n"
                          (if (= num 0) "*** TODO Place order at [[https://www.doordash.com/teams/calendar?calId=eyJ0ZWFtQWNjb3VudElkIjoiNjEzN2Q1Y2ItMGQ2OC00NWMyLTk3NzgtYTk0YzVjOGU1ODc1IiwidGVhbU5hbWUiOiJTeW50aWFudCBDb3JwLiIsIm9mZmljZUlkIjoiM2M1ODUzNDctZmRkNy00OWNhLTgwOGEtNzRjOWVlMThjNTQ5Iiwib2ZmaWNlQWRkcmVzcyI6IjI1NzAgVyBFbCBDYW1pbm8gUmVhbCBzdWl0ZSAzODAsIE1vdW50YWluIFZpZXcsIENBIDk0MDQwLCBVU0EiLCJ0aW1lem9uZSI6IkFtZXJpY2EvTG9zX0FuZ2VsZXMifQ==][Doordash]]\n*** TODO Pull Chevron POS data\n*** TODO Don't forget about [[id:230122_175647][Some projects I would like to work on]]!\n*** TODO What to do for Assa Abloy/Apical, Pradco/Sercomm, Sennheiser/Tymphany\n*** TODO Check Ethan's and Spencer's calendars for meetings I should join\n*** TODO Check [[http://control1/releases/latest/][Latest]] to see if things built\n")
-                         "** Meetings\n*** 9 AM Product Synch\n** Notes\n"))
+                         "** Meetings\n*** 9 /10 AM Product Synch\n** Notes\n"))
    (number-sequence 0 4)
    ""))
 
 ;; (gpc/gen-weekly (current-time))
+;; (gpc/gen-weekly (time-add (current-time) (* 4 24 60 60)))
+;; (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --date " "2023-12-11"))
 
 (global-set-key (kbd "M-=") 'mark-whole-buffer)
 
