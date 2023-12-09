@@ -315,30 +315,12 @@
 
 ;; Check out all of Doom's templates and see if they are better than mine
 
-;; (setq org-capture-templates
-;;       '(("t" "Todo" entry (file+headline "" "Inbox")
-;;          "* TODO %?\n  %i" :prepend t)
-;;         ("T" "Todo w/backlink" entry (file+headline "" "Inbox")
-;;          "* TODO %?\n  %i\n  %a" :prepend t)
-;;         ("j" "Journal" entry (file+olp+datetree "journal.org" "Journal")
-;;          "* %?\nEntered on %U\n  %i\n  %a")))
-
-
 ;; I think I want to install these. Is there a shortcut?
 ;; (use-package org-web-tools)
 ;; (setq org-web-tools-pandoc-sleep-time 1.0)
 ;; (global-set-key (kbd "s-w") 'org-web-tools-insert-web-page-as-entry)
 
 ;; Use this next time I need to write a real work memo
-
-;; (add-to-list 'org-latex-classes
-;;              '("memo"
-;;                "\\documentclass[letterpaper,11pt]{texMemo}"
-;;                ("\\section{%s}" . "\\section*{%s}")
-;;                ("\\subsection{%s}" . "\\subsection*{%s}")
-;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
-;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
 (setq calc-gnuplot-default-device "qt")
 
@@ -371,28 +353,6 @@
 ;;   (find-file "~/dev/org/incoming.org")
 ;;   (browse-url "https://docs.google.com/spreadsheets/d/1T8qe2m4z9ViJ9W72PJb8COCmpptr5D5312vM6e32iPM/edit#gid=0"))
 
-;; (defun gpc/org-table-goto-beginning ()
-;;   (interactive)
-;;   (if (org-at-table-p)
-;;       (goto-char (org-table-begin))
-;;     (message "Can't go to beginning of table if not inside a table")))
-
-;; (defun gpc/org-table-goto-end ()
-;;   (interactive)
-;;   (if (org-at-table-p)
-;;       (goto-char (org-table-end))
-;;     (message "Can't go to end of table if not inside a table")))
-
-;; (define-key org-mode-map (kbd "C-c C-g a") #'gpc/org-table-goto-beginning)
-;; (define-key org-mode-map (kbd "C-c C-g e") #'gpc/org-table-goto-end)
-
-;; (defun gpc/clean-slate ()
-;;   "Go to the top of the page and open just a bit."
-;;   (interactive)
-;;   (beginning-of-buffer)
-;;   (org-shifttab 1)
-;;   )
-
 ;; I used these keystrokes for a GA homework or something?
 ;; (define-prefix-command 'algorithms-map)
 ;; (global-set-key (kbd "C-c l a") 'algorithms-map)
@@ -401,10 +361,8 @@
 ;; (define-key algorithms-map (kbd "3") (cmd! (insert "$R_{buy}$")))
 ;; (define-key algorithms-map (kbd "4") (cmd! (insert "$R_{sell}$")))
 
-
 ;; (global-set-key (kbd "s-t") 'my-google-translate-at-point)
 ;; (global-set-key (kbd "s-w") 'org-web-tools-insert-web-page-as-entry)
-;; (global-set-key (kbd "s-C") 'gpc/clean-slate)
 
 (defun gpc/makron ()
   "Replace un-macroned letter under point with the corresponding macronized letter"
