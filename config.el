@@ -197,7 +197,7 @@
 
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
-      :desc "gpc/org-agenda-month-insert" "l i" #'gpc/org-agenda-month-insert
+      ;; :desc "gpc/org-agenda-month-insert" "l i" #'gpc/org-agenda-month-insert
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
@@ -628,25 +628,26 @@
     (insert (format-time-string "%A" (current-time)))
     (insert "\n")))
 
+;; This was made obsolete by the ./roam_todos_to_monthly.py script.
 ;; This is my attempt to make it so when I open a new month file, I get a set of
 ;; agenda items that I scheduled for this month a long time ago.
-(defun gpc/org-agenda-month-insert ()
-  "Put agenda items for this month into this new buffer."
-  (interactive)
-  (let ((orig-buffer (current-buffer)))
-    (save-window-excursion
-      (org-agenda-list nil nil 'month' nil)
-      (set-buffer org-agenda-buffer-name)
-      (read-only-mode -1)
-      (beginning-of-buffer)
-      (keep-lines "TODO")
-      (beginning-of-buffer)
-      (flush-lines "x: ")
-      (replace-regexp "  2[34][0-9]*_.*:Scheduled: " "**")
-      (beginning-of-buffer)
-      (let ((agenda-content (buffer-string)))
-        (set-buffer orig-buffer)
-        (insert agenda-content)))))
+;; (defun gpc/org-agenda-month-insert ()
+;;   "Put agenda items for this month into this new buffer."
+;;   (interactive)
+;;   (let ((orig-buffer (current-buffer)))
+;;     (save-window-excursion
+;;       (org-agenda-list nil nil 'month' nil)
+;;       (set-buffer org-agenda-buffer-name)
+;;       (read-only-mode -1)
+;;       (beginning-of-buffer)
+;;       (keep-lines "TODO")
+;;       (beginning-of-buffer)
+;;       (flush-lines "x: ")
+;;       (replace-regexp "  2[34][0-9]*_.*:Scheduled: " "**")
+;;       (beginning-of-buffer)
+;;       (let ((agenda-content (buffer-string)))
+;;         (set-buffer orig-buffer)
+;;         (insert agenda-content)))))
 
 (defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
   "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
