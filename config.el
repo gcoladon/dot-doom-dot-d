@@ -126,6 +126,7 @@
 (global-set-key (kbd "s-p") (cmd!  (find-file "~/repos/personal/Personal/greg")))
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 (global-set-key (kbd "s-r") gpc/todays-notes-fn)
+(global-set-key (kbd "s-O") (cmd!  (find-file "~/org/roam/roam-stem/230420_omscs_cs_6265_informati.org")))
 (global-set-key (kbd "s-2") (cmd! (org-todo-list 2)))
 (global-set-key (kbd "s-3") (cmd! (org-todo-list 3)))
 (global-set-key (kbd "s-4") (cmd! (org-todo-list 4)))
@@ -647,6 +648,13 @@
 ;;       (let ((agenda-content (buffer-string)))
 ;;         (set-buffer orig-buffer)
 ;;         (insert agenda-content)))))
+
+(defun gpc/org-agenda-month-insert ()
+  "Put agenda items for this month into this new buffer."
+  (interactive)
+  (insert (shell-command-to-string (concat  "/Users/greg/dev/python/roam_todos_to_monthly.py --date "
+                                            (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60))))))
+
 
 (defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
   "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
