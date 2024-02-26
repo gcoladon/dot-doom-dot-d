@@ -653,7 +653,7 @@
   "Put agenda items for this month into this new buffer."
   (interactive)
   (insert (shell-command-to-string (concat  "/Users/greg/dev/python/roam_todos_to_monthly.py --date "
-                                            (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60))))))
+                                            (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))))
 
 
 (defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
