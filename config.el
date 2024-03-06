@@ -131,6 +131,7 @@
 (global-set-key (kbd "s-3") (cmd! (org-todo-list 3)))
 (global-set-key (kbd "s-4") (cmd! (org-todo-list 4)))
 (global-set-key (kbd "s-J") (cmd! (org-capture nil "j")))
+(global-set-key (kbd "M-s-c") (cmd! (org-capture nil)))
 
 ;; (global-set-key (kbd "s-d") (cmd! (find-file "~/org/roam-stem/210820_dl_syllabus.org")))
 (global-set-key (kbd "C-c &") 'org-mark-ring-goto)
@@ -199,6 +200,7 @@
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
       ;; :desc "gpc/org-agenda-month-insert" "l i" #'gpc/org-agenda-month-insert
+      :desc "Mark as DONE move to bottom" "l d" #'gpc/mark-todo-as-done-move-to-end
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
@@ -414,7 +416,9 @@
 ;; (gpc/gen-weekly (time-add (current-time) (* 4 24 60 60)))
 ;; (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --date " "2023-12-11"))
 
-(global-set-key (kbd "M-=") 'mark-whole-buffer)
+(global-set-key
+ (kbd "M-=")
+ 'mark-whole-buffer)
 
 ;; https://org-roam.discourse.group/t/prototype-transclusion-block-reference-with-emacs-org-mode/830/96?u=gcoladon
 
@@ -602,6 +606,17 @@
     (beginning-of-line)
     (yank)))
 
+(defun gpc/mark-todo-as-done-move-to-end ()
+  "Mark a TODO as done and move it to the end of the heading its under"
+  (interactive)
+  (save-excursion
+    (org-todo 5)
+    (org-mark-element)
+    (kill-region (point) (mark))
+    (outline-up-heading 2)
+    (org-forward-heading-same-level 1)
+    (beginning-of-line)
+    (yank)))
 
 (use-package! jq-mode)
 
@@ -755,3 +770,9 @@ It puts a todo to read this article near the top of the hackernews node."
 ;; https://repo.or.cz/emacs-rainbow-fart.git
 ;; https://github.com/DogLooksGood/rainbow-fart.el
 ;; (rainbow-fart-mode 1)
+
+(defun gpc/place-idea-in-notes-file ()
+  (interactive)
+  (find-file (car (reverse (file-expand-wildcards "~/org/roam/roam-personal/2*_monthly.org"))))
+  (goto-char (point-min))
+  (forward-line 7))
