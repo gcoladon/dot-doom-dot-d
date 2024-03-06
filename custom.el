@@ -31,6 +31,58 @@
      (todo priority-down user-defined-down category-keep)
      (tags priority-down category-keep)
      (search category-keep)))
+ '(org-capture-templates
+   '(("C" "Chin up log" table-line
+      (file+olp "~/org/roam/roam-stem/230621_pull_ups.org" "Goggins routine")
+      "| %t | %^{count} | " :immediate-finish t :table-line-pos "I+1")
+     ("P" "Push up log" table-line
+      (file+olp "~/org/roam/roam-stem/230606_push_ups.org" "Goggins routine")
+      "| %t | %^{count} | " :immediate-finish t :table-line-pos "I+1")
+     ("L" "Lifting log" table-line
+      (file+olp "~/org/roam/roam-personal/230324_powerlifting.org" "Logbook")
+      "| %<%a %b %0e> | %^{Lift|Press|Dead|Squat|Bench} | %^{1st} | %^{2nd} | %^{3rd} | %^{4th} | %^{5th} | %^{6th} | %^{Note} |" :table-line-pos "I+1")
+     ("I" "Idea" plain #'gpc/place-idea-in-notes-file "** IDEA %^{Idea}" :immediate-finish t)
+     ("t" "Personal todo" entry
+      (file+headline +org-capture-todo-file "Inbox")
+      "* [ ] %?
+%i
+%a" :prepend t)
+     ("n" "Personal notes" entry
+      (file+headline +org-capture-notes-file "Inbox")
+      "* %u %?
+%i
+%a" :prepend t)
+     ("j" "Journal" entry
+      (file+olp+datetree +org-capture-journal-file)
+      "* %U %?
+%i
+%a" :prepend t)
+     ("p" "Templates for projects")
+     ("pt" "Project-local todo" entry
+      (file+headline +org-capture-project-todo-file "Inbox")
+      "* TODO %?
+%i
+%a" :prepend t)
+     ("pn" "Project-local notes" entry
+      (file+headline +org-capture-project-notes-file "Inbox")
+      "* %U %?
+%i
+%a" :prepend t)
+     ("pc" "Project-local changelog" entry
+      (file+headline +org-capture-project-changelog-file "Unreleased")
+      "* %U %?
+%i
+%a" :prepend t)
+     ("o" "Centralized templates for projects")
+     ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?
+ %i
+ %a" :heading "Tasks" :prepend nil)
+     ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?
+ %i
+ %a" :prepend t :heading "Notes")
+     ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?
+ %i
+ %a" :prepend t :heading "Changelog")))
  '(org-export-with-section-numbers nil)
  '(org-export-with-toc nil)
  '(org-id-link-to-org-use-id t)
