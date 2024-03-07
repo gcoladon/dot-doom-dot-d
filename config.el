@@ -37,6 +37,7 @@
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+          gpc/mark-item-done 'gpc/home-mark-todo-as-done-move-to-end
           gpc/bump-todo-item 'gpc/move-todo-to-tomorrow
           gpc/todays-notes-fn 'gpc/org-roam-monthly)
 
@@ -44,6 +45,7 @@
   (setq gpc/email "greg@syntiant.com"
         gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-pilot/23*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        gpc/mark-item-done 'gpc/work-mark-todo-as-done-move-to-end
         gpc/bump-todo-item 'gpc/move-todo-to-tomorrow-plan
         gpc/todays-notes-fn 'gc/org-roam-weekly-this))
 
@@ -200,7 +202,7 @@
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
       ;; :desc "gpc/org-agenda-month-insert" "l i" #'gpc/org-agenda-month-insert
-      :desc "Mark as DONE move to bottom" "l d" #'gpc/mark-todo-as-done-move-to-end
+      :desc "Mark as DONE move to bottom" "l d" gpc/mark-item-done
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
@@ -606,14 +608,26 @@
     (beginning-of-line)
     (yank)))
 
-(defun gpc/mark-todo-as-done-move-to-end ()
+(defun gpc/home-mark-todo-as-done-move-to-end ()
   "Mark a TODO as done and move it to the end of the heading its under"
   (interactive)
   (save-excursion
     (org-todo 5)
     (org-mark-element)
     (kill-region (point) (mark))
-    (outline-up-heading 2)
+    (outline-up-heading 1)
+    (org-forward-heading-same-level 1)
+    (beginning-of-line)
+    (yank)))
+
+(defun gpc/work-mark-todo-as-done-move-to-end ()
+  "Mark a TODO as done and move it to the end of the heading its under"
+  (interactive)
+  (save-excursion
+    (org-todo 2)
+    (org-mark-element)
+    (kill-region (point) (mark))
+    (outline-up-heading 1)
     (org-forward-heading-same-level 1)
     (beginning-of-line)
     (yank)))
