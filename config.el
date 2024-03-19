@@ -201,16 +201,16 @@
 
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
-      ;; :desc "gpc/org-agenda-month-insert" "l i" #'gpc/org-agenda-month-insert
       :desc "Mark as DONE move to bottom" "l d" gpc/mark-item-done
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
-      :desc "Move TODO to top"            "l m" gpc/bump-todo-item
+      :desc "Bump TODO forward"           "l m" gpc/bump-todo-item
       :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
+      :desc "Bump TODO to new day"        "l n" #'gpc/move-todo-to-datespec
       :desc "Move todo/day to bottom"     "l >" #'gpc/move-todo-to-bottom
-      :desc "Move todo to top"            "l <" #'gpc/move-todo-to-top
+      :desc "Move TODO to top"            "l <" #'gpc/move-todo-to-top
       :desc "Insert birthday props"       "l b" #'gpc/add-birthday
       :desc "pdb.set_trace()"             "l p" (cmd! (insert "import pdb; pdb.set_trace()"))
 
@@ -596,13 +596,15 @@
     (beginning-of-line)
     (yank)))
 
+;; Currently this guy is unable to move a todo that's already at the bottom of it's group
+;; because once you cut it, it's at the top of the outline if the line below starts a new day.
 (defun gpc/move-todo-to-tomorrow ()
   "Move a todo at tomorrow's heading in personal notes"
   (interactive)
   (save-excursion
     (org-mark-element)
     (kill-region (point) (mark))
-    (outline-up-heading 2)
+    (outline-up-heading 1)
     (org-forward-heading-same-level 1)
     (org-next-visible-heading 1)
     (beginning-of-line)
@@ -632,6 +634,25 @@
     (beginning-of-line)
     (yank)))
 
+(defun gpc/move-todo-to-datespec ()
+  "Move a todo to a computed new date within this file"
+  (interactive)
+  (save-excursion
+    (org-mark-element)
+    (kill-region (point) (mark))
+    (outline-up-heading 1)
+    (let* ((offset (read-string "Date offset: "))
+           (orig-date (buffer-substring-no-properties (+ (point) 2) (+ (point) 12)))
+           (target-date (format-time-string "%Y-%m-%d" (org-read-date orig-date t offset))))
+      (while (not
+        (org-forward-heading-same-level 1)
+        (let ((this-date (buffer-substring-no-properties (+ (point) 2) (+ (point) 12))))
+          (if (string-equal this-date target-date)
+              (progn
+                (forward-line 1)
+                (beginning-of-line)
+                (yank)))))))))
+
 (use-package! jq-mode)
 
 (setq +org-capture-journal-file "~/org/roam/roam-personal/220531_personal_journal.org")
@@ -656,34 +677,6 @@
     (insert " ")
     (insert (format-time-string "%A" (current-time)))
     (insert "\n")))
-
-;; This was made obsolete by the ./roam_todos_to_monthly.py script.
-;; This is my attempt to make it so when I open a new month file, I get a set of
-;; agenda items that I scheduled for this month a long time ago.
-;; (defun gpc/org-agenda-month-insert ()
-;;   "Put agenda items for this month into this new buffer."
-;;   (interactive)
-;;   (let ((orig-buffer (current-buffer)))
-;;     (save-window-excursion
-;;       (org-agenda-list nil nil 'month' nil)
-;;       (set-buffer org-agenda-buffer-name)
-;;       (read-only-mode -1)
-;;       (beginning-of-buffer)
-;;       (keep-lines "TODO")
-;;       (beginning-of-buffer)
-;;       (flush-lines "x: ")
-;;       (replace-regexp "  2[34][0-9]*_.*:Scheduled: " "**")
-;;       (beginning-of-buffer)
-;;       (let ((agenda-content (buffer-string)))
-;;         (set-buffer orig-buffer)
-;;         (insert agenda-content)))))
-
-(defun gpc/org-agenda-month-insert ()
-  "Put agenda items for this month into this new buffer."
-  (interactive)
-  (insert (shell-command-to-string (concat  "/Users/greg/dev/python/roam_todos_to_monthly.py --date "
-                                            (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))))
-
 
 (defun gpc/nature-get-pdf-add-bibtex-entry (article-number bibfile pdfdir)
   "Add bibtex entry for ARTICLE-NUMBER to BIBFILE.
@@ -712,7 +705,7 @@ key."
             ;; check if the key is in the buffer
             (when (save-excursion
                     (bibtex-search-entry key))
-              (save-excursion
+              (Save-excursion
                 (bibtex-search-entry key)
                 (bibtex-copy-entry-as-kill)
                 (switch-to-buffer-other-window "*duplicate entry*")
