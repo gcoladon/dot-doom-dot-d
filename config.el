@@ -656,14 +656,17 @@
     (let* ((offset (read-string "Date offset: "))
            (orig-date (buffer-substring-no-properties (+ (point) 2) (+ (point) 12)))
            (target-date (format-time-string "%Y-%m-%d" (org-read-date orig-date t offset))))
-      (while (not
-        (org-forward-heading-same-level 1)
-        (let ((this-date (buffer-substring-no-properties (+ (point) 2) (+ (point) 12))))
-          (if (string-equal this-date target-date)
-              (progn
-                (forward-line 1)
-                (beginning-of-line)
-                (yank)))))))))
+      (while
+          (progn
+           (org-forward-heading-same-level 1)
+           (let ((this-date (buffer-substring-no-properties (+ (point) 2) (+ (point) 12))))
+             (if (string-equal this-date target-date)
+                 (progn
+                   (forward-line 1)
+                   (beginning-of-line)
+                   (yank)
+                   nil)
+               t)))))))
 
 (use-package! jq-mode)
 
