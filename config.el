@@ -215,6 +215,7 @@
       :desc "pdb.set_trace()"             "l p" (cmd! (insert "import pdb; pdb.set_trace()"))
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
+      :desc "HTML-to-Org no-table"        "n H" (cmd! (html2org-clipboard-no-table))
 
       :desc "Toggle fundamental-mode on"  "t u" #'fundamental-mode
       :desc "JSON pretty print buffer"    "t j" #'json-pretty-print-buffer
@@ -303,6 +304,17 @@
   (interactive)
   ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | tee ~/$$_html.txt | pandoc -f html -t org --wrap=none --filter /Users/greg/dev/python/filter_pandoc.py | grep -v '^ *:'")
   (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | tee /Users/greg/dev/python/pandoc_$$.json | pandoc -f json -t org --wrap=none --filter /Users/greg/dev/python/filter_pandoc.py | grep -v '^ *:'")
+  ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | tee ~/$$.json | pandoc -f json -t org --wrap=none | grep -v '^ *:'")
+  (kill-new (shell-command-to-string cmd))
+  (yank)
+  ;; get rid of that newline that gets printed
+  (delete-backward-char 1))
+
+(defun html2org-clipboard-no-table ()
+  "Convert clipboard contents from HTML to Org and then paste (yank)."
+  (interactive)
+  ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | tee ~/$$_html.txt | pandoc -f html -t org --wrap=none --filter /Users/greg/dev/python/filter_pandoc.py | grep -v '^ *:'")
+  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | tee /Users/greg/dev/python/pandoc_$$.json | pandoc -f json -t org --wrap=none --filter /Users/greg/dev/python/filter_table.py | grep -v '^ *:'")
   ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | tee ~/$$.json | pandoc -f json -t org --wrap=none | grep -v '^ *:'")
   (kill-new (shell-command-to-string cmd))
   (yank)
