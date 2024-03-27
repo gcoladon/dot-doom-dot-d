@@ -580,6 +580,7 @@
   (interactive)
   (save-excursion
     (org-mark-element)
+    (setq last-command 'ignore)
     (kill-region (point) (mark))
     (beginning-of-buffer)
     (next-line 5)
@@ -592,6 +593,7 @@
   (save-excursion
     (outline-up-heading 1)
     (org-mark-element)
+    (setq last-command 'ignore)
     (kill-region (point) (mark))
     (end-of-buffer)
     (yank)))
@@ -601,6 +603,7 @@
   (interactive)
   (save-excursion
     (org-mark-element)
+    (setq last-command 'ignore)
     (kill-region (point) (mark))
     (outline-up-heading 3)
     (org-forward-heading-same-level 1)
@@ -615,6 +618,7 @@
   (interactive)
   (save-excursion
     (org-mark-element)
+    (setq last-command 'ignore)
     (kill-region (point) (mark))
     (outline-up-heading 1)
     (org-forward-heading-same-level 1)
@@ -628,6 +632,7 @@
   (save-excursion
     (org-todo 5)
     (org-mark-element)
+    (setq last-command 'ignore)
     (kill-region (point) (mark))
     (outline-up-heading 1)
     (org-forward-heading-same-level 1)
@@ -640,6 +645,7 @@
   (save-excursion
     (org-todo 2)
     (org-mark-element)
+    (setq last-command 'ignore)
     (kill-region (point) (mark))
     (outline-up-heading 1)
     (org-forward-heading-same-level 1)
@@ -651,6 +657,7 @@
   (interactive)
   (save-excursion
     (org-mark-element)
+    (setq last-command 'ignore)
     (kill-region (point) (mark))
     (outline-up-heading 1)
     (let* ((offset (read-string "Date offset: "))
