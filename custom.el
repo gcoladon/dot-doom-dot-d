@@ -34,10 +34,10 @@
  '(org-capture-templates
    '(("C" "Chin up log" table-line
       (file+olp "~/org/roam/roam-stem/230621_pull_ups.org" "Goggins routine")
-      "| %t | %^{count} | " :immediate-finish t :table-line-pos "I+1")
+      "| %t | %^{reps} | %^{sets} | " :immediate-finish t :table-line-pos "I+1")
      ("P" "Push up log" table-line
       (file+olp "~/org/roam/roam-stem/230606_push_ups.org" "Goggins routine")
-      "| %t | %^{count} | " :immediate-finish t :table-line-pos "I+1")
+      "| %t | %^{reps} | %^{sets} | " :immediate-finish t :table-line-pos "I+1")
      ("L" "Lifting log" table-line
       (file+olp "~/org/roam/roam-personal/230324_powerlifting.org" "Logbook")
       "| %<%a %b %0e> | %^{Lift|Press|Dead|Squat|Bench} | %^{1st} | %^{2nd} | %^{3rd} | %^{4th} | %^{5th} | %^{6th} | %^{Note} |" :table-line-pos "I+1")
