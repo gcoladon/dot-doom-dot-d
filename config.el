@@ -30,24 +30,27 @@
 
 (setq org-babel-awk-command "gawk")
 
-(if (equal (replace-regexp-in-string "[\t|\n]" ""
-                                     (shell-command-to-string "ifconfig en0 | grep ether"))
-           "ether b0:be:83:69:04:b3 ")
-
+(if (or
+     (equal (replace-regexp-in-string "[\t|\n]" ""
+                                      (shell-command-to-string "ifconfig en0 | grep ether"))
+            "ether b0:be:83:69:04:b3 ")
+     (equal (replace-regexp-in-string "[\t|\n]" ""
+                                      (shell-command-to-string "ifconfig enp4s0 | grep ether"))
+            "ether 04:7c:16:57:6c:4c "))
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/mark-item-done 'gpc/home-mark-todo-as-done-move-to-end
           gpc/bump-todo-item 'gpc/move-todo-to-tomorrow
-          gpc/todays-notes-fn 'gpc/org-roam-monthly)
-
-
+          gpc/todays-notes-fn 'gpc/org-roam-monthly
+          gpc/super-p-fn (find-file "~/org/roam/roam-stem/240421_optivore.org"))
   (setq gpc/email "greg@syntiant.com"
         gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-pilot/23*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         gpc/mark-item-done 'gpc/work-mark-todo-as-done-move-to-end
         gpc/bump-todo-item 'gpc/move-todo-to-tomorrow-plan
-        gpc/todays-notes-fn 'gc/org-roam-weekly-this))
+        gpc/todays-notes-fn 'gc/org-roam-weekly-this
+        gpc/super-p-fn (cmd! (find-file "~/repos/personal/Personal/greg"))))
 
 (setq user-mail-address gpc/email)
 
@@ -125,7 +128,7 @@
 (global-set-key (kbd "s-f") 'org-roam-node-find)
 (global-set-key (kbd "s-i") 'org-roam-node-insert)
 (global-set-key (kbd "s-s") (cmd!  (find-file "~/repos/master/Source/")))
-(global-set-key (kbd "s-p") (cmd!  (find-file "~/repos/personal/Personal/greg")))
+(global-set-key (kbd "s-p") gpc/super-p-fn)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 (global-set-key (kbd "s-r") gpc/todays-notes-fn)
 (global-set-key (kbd "s-O") (cmd!  (find-file "~/org/roam/roam-stem/230420_omscs_cs_6265_informati.org")))
@@ -200,14 +203,14 @@
       :desc "Insert [$] around"           "i [" #'gpc/wrap-region-with-anki-latex
 
       :desc "Count words region"          "l =" #'count-words-region
-      :desc "Copy todos from email"       "l t" #'gpc/copy-todos-from-email
+      :desc "Copy todos from email"       "l T" #'gpc/copy-todos-from-email
       :desc "Mark as DONE move to bottom" "l d" gpc/mark-item-done
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
       :desc "Bump TODO forward"           "l m" gpc/bump-todo-item
-      :desc "Insert node for today/now"   "l T" #'gpc/insert-today-node
+      :desc "Insert node for today/now"   "l t" #'gpc/insert-today-node
       :desc "Bump TODO to new day"        "l n" #'gpc/move-todo-to-datespec
       :desc "Move todo/day to bottom"     "l >" #'gpc/move-todo-to-bottom
       :desc "Move TODO to top"            "l <" #'gpc/move-todo-to-top
