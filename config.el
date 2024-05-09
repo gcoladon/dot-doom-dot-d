@@ -34,9 +34,9 @@
      (equal (replace-regexp-in-string "[\t|\n]" ""
                                       (shell-command-to-string "ifconfig en0 | grep ether"))
             "ether b0:be:83:69:04:b3 ")
-     (equal (replace-regexp-in-string "[\t|\n]" ""
+     (equal  (replace-regexp-in-string "[\t|\n]" ""
                                       (shell-command-to-string "ifconfig enp4s0 | grep ether"))
-            "ether 04:7c:16:57:6c:4c "))
+             "        ether 04:7c:16:57:6c:4c  txqueuelen 1000  (Ethernet)"))
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
