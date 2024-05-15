@@ -807,3 +807,6 @@ It puts a todo to read this article near the top of the hackernews node."
   (find-file (car (reverse (file-expand-wildcards "~/org/roam/roam-personal/2*_monthly.org"))))
   (goto-char (point-min))
   (forward-line 7))
+
+;; This is so that open: org mode link tags open with the system open, like preview for a JPG
+(org-link-set-parameters "open" :follow (lambda (path) (start-process "open" nil "open" path)))
