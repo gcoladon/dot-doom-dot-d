@@ -35,7 +35,7 @@
                                       (shell-command-to-string "ifconfig en0 | grep ether"))
             "ether b0:be:83:69:04:b3 ")
      (equal  (replace-regexp-in-string "[\t|\n]" ""
-                                      (shell-command-to-string "ifconfig enp4s0 | grep ether"))
+                                      (shell-command-to-string "ifconfig enp5s0 | grep ether"))
              "        ether 04:7c:16:57:6c:4c  txqueuelen 1000  (Ethernet)"))
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*.org"))
@@ -43,7 +43,7 @@
           gpc/mark-item-done 'gpc/home-mark-todo-as-done-move-to-end
           gpc/bump-todo-item 'gpc/move-todo-to-tomorrow
           gpc/todays-notes-fn 'gpc/org-roam-monthly
-          gpc/super-p-fn (find-file "~/org/roam/roam-stem/240421_optivore.org"))
+          gpc/super-p-fn (cmd! (find-file "~/org/roam/roam-stem/240421_optivore.org")))
   (setq gpc/email "greg@syntiant.com"
         gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-pilot/23*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -130,6 +130,8 @@
 (global-set-key (kbd "s-s") (cmd!  (find-file "~/repos/master/Source/")))
 (global-set-key (kbd "s-p") gpc/super-p-fn)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
+;; this is how I swapped windows and alt on ubuntu to match keys on mac keyboard
+;; https://www.perplexity.ai/search/how-can-I-CSl1GbYWS5KLL5RSZm5Uuw
 (global-set-key (kbd "s-r") gpc/todays-notes-fn)
 (global-set-key (kbd "s-O") (cmd!  (find-file "~/org/roam/roam-stem/230420_omscs_cs_6265_informati.org")))
 (global-set-key (kbd "s-2") (cmd! (org-todo-list 2)))
