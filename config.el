@@ -22,10 +22,10 @@
 ;; (setq org-element-use-cache nil)
 ;; (setq org-roam-v2-ack t)
 
-(setq bibtex-completion-library-path "~/pdfs"
+(setq bibtex-completion-library-path "~/org/roam/roam-pdfs"
       ;; Changed from list to string to get org-roam-bibtext helm-edit-note to work
       ;; bibtex-completion-bibliography (list "~/pdfs/references.bib")
-      bibtex-completion-bibliography "~/pdfs/references.bib"
+      bibtex-completion-bibliography "~/org/roam/roam-pdfs/references.bib"
       org-directory "~/org/")
 
 (setq org-babel-awk-command "gawk")
@@ -683,6 +683,10 @@
 
 (setq +org-capture-journal-file "~/org/roam/roam-personal/220531_personal_journal.org")
 
+;; How to configure things so this gets used?
+(setq gpc/health-journal-file "~/org/roam/roam-stem/240515_health_journal.org")
+(setq gpc/love-journal-file "~/org/roam/roam-personal/240519_love_journal.org")
+
 (use-package! org-protocol)
 
 ;;;###autoload
@@ -779,9 +783,12 @@ It puts a todo to read this article near the top of the hackernews node."
   (org-insert-subheading nil)
   (insert "Birthday")
   (let* ((month (read-string "Month: "))
-         (day (read-string "Day: ")))
+         (day (read-string "Day: "))
+         (year (read-string "Year: ")))
     (org-set-property "MONTH" month)
-    (org-set-property "DAY" day)))
+    (org-set-property "DAY" day)
+    (if (not (equal year ""))
+        (org-set-property "YEAR" year))))
 
 ;; ;; I would like to make it so my yanks of org to rich text don't have tables of
 ;; ;; contents or numbered items. See if this works to do that
