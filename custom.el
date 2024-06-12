@@ -41,6 +41,14 @@
      ("L" "Lifting log" table-line
       (file+olp "~/org/roam/roam-personal/230324_powerlifting.org" "Logbook")
       "| %<%a %b %0e> | %^{Lift|Press|Dead|Squat|Bench} | %^{1st} | %^{2nd} | %^{3rd} | %^{4th} | %^{5th} | %^{6th} | %^{Note} |" :table-line-pos "I+1")
+     ("H" "Health journal" entry
+      (file+olp+datetree gpc/health-journal-file)
+      "* %U %?
+%i" :prepend t)
+     ("l" "Love journal" entry
+      (file+olp+datetree gpc/love-journal-file)
+      "* %U %?
+%i" :prepend t)
      ("I" "Idea" plain #'gpc/place-idea-in-notes-file "** IDEA %^{Idea}" :immediate-finish t)
      ("t" "Personal todo" entry
       (file+headline +org-capture-todo-file "Inbox")
@@ -55,8 +63,7 @@
      ("j" "Journal" entry
       (file+olp+datetree +org-capture-journal-file)
       "* %U %?
-%i
-%a" :prepend t)
+%i" :prepend t)
      ("p" "Templates for projects")
      ("pt" "Project-local todo" entry
       (file+headline +org-capture-project-todo-file "Inbox")
@@ -163,7 +170,7 @@ ${abstract}
  '(org-roam-graph-max-title-length 25)
  '(org-roam-graph-shorten-titles 'wrap)
  '(org-startup-folded nil)
- '(package-selected-packages '(nov impatient-mode))
+ '(package-selected-packages '(geiser-mit nov impatient-mode))
  '(pdf-misc-print-program-executable "/usr/local/bin/gpr")
  '(projectile-project-search-path '("~/dl" "~/src"))
  '(save-place-mode nil)
