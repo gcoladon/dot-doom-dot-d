@@ -118,7 +118,8 @@
 
        :lang
        ;;agda              ; types of types of types of types...
-       (cc +lsp)
+       ;; (cc +lsp)
+       cc                               ; not loving how lsp greys out the ifdefs!!
 
        ;;clojure           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
