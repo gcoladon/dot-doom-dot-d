@@ -87,4 +87,7 @@
   :recipe (:host github :repo "ljos/jq-mode"))
 
 (unpin! org-roam)
+
 (package! org-roam-ui)
+
+;; (package! takenote :recipe (:host github :repo "gcoladon/takenote"))
