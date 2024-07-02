@@ -827,3 +827,5 @@ It puts a todo to read this article near the top of the hackernews node."
 
 ;; This is so that open: org mode link tags open with the system open, like preview for a JPG
 (org-link-set-parameters "open" :follow (lambda (path) (start-process "open" nil "open" path)))
+
+;; (use-package! takenote :after org)
