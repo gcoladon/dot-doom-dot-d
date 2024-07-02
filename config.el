@@ -430,6 +430,10 @@
    (number-sequence 0 4)
    ""))
 
+(defun gpc/gen-monthly ()
+  (shell-command-to-string
+   (concat  "/Users/greg/dev/python/roam_todos_to_monthly.py")))
+
 ;; (gpc/gen-weekly (current-time))
 ;; (gpc/gen-weekly (time-add (current-time) (* 4 24 60 60)))
 ;; (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --date " "2023-12-11"))
