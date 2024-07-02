@@ -421,14 +421,16 @@
 ;;  :after 'org-set-regexps-and-options (setq org-todo-sets '("TODO" "DONE")))
 
 (defun gpc/gen-weekly (monday-tv)
-  (mapconcat
-   (lambda (num) (concat "* " (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60))) "\n"
-                         "** Plan\n"
-                         (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --date "
-                                                           (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))
-                         "** Meetings\n"))
-   (number-sequence 0 4)
-   ""))
+  (concat
+   (shell-command-to-string "/Users/greg/repos/personal/Personal/greg/roam_nodes_to_prospects.py")
+   (mapconcat
+    (lambda (num) (concat "* " (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60))) "\n"
+                          "** Plan\n"
+                          (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --date "
+                                                            (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))
+                          "** Meetings\n"))
+    (number-sequence 0 4)
+    "")))
 
 ;; (gpc/gen-weekly (current-time))
 ;; (gpc/gen-weekly (time-add (current-time) (* 4 24 60 60)))
