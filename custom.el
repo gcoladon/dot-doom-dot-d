@@ -146,6 +146,13 @@
 %(gpc/gen-weekly monday-tv)
 ")
       :unnarrowed t)
+     ("P" "personal monthly" plain "%?" :if-new
+      (file+head "roam-personal/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
+#+TODO: IDEA TODO NOW BLOCKED | DONE
+
+%(gpc/gen-monthly)
+")
+      :unnarrowed t)
      ("n" "ref+noter" plain "%?" :if-new
       (file+head "roam-stem/${citekey}.org" "#+TITLE: %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}
 #+ROAM_KEY: cite:${citekey}
