@@ -575,6 +575,18 @@
 (ucsc-make-commands "Latin.* letter [a-z]+ with macron$")
 (define-prefix-command 'macron-map)
 (global-set-key (kbd "C-x 8 l") 'macron-map)
+
+(global-set-key (kbd "M-s-a") 'latin-small-letter-a-with-macron)
+(global-set-key (kbd "M-s-A") 'latin-capital-letter-a-with-macron)
+(global-set-key (kbd "M-s-e") 'latin-small-letter-e-with-macron)
+(global-set-key (kbd "M-s-E") 'latin-capital-letter-e-with-macron)
+(global-set-key (kbd "M-s-i") 'latin-small-letter-i-with-macron)
+(global-set-key (kbd "M-s-I") 'latin-capital-letter-i-with-macron)
+(global-set-key (kbd "M-s-o") 'latin-small-letter-o-with-macron)
+(global-set-key (kbd "M-s-O") 'latin-capital-letter-o-with-macron)
+(global-set-key (kbd "M-s-u") 'latin-small-letter-u-with-macron)
+(global-set-key (kbd "M-s-U") 'latin-capital-letter-u-with-macron)
+
 (define-key macron-map (kbd "a") 'latin-small-letter-a-with-macron)
 (define-key macron-map (kbd "e") 'latin-small-letter-e-with-macron)
 (define-key macron-map (kbd "i") 'latin-small-letter-i-with-macron)
