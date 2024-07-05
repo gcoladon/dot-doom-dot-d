@@ -227,6 +227,7 @@
       :desc "Toggle debug-on-error"       "t d" #'toggle-debug-on-error
       :desc "Toggle Frame Min/Max"        "t m" #'toggle-frame-maximized
       :desc "Toggle truncate lines"       "t t" #'toggle-truncate-lines
+      :desc "Toggle org-tidy"             "t T" #'org-tidy-toggle
       :desc "Toggle/set a variable"       "t v" #'set-variable
       :desc "Toggle overwrite mode"       "t o" #'overwrite-mode
       :desc "Toggle tbl-col-width"        "t c" #'org-table-toggle-column-width
@@ -832,3 +833,7 @@ It puts a todo to read this article near the top of the hackernews node."
 (org-link-set-parameters "open" :follow (lambda (path) (start-process "open" nil "open" path)))
 
 ;; (use-package! takenote :after org)
+
+(use-package! org-tidy
+  :ensure t
+  :hook (org-mode . org-tidy-mode))

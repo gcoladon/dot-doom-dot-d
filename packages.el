@@ -91,3 +91,5 @@
 (package! org-roam-ui)
 
 ;; (package! takenote :recipe (:host github :repo "gcoladon/takenote"))
+
+(package! org-tidy)
