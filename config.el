@@ -21,8 +21,10 @@
 ;; (setq org-element--cache-self-verify 'backtrace)
 ;; (setq org-element-use-cache nil)
 ;; (setq org-roam-v2-ack t)
+;; (setq debug-on-error t)
 
-(setq bibtex-completion-library-path "~/org/roam/roam-pdfs"
+(setq bibtex-completion-library-path "~/org/roam/roam-pdfs/"
+      bibtex-completion-notes-path "~/org/roam/roam-stem/"
       ;; Changed from list to string to get org-roam-bibtext helm-edit-note to work
       ;; bibtex-completion-bibliography (list "~/pdfs/references.bib")
       bibtex-completion-bibliography "~/org/roam/roam-pdfs/references.bib"
@@ -843,8 +845,6 @@ It puts a todo to read this article near the top of the hackernews node."
 
 ;; This is so that open: org mode link tags open with the system open, like preview for a JPG
 (org-link-set-parameters "open" :follow (lambda (path) (start-process "open" nil "open" path)))
-
-;; (use-package! takenote :after org)
 
 (use-package! org-tidy
   :ensure t
