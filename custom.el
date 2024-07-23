@@ -8,7 +8,6 @@
  '(bibtex-completion-additional-search-fields '("keywords" "primaryClass"))
  '(bibtex-completion-display-formats
    '((t . "${author:20} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
- '(bibtex-completion-notes-path (concat org-directory "roam-stem/"))
  '(bibtex-completion-pdf-field "file")
  '(deft-directory org-directory)
  '(deft-recursive t)
