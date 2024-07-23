@@ -86,7 +86,8 @@
 (package! jq-mode
   :recipe (:host github :repo "ljos/jq-mode"))
 
-(unpin! org-roam)
+;; (unpin! org-roam)
+;; removing this unpin on jul 21 2024, to see if that helps 
 
 (package! org-roam-ui)
 
