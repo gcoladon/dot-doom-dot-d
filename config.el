@@ -849,3 +849,6 @@ It puts a todo to read this article near the top of the hackernews node."
 (use-package! org-tidy
   :ensure t
   :hook (org-mode . org-tidy-mode))
+
+(after! helm-mode
+  (add-to-list 'helm-completing-read-handlers-alist '(kill-buffer . nil)))
