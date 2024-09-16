@@ -672,7 +672,7 @@
   "Mark a TODO as done and move it to the end of the heading its under"
   (interactive)
   (save-excursion
-    (org-todo 2)
+    (org-todo 3)
     (org-mark-element)
     (setq last-command 'ignore)
     (kill-region (point) (mark))

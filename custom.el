@@ -140,7 +140,7 @@
       :unnarrowed t)
      ("W" "work weekly" plain "%?" :if-new
       (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
-#+TODO: TODO | DONE
+#+TODO: TODO WAIT | DONE
 
 %(gpc/gen-weekly monday-tv)
 ")
