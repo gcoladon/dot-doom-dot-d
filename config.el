@@ -216,6 +216,7 @@
       :desc "Bump TODO forward"           "l m" gpc/bump-todo-item
       :desc "Insert node for today/now"   "l t" #'gpc/insert-today-node
       :desc "Bump TODO to new day"        "l n" #'gpc/move-todo-to-datespec
+      :desc "Bump TODO to now"            "l u" #'gpc/move-todo-from-plan-to-now
       :desc "Move todo/day to bottom"     "l >" #'gpc/move-todo-to-bottom
       :desc "Move TODO to top"            "l <" #'gpc/move-todo-to-top
       :desc "Insert birthday props"       "l b" #'gpc/add-birthday
@@ -650,6 +651,21 @@
         (outline-up-heading 1))
     (org-forward-heading-same-level 1)
     (org-next-visible-heading 1)
+    (beginning-of-line)
+    (yank)))
+
+(defun gpc/move-todo-from-plan-to-now ()
+  "Move a todo at tomorrow's heading in personal notes"
+  (interactive)
+  (save-excursion
+    (org-mark-element)
+    (setq last-command 'ignore)
+    (kill-region (point) (mark))
+    (previous-line)
+    (if (> (funcall outline-level) 1)
+        (outline-up-heading 1))
+    (org-backward-heading-same-level 1)
+    (next-line)
     (beginning-of-line)
     (yank)))
 
