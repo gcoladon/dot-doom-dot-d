@@ -220,6 +220,7 @@
       :desc "Move todo/day to bottom"     "l >" #'gpc/move-todo-to-bottom
       :desc "Move TODO to top"            "l <" #'gpc/move-todo-to-top
       :desc "Insert birthday props"       "l b" #'gpc/add-birthday
+      :desc "Compare windows"             "l w" #'compare-windows
       :desc "pdb.set_trace()"             "l p" (cmd! (insert "import pdb; pdb.set_trace()"))
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
