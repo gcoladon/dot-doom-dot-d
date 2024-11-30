@@ -869,3 +869,11 @@ It puts a todo to read this article near the top of the hackernews node."
 
 (after! helm-mode
   (add-to-list 'helm-completing-read-handlers-alist '(kill-buffer . nil)))
+
+;; I needed the lines below in order for comments inside Espressif assembler to get // instead of ;;
+(defun gpc/asm-mode-hook ()
+  (setq comment-start "// ")
+  (setq comment-end "")
+  (setq comment-start-skip "//+\\s-*"))
+(add-hook 'asm-mode-hook 'gpc/asm-mode-hook)
+(add-to-list 'auto-mode-alist '("\\.S\\'" . asm-mode))
