@@ -222,6 +222,7 @@
       :desc "Insert birthday props"       "l b" #'gpc/add-birthday
       :desc "Compare windows"             "l w" #'compare-windows
       :desc "pdb.set_trace()"             "l p" (cmd! (insert "import pdb; pdb.set_trace()"))
+      :desc "Smart Markdown yank"         "l y" #'gpc/smart-yank-markdown-to-org
 
       :desc "HTML-to-Org"                 "n h" (cmd! (html2org-clipboard))
       :desc "HTML-to-Org no-table"        "n H" (cmd! (html2org-clipboard-no-table))
@@ -877,3 +878,28 @@ It puts a todo to read this article near the top of the hackernews node."
   (setq comment-start-skip "//+\\s-*"))
 (add-hook 'asm-mode-hook 'gpc/asm-mode-hook)
 (add-to-list 'auto-mode-alist '("\\.S\\'" . asm-mode))
+
+
+;; [[https://www.perplexity.ai/search/when-i-yank-text-into-an-org-m-b3BjtFTISeq1tquxqDyW9A][when I yank text into an org-mode document, I would like to first check to see if the text in the clipboard is in markdown format, and if it is, convert it to org mode before yanking it. How can I set this up?]]
+
+(defun gpc/is-markdown-p (text)
+  "Check if TEXT is likely to be in Markdown format."
+  (string-match-p "\\(^#\\|\\[.+\\](.+)\\|^-\\s-\\|^\\*\\s-\\|^\\d\\.\\s-\\)" text))
+
+(defun gpc/convert-markdown-to-org (markdown-text)
+  "Convert MARKDOWN-TEXT to Org format using Pandoc."
+  (with-temp-buffer
+    (insert markdown-text)
+    (shell-command-on-region (point-min) (point-max)
+                             "pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' "
+                             nil t)
+    (buffer-string)))
+
+(defun gpc/smart-yank-markdown-to-org ()
+  "Check if clipboard content is Markdown, convert to Org if true, then yank."
+  (interactive)
+  (let ((clipboard-content (current-kill 0 t)))
+    (if (gpc/is-markdown-p clipboard-content)
+        (let ((org-content (gpc/convert-markdown-to-org clipboard-content)))
+          (insert org-content))
+      (yank))))
