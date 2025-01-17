@@ -679,12 +679,14 @@
     (org-mark-element)
     (setq last-command 'ignore)
     (kill-region (point) (mark))
-    (previous-line)
-    (if (> (funcall outline-level) 1)
-        (outline-up-heading 1))
-    (org-forward-heading-same-level 1)
-    (beginning-of-line)
-    (yank)))
+    (let ((level-before (funcall outline-level)))
+      (previous-line)
+      (if (= (funcall outline-level) level-before)
+          ;; The point of this is to handle both when todo is first and when it's not
+          (outline-up-heading 1))
+      (org-forward-heading-same-level 1)
+      (beginning-of-line)
+      (yank))))
 
 (defun gpc/work-mark-todo-as-done-move-to-end ()
   "Mark a TODO as done and move it to the end of the heading its under"
