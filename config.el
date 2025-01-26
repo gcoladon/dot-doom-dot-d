@@ -903,5 +903,49 @@ It puts a todo to read this article near the top of the hackernews node."
   (let ((clipboard-content (current-kill 0 t)))
     (if (gpc/is-markdown-p clipboard-content)
         (let ((org-content (gpc/convert-markdown-to-org clipboard-content)))
-          (insert org-content))
+          (insert (gpc/incorporate-citations org-content)))
       (yank))))
+
+;; These don't work as intended, yet, even though Perplexity thinks they do
+(require 'calendar)
+(require 'time-date)
+
+(defun gpc/calendar-subtract-days (date days)
+  (time-subtract date (days-to-time days)))
+
+(defun gpc/insert-dates-two-weeks-before-second-sunday-2025 ()
+  "Insert dates that are 2 weeks before the second Sunday of each month in 2025."
+  (interactive)
+  (let ((year 2025)
+        (dates '()))
+    (dotimes (month 12)
+      (let* ((second-sunday (calendar-nth-named-day 2 0 (+ 1 month) year))
+             (two-weeks-before (gpc/calendar-subtract-days second-sunday 14))
+             )
+            (push (format-time-string "%Y-%m-%d" (encode-time 0 0 0 (nth 1 two-weeks-before) (nth 0 two-weeks-before) year)) dates)
+            ))
+    (insert (mapconcat 'identity (nreverse dates) "\n"))))
+
+(defun gpc/incorporate-citations (text)
+  "Incorporate citation links into the given TEXT."
+  (with-temp-buffer
+    (insert text)
+    (let ((citations (make-hash-table :test 'equal))
+          (citation-regex "\\[\\([0-9]+\\)\\]\\s-*\\(https?://[^\n]+\\)"))
+      ;; Find and store citations
+      (goto-char (point-min))
+      (when (search-forward "Citations:" nil t)
+        (while (re-search-forward citation-regex nil t)
+          (puthash (match-string 1) (match-string 2) citations)))
+
+      ;; Replace citations in the main text
+      (goto-char (point-min))
+      (while (re-search-forward "\\(\\[\\([0-9]+\\)\\]\\)" nil t)
+        (let* ((full-match (match-string 1))
+               (citation-number (match-string 2))
+               (url (gethash citation-number citations)))
+          (when url
+            (replace-match (format "[[[%s][%s]]]" url citation-number) nil nil nil 1))))
+
+      ;; Return the processed text
+      (buffer-string))))
