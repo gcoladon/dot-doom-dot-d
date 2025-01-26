@@ -927,20 +927,22 @@ It puts a todo to read this article near the top of the hackernews node."
     (insert (mapconcat 'identity (nreverse dates) "\n"))))
 
 (defun gpc/incorporate-citations (text)
-  "Incorporate citation links into the given TEXT."
+  "Incorporate citation links into the given TEXT, preserving the original Citations section."
   (with-temp-buffer
     (insert text)
     (let ((citations (make-hash-table :test 'equal))
-          (citation-regex "\\[\\([0-9]+\\)\\]\\s-*\\(https?://[^\n]+\\)"))
+          (citation-regex "\\[\\([0-9]+\\)\\]\\s-*\\(https?://[^\n]+\\)")
+          (citations-start (progn (goto-char (point-min))
+                                  (search-forward "Citations:" nil t))))
       ;; Find and store citations
-      (goto-char (point-min))
-      (when (search-forward "Citations:" nil t)
+      (when citations-start
         (while (re-search-forward citation-regex nil t)
           (puthash (match-string 1) (match-string 2) citations)))
 
       ;; Replace citations in the main text
       (goto-char (point-min))
-      (while (re-search-forward "\\(\\[\\([0-9]+\\)\\]\\)" nil t)
+      (while (and (re-search-forward "\\(\\[\\([0-9]+\\)\\]\\)" nil t)
+                  (or (not citations-start) (< (point) citations-start)))
         (let* ((full-match (match-string 1))
                (citation-number (match-string 2))
                (url (gethash citation-number citations)))
