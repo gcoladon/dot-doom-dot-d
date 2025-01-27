@@ -926,14 +926,16 @@ It puts a todo to read this article near the top of the hackernews node."
             ))
     (insert (mapconcat 'identity (nreverse dates) "\n"))))
 
+;; https://www.perplexity.ai/search/please-write-me-some-emacs-lis-KkDaNjTHTuKzoPXDahU6TA
+
 (defun gpc/incorporate-citations (text)
   "Incorporate citation links into the given TEXT, preserving the original Citations section."
   (with-temp-buffer
     (insert text)
     (let ((citations (make-hash-table :test 'equal))
-          (citation-regex "\\[\\([0-9]+\\)\\]\\s-*\\(https?://[^\\s\n]+\\)")
+          (citation-regex "^\\([0-9]+\\)\\. \\(https?://[^\n]+\\)")
           (citations-start (progn (goto-char (point-min))
-                                  (search-forward "Citations:" nil t))))
+                                  (search-forward "** Citations:" nil t))))
       ;; Find and store citations
       (when citations-start
         (while (re-search-forward citation-regex nil t)
