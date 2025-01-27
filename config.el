@@ -893,7 +893,7 @@ It puts a todo to read this article near the top of the hackernews node."
   (with-temp-buffer
     (insert markdown-text)
     (shell-command-on-region (point-min) (point-max)
-                             "pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' "
+                             "sed  '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /' | sed 's/^Citations:$/## Citations:\\n/' | pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' "
                              nil t)
     (buffer-string)))
 
@@ -931,7 +931,7 @@ It puts a todo to read this article near the top of the hackernews node."
   (with-temp-buffer
     (insert text)
     (let ((citations (make-hash-table :test 'equal))
-          (citation-regex "\\[\\([0-9]+\\)\\]\\s-*\\(https?://[^\n]+\\)")
+          (citation-regex "\\[\\([0-9]+\\)\\]\\s-*\\(https?://[^\\s\n]+\\)")
           (citations-start (progn (goto-char (point-min))
                                   (search-forward "Citations:" nil t))))
       ;; Find and store citations
