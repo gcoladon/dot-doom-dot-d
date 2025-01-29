@@ -928,6 +928,8 @@ It puts a todo to read this article near the top of the hackernews node."
 
 ;; https://www.perplexity.ai/search/please-write-me-some-emacs-lis-KkDaNjTHTuKzoPXDahU6TA
 
+;; Does this with-temp-buffer construction produce a closure that can't be debugged?
+;; interesting! Find out more about that.
 (defun gpc/incorporate-citations (text)
   "Incorporate citation links into the given TEXT, preserving the original Citations section."
   (with-temp-buffer
