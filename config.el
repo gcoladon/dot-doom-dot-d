@@ -930,6 +930,7 @@ It puts a todo to read this article near the top of the hackernews node."
 
 ;; Does this with-temp-buffer construction produce a closure that can't be debugged?
 ;; interesting! Find out more about that.
+
 (defun gpc/incorporate-citations (text)
   "Incorporate citation links into the given TEXT, preserving the original Citations section."
   (with-temp-buffer
@@ -940,18 +941,20 @@ It puts a todo to read this article near the top of the hackernews node."
                                   (search-forward "** Citations:" nil t))))
       ;; Find and store citations
       (when citations-start
+        (goto-char citations-start)
         (while (re-search-forward citation-regex nil t)
           (puthash (match-string 1) (match-string 2) citations)))
 
-      ;; Replace citations in the main text
+      ;; Replace all citations in the entire text
       (goto-char (point-min))
-      (while (and (re-search-forward "\\(\\[\\([0-9]+\\)\\]\\)" nil t)
-                  (or (not citations-start) (< (point) citations-start)))
-        (let* ((full-match (match-string 1))
-               (citation-number (match-string 2))
-               (url (gethash citation-number citations)))
-          (when url
-            (replace-match (format "[[[%s][%s]]]" url citation-number) nil nil nil 1))))
+      (let ((citation-replace-regex "\\(\\[\\([0-9]+\\)\\]\\)"))
+        (while (re-search-forward citation-replace-regex nil t)
+          (let* ((full-match (match-string 1))
+                 (citation-number (match-string 2))
+                 (url (gethash citation-number citations)))
+            (when url
+              ;; Replace the match with the formatted citation
+              (replace-match (format "[[[%s][%s]]]" url citation-number) nil nil nil 1)))))
 
-      ;; Return the processed text
-      (buffer-string))))
+    ;; Return the processed text
+    (buffer-string))))
