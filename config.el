@@ -23,7 +23,7 @@
 ;; (setq org-roam-v2-ack t)
 ;; (setq debug-on-error t)
 
-(setq bibtex-completion-library-path "~/org/roam/roam-pdfs/"
+(setq bibtex-completion-library-path "~/org/roam/roam-pdfs"
       bibtex-completion-notes-path "~/org/roam/roam-stem/"
       ;; Changed from list to string to get org-roam-bibtext helm-edit-note to work
       ;; bibtex-completion-bibliography (list "~/pdfs/references.bib")
@@ -826,7 +826,7 @@ It puts a todo to read this article near the top of the hackernews node."
   (interactive)
   (end-of-line)
   (org-insert-subheading nil)
-  (let* ((occasion (read-string "Occastion: " "Birthday"))
+  (let* ((occasion (read-string "Occasion: " "Birthday"))
          (month (read-string "Month: "))
          (day (read-string "Day: "))
          (year (read-string "Year: ")))
@@ -958,3 +958,23 @@ It puts a todo to read this article near the top of the hackernews node."
 
     ;; Return the processed text
     (buffer-string))))
+
+(defun gpc/email-current-headline-element ()
+  "Email the org-element of the current headline to yourself."
+  (interactive)
+  (require 'org-element)
+  (require 'message)
+
+  (let* ((element (org-element-at-point))
+         (headline (org-element-property :raw-value element))
+         (content (buffer-substring-no-properties
+                   (org-element-property :begin element)
+                   (org-element-property :end element))))
+    (compose-mail)
+    (message-goto-to)
+    (insert "gcoladon@gmail.com")
+    (message-goto-subject)
+    (insert (format "Org Headline: %s" headline))
+    (message-goto-body)
+    (insert (format "Headline: %s\n\nContent:\n%s" headline content))
+    (message-send-and-exit)))
