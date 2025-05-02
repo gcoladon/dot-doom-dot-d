@@ -126,18 +126,6 @@
 
 ")
       :unnarrowed t)
-     ("c" "customer" plain "%?" :if-new
-      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
-
-* Company :: 
-* LinkedIn :: 
-* Title :: 
-* Location :: 
-* Email :: 
-* Phone :: 
-* Notes
-- ")
-      :unnarrowed t)
      ("W" "work weekly" plain "%?" :if-new
       (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
 #+TODO: TODO WAIT | DONE
