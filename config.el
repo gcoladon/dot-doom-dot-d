@@ -554,6 +554,7 @@
       (replace-regexp "^[ >]*" "")
       (mark-whole-buffer)
       (flush-lines "gcoladon")
+      (flush-lines "Palm Pilot")
       (mark-whole-buffer)
       (flush-lines "^$")
       (org-mode)
@@ -893,7 +894,7 @@ It puts a todo to read this article near the top of the hackernews node."
   (with-temp-buffer
     (insert markdown-text)
     (shell-command-on-region (point-min) (point-max)
-                             "sed  '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /' | sed 's/^Citations:$/## Citations:\\n/' | pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' "
+                             "sed  '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /' | sed 's/^Citations:$/## Citations:\\n/' | pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' | sed 's/\\\\\\\\$//' | sed '/^--------------$/,+1d' | sed '/^Answer from Perplexity: pplx.ai/,+2d' "
                              nil t)
     (buffer-string)))
 
