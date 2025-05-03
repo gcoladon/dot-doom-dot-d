@@ -429,6 +429,8 @@
 (defun gpc/gen-weekly (monday-tv)
   (concat
    (shell-command-to-string "/Users/greg/repos/personal/Personal/greg/roam_nodes_to_prospects.py")
+   (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_snippets.py --date "
+                                     (format-time-string "%Y-%m-%d" (time-add monday-tv (* -7 24 60 60)))))
    (mapconcat
     (lambda (num) (concat "* " (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60))) "\n"
                           "** Plan\n"
