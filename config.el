@@ -982,3 +982,5 @@ It puts a todo to read this article near the top of the hackernews node."
     (message-goto-body)
     (insert content)
     (message-send-and-exit)))
+
+(setq chatgpt-shell-perplexity-key "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")
