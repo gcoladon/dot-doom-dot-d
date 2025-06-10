@@ -11,10 +11,7 @@
  '(bibtex-completion-pdf-field "file")
  '(deft-directory org-directory)
  '(deft-recursive t)
- '(deft-strip-summary-regexp ":PROPERTIES:
-\\(.+
-\\)+:END:
-#\\+title: ")
+ '(deft-strip-summary-regexp ":PROPERTIES:\12\\(.+\12\\)+:END:\12#\\+title: ")
  '(deft-use-filename-as-title t t)
  '(helm-case-fold-search t)
  '(initial-frame-alist '((top . 1) (left . 1) (width . 150) (height . 40)))
@@ -42,53 +39,37 @@
       "| %<%y-%m %b %a %0e> | %^{Lift|Press|Dead|Squat|Bench} | %^{1st} | %^{2nd} | %^{3rd} | %^{4th} | %^{5th} | %^{6th} | %^{Note} |" :table-line-pos "I+1")
      ("H" "Health journal" entry
       (file+olp+datetree gpc/health-journal-file)
-      "* %U %?
-%i" :prepend t)
+      "* %U %?\12%i" :prepend t)
+     ("T" "Tesla FSD journal" entry
+      (file+olp+datetree "~/org/roam/roam-stem/250510_tesla_fsd_journal.org")
+      "* %U %?\12%i" :prepend t)
      ("l" "Love journal" entry
       (file+olp+datetree gpc/love-journal-file)
-      "* %U %?
-%i" :prepend t)
+      "* %U %?\12%i" :prepend t)
      ("I" "Idea" plain #'gpc/place-idea-in-notes-file "** IDEA %^{Idea}" :immediate-finish t)
      ("t" "Personal todo" entry
       (file+headline +org-capture-todo-file "Inbox")
-      "* [ ] %?
-%i
-%a" :prepend t)
+      "* [ ] %?\12%i\12%a" :prepend t)
      ("n" "Personal notes" entry
       (file+headline +org-capture-notes-file "Inbox")
-      "* %u %?
-%i
-%a" :prepend t)
+      "* %u %?\12%i\12%a" :prepend t)
      ("j" "Journal" entry
       (file+olp+datetree +org-capture-journal-file)
-      "* %U %?
-%i" :prepend t)
+      "* %U %?\12%i" :prepend t)
      ("p" "Templates for projects")
      ("pt" "Project-local todo" entry
       (file+headline +org-capture-project-todo-file "Inbox")
-      "* TODO %?
-%i
-%a" :prepend t)
+      "* TODO %?\12%i\12%a" :prepend t)
      ("pn" "Project-local notes" entry
       (file+headline +org-capture-project-notes-file "Inbox")
-      "* %U %?
-%i
-%a" :prepend t)
+      "* %U %?\12%i\12%a" :prepend t)
      ("pc" "Project-local changelog" entry
       (file+headline +org-capture-project-changelog-file "Unreleased")
-      "* %U %?
-%i
-%a" :prepend t)
+      "* %U %?\12%i\12%a" :prepend t)
      ("o" "Centralized templates for projects")
-     ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?
- %i
- %a" :heading "Tasks" :prepend nil)
-     ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?
- %i
- %a" :prepend t :heading "Notes")
-     ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?
- %i
- %a" :prepend t :heading "Changelog")))
+     ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\12 %i\12 %a" :heading "Tasks" :prepend nil)
+     ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\12 %i\12 %a" :prepend t :heading "Notes")
+     ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\12 %i\12 %a" :prepend t :heading "Changelog")))
  '(org-export-with-section-numbers nil)
  '(org-export-with-toc nil)
  '(org-id-link-to-org-use-id t)
@@ -110,51 +91,22 @@
       :unnarrowed t)))
  '(org-roam-capture-templates
    '(("w" "work" plain "%?" :if-new
-      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
-
-")
+      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}\12\12")
       :unnarrowed t)
      ("s" "stem" plain "%?" :if-new
-      (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
-#+TODO: TODO | DONE
-
-")
+      (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}\12#+TODO: TODO | DONE\12\12")
       :unnarrowed t)
      ("p" "personal" plain "%?" :if-new
-      (file+head "roam-personal/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
-#+TODO: TODO | DONE
-
-")
+      (file+head "roam-personal/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}\12#+TODO: TODO | DONE\12\12")
       :unnarrowed t)
      ("W" "work weekly" plain "%?" :if-new
-      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
-#+TODO: TODO WAIT | DONE
-
-%(gpc/gen-weekly monday-tv)
-")
+      (file+head "roam-pilot/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}\12#+TODO: TODO WAIT | DONE\12\12%(gpc/gen-weekly monday-tv)\12")
       :unnarrowed t)
      ("P" "personal monthly" plain "%?" :if-new
-      (file+head "roam-personal/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}
-#+TODO: IDEA TODO NOW BLOCKED | DONE
-
-%(gpc/gen-monthly)
-")
+      (file+head "roam-personal/%<%y%m%d_>${slug}.org" "#+TITLE: ${title}\12#+TODO: IDEA TODO NOW BLOCKED | DONE\12\12%(gpc/gen-monthly)\12")
       :unnarrowed t)
      ("n" "ref+noter" plain "%?" :if-new
-      (file+head "roam-stem/${citekey}.org" "#+TITLE: %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}
-#+ROAM_KEY: cite:${citekey}
-#+ROAM_TAGS:
-
-* %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}
-:PROPERTIES:
-:URL: ${url}
-:AUTHOR: ${author-or-editor-abbrev}
-:NOTER_DOCUMENT: ${file}
-:NOTER_PAGE:
-:END:
-** Abstract
-${abstract}
-")
+      (file+head "roam-stem/${citekey}.org" "#+TITLE: %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}\12#+ROAM_KEY: cite:${citekey}\12#+ROAM_TAGS:\12\12* %(car (split-string \"${author}\" \",\")) '%(substring \"${year}\" 2 4) - ${title}\12:PROPERTIES:\12:URL: ${url}\12:AUTHOR: ${author-or-editor-abbrev}\12:NOTER_DOCUMENT: ${file}\12:NOTER_PAGE:\12:END:\12** Abstract\12${abstract}\12")
       :unnarrowed t)))
  '(org-roam-graph-edge-extra-config '(("color" . "#333333") ("dir" . "back")))
  '(org-roam-graph-exclude-matcher '("_weekly" "_exclude" "_monthly"))
@@ -168,6 +120,7 @@ ${abstract}
  '(pdf-misc-print-program-executable "/usr/local/bin/gpr")
  '(projectile-project-search-path '("~/dl" "~/src"))
  '(save-place-mode nil)
+ '(send-mail-function 'mailclient-send-it)
  '(warning-suppress-types '((org-element-cache) (org-element-cache))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
