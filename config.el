@@ -208,6 +208,7 @@
 
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l T" #'gpc/copy-todos-from-email
+      :desc "Email headline"              "l e" #'gpc/email-headline
       :desc "Mark as DONE move to bottom" "l d" gpc/mark-item-done
       :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
       :desc "Flush lines"                 "l f" #'flush-lines
@@ -962,7 +963,7 @@ It puts a todo to read this article near the top of the hackernews node."
     ;; Return the processed text
     (buffer-string))))
 
-(defun gpc/email-current-headline-element ()
+(defun gpc/email-headline ()
   "Email the org-element of the current headline to yourself."
   (interactive)
   (require 'org-element)
@@ -977,7 +978,7 @@ It puts a todo to read this article near the top of the hackernews node."
     (message-goto-to)
     (insert "gcoladon@gmail.com")
     (message-goto-subject)
-    (insert (format "Org Headline: %s" headline))
+    (insert (format "Org headline: %s" headline))
     (message-goto-body)
-    (insert (format "Headline: %s\n\nContent:\n%s" headline content))
+    (insert content)
     (message-send-and-exit)))
