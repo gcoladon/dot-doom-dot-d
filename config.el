@@ -435,9 +435,10 @@
    (mapconcat
     (lambda (num) (concat "* " (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60))) "\n"
                           "** Plan\n"
-                          (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --date "
+                          (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --no-meetings --date "
                                                             (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))
-                          "** Meetings\n"))
+                          (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --meetings --date "
+                                                            (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))))
     (number-sequence 0 4)
     "")))
 
