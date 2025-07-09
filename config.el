@@ -702,6 +702,16 @@
     (setq last-command 'ignore)
     (kill-region (point) (mark))
     (outline-up-heading 1)
+
+    (let ((point-before-fwd (point)))
+      (org-forward-heading-same-level 1)
+      ;; we need to do this to handle the case where we're in the last subsection of the day
+      (if (= point-before-fwd (point))
+          (forward-line))
+      (beginning-of-line)
+      (yank))))
+
+
     (org-forward-heading-same-level 1)
     (beginning-of-line)
     (yank)))
