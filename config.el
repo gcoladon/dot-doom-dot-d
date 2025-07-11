@@ -435,9 +435,10 @@
    (mapconcat
     (lambda (num) (concat "* " (format-time-string "%a %b %e" (time-add monday-tv (* num 24 60 60))) "\n"
                           "** Plan\n"
-                          (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --date "
+                          (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --no-meetings --date "
                                                             (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))
-                          "** Meetings\n"))
+                          (shell-command-to-string (concat  "/Users/greg/repos/personal/Personal/greg/roam_todos_to_yyyy-mm-dd.py --meetings --date "
+                                                            (format-time-string "%Y-%m-%d" (time-add monday-tv (* num 24 60 60)))))))
     (number-sequence 0 4)
     "")))
 
@@ -701,6 +702,16 @@
     (setq last-command 'ignore)
     (kill-region (point) (mark))
     (outline-up-heading 1)
+
+    (let ((point-before-fwd (point)))
+      (org-forward-heading-same-level 1)
+      ;; we need to do this to handle the case where we're in the last subsection of the day
+      (if (= point-before-fwd (point))
+          (forward-line))
+      (beginning-of-line)
+      (yank))))
+
+
     (org-forward-heading-same-level 1)
     (beginning-of-line)
     (yank)))
