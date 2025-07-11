@@ -963,6 +963,10 @@ It puts a todo to read this article near the top of the hackernews node."
     ;; Return the processed text
     (buffer-string))))
 
+;; Needed to do this otherwise it was overwritten during boot
+(after! message
+  (setq message-send-mail-function 'mailclient-send-it))
+
 (defun gpc/email-headline ()
   "Email the org-element of the current headline to yourself."
   (interactive)
@@ -983,4 +987,7 @@ It puts a todo to read this article near the top of the hackernews node."
     (insert content)
     (message-send-and-exit)))
 
+;; Need to figure out how to get this into Emacs without exposing it on Github
 (setq chatgpt-shell-perplexity-key "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")
+
+(doom/increase-font-size 1)
