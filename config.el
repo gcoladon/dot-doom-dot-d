@@ -707,12 +707,8 @@
       (org-forward-heading-same-level 1)
       ;; we need to do this to handle the case where we're in the last subsection of the day
       (if (= point-before-fwd (point))
-          (forward-line))
-      (beginning-of-line)
-      (yank))))
+          (forward-line)))
 
-
-    (org-forward-heading-same-level 1)
     (beginning-of-line)
     (yank)))
 
