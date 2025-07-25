@@ -899,12 +899,35 @@ It puts a todo to read this article near the top of the hackernews node."
   "Check if TEXT is likely to be in Markdown format."
   (string-match-p "\\(^#\\|\\[.+\\](.+)\\|^-\\s-\\|^\\*\\s-\\|^\\d\\.\\s-\\)" text))
 
+;; Used to use:
+    ;; (shell-command-on-region (point-min) (point-max)
+    ;;                          "sed  '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /' | sed 's/^Citations:$/## Citations:\\n/' | pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' | sed 's/\\\\\\\\$//' | sed '/^--------------$/,+1d' | sed '/^Answer from Perplexity: pplx.ai/,+2d' "
+    ;;                          nil t)
+
+(defun gpc/insert-citations-before-citations ()
+  "Go to the end of the buffer, find the empty line before all the citations, and write Citations: there"
+  (interactive)
+  (save-excursion
+    (goto-char (point-max))
+    (while (and (not (bobp))
+                (progn
+                  (beginning-of-line)
+                  (looking-at-p "^\\[")))
+      (forward-line -1))
+    (while (and (not (bobp))
+                (not (looking-at-p "^$")))
+      (forward-line -1))
+    (forward-line 1)
+    (insert "Citations:\n\n")))
+
 (defun gpc/convert-markdown-to-org (markdown-text)
   "Convert MARKDOWN-TEXT to Org format using Pandoc."
   (with-temp-buffer
     (insert markdown-text)
+    ;; For some reason, Perplexity no longer puts Citations in itself.
+    (gpc/insert-citations-before-citations)
     (shell-command-on-region (point-min) (point-max)
-                             "sed  '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /' | sed 's/^Citations:$/## Citations:\\n/' | pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' | sed 's/\\\\\\\\$//' | sed '/^--------------$/,+1d' | sed '/^Answer from Perplexity: pplx.ai/,+2d' "
+                             "sed  '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /' | sed 's/^Citations:$/## Citations:\\n/' | pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' | sed 's/\\\\\\\\$//' | sed '/^--------------$/,+1d' "
                              nil t)
     (buffer-string)))
 
