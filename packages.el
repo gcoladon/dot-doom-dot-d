@@ -96,9 +96,9 @@
 (package! org-tidy)
 
 ;; After seeing a demo at BALISP at Hacker Dojo, I want to try this out myself
-(package! shell-maker
-  :recipe (:host github :repo "xenodium/shell-maker"))
-(package! chatgpt-shell
-  :recipe (:host github :repo "xenodium/chatgpt-shell"))
-(package! ob-chatgpt-shell
-  :recipe (:host github :repo "xenodium/ob-chatgpt-shell"))
+;; (package! shell-maker
+;;   :recipe (:host github :repo "xenodium/shell-maker"))
+;; (package! chatgpt-shell
+;;   :recipe (:host github :repo "xenodium/chatgpt-shell"))
+;; (package! ob-chatgpt-shell
+;;   :recipe (:host github :repo "xenodium/ob-chatgpt-shell"))
