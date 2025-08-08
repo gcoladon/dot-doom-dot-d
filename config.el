@@ -1017,7 +1017,12 @@ It puts a todo to read this article near the top of the hackernews node."
     (insert content)
     (message-send-and-exit)))
 
-;; Need to figure out how to get this into Emacs without exposing it on Github
-(setq chatgpt-shell-perplexity-key "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")
-
 (doom/increase-font-size 1)
+
+(after! org
+  (require 'org-crypt)
+  (setq org-tags-exclude-from-inheritance '("crypt"))
+  (setq org-crypt-key nil)  ;; nil = use symmetric encryption
+  ;; this magic doesn't appear to be having the desired effect?
+  (setenv "GPG_TTY" (getenv "TTY"))
+  (org-crypt-use-before-save-magic))
