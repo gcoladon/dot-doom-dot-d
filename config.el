@@ -905,7 +905,8 @@ It puts a todo to read this article near the top of the hackernews node."
     ;;                          nil t)
 
 (defun gpc/insert-citations-before-citations ()
-  "Go to the end of the buffer, find the empty line before all the citations, and write Citations: there"
+  "Go to the end of the buffer, find the empty line before all the citations,
+   and write Citations: there"
   (interactive)
   (save-excursion
     (goto-char (point-max))
@@ -920,15 +921,23 @@ It puts a todo to read this article near the top of the hackernews node."
     (forward-line 1)
     (insert "Citations:\n\n")))
 
+(defun gpc/scor (unix-cmd)
+  "syntactic sugar for a long call, so it fits in my screen"
+  (shell-command-on-region (point-min) (point-max) unix-cmd nil t))
+
 (defun gpc/convert-markdown-to-org (markdown-text)
   "Convert MARKDOWN-TEXT to Org format using Pandoc."
   (with-temp-buffer
     (insert markdown-text)
-    ;; For some reason, Perplexity no longer puts Citations in itself.
+    ;; I think I prefer putting each of these on their own line for readability
+    ;; and debugging purposes.
     (gpc/insert-citations-before-citations)
-    (shell-command-on-region (point-min) (point-max)
-                             "sed  '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /' | sed 's/^Citations:$/## Citations:\\n/' | pandoc -f markdown -t org | sed '/^:PROPERTIES:/,/^:END:/d' | sed 's/\\\\\\\\$//' | sed '/^--------------$/,+1d' "
-                             nil t)
+    (gpc/scor "sed '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /'")
+    (gpc/scor "sed 's/^Citations:$/## Citations:\\n/'")
+    (gpc/scor "pandoc -f markdown -t org")
+    (gpc/scor "sed '/^:PROPERTIES:/,/^:END:/d'")
+    (gpc/scor "sed 's/\\\\\\\\$//'")
+    (gpc/scor "sed '/^--------------$/,+1d'")
     (buffer-string)))
 
 (defun gpc/smart-yank-markdown-to-org ()
