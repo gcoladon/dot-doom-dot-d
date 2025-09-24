@@ -933,7 +933,7 @@ It puts a todo to read this article near the top of the hackernews node."
     ;; and debugging purposes.
     (gpc/insert-citations-before-citations)
     (gpc/scor "sed '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /'")
-    (gpc/scor "sed 's/^Citations:$/## Citations:\\n/'")
+    (gpc/scor "sed 's/^Citations:$/### Citations:\\n/'")
     (gpc/scor "pandoc -f markdown -t org")
     (gpc/scor "sed '/^:PROPERTIES:/,/^:END:/d'")
     (gpc/scor "sed 's/\\\\\\\\$//'")
@@ -979,9 +979,9 @@ It puts a todo to read this article near the top of the hackernews node."
   (with-temp-buffer
     (insert text)
     (let ((citations (make-hash-table :test 'equal))
-          (citation-regex "^\\([0-9]+\\)\\. \\(https?://[^\n]+\\)")
+          (citation-regex "^\\([0-9]+\\)\\. (\\(https?://[^\n]+\\))")
           (citations-start (progn (goto-char (point-min))
-                                  (search-forward "** Citations:" nil t))))
+                                  (search-forward "*** Citations:" nil t))))
       ;; Find and store citations
       (when citations-start
         (goto-char citations-start)
