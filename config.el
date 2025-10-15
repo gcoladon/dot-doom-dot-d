@@ -934,7 +934,7 @@ It puts a todo to read this article near the top of the hackernews node."
     (gpc/insert-citations-before-citations)
     (gpc/scor "sed '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /'")
     (gpc/scor "sed 's/^Citations:$/### Citations:\\n/'")
-    (gpc/scor "pandoc -f markdown -t org")
+    (gpc/scor "pandoc -f markdown -t org --wrap=none")
     (gpc/scor "sed '/^:PROPERTIES:/,/^:END:/d'")
     (gpc/scor "sed 's/\\\\\\\\$//'")
     (gpc/scor "sed '/^--------------$/,+1d'")
