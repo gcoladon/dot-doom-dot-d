@@ -662,6 +662,78 @@
     (yank)))
 
 (defun gpc/move-todo-from-plan-to-now ()
+  "Move the current level 3 subtree under the first 2nd-level heading of the current 1st-level parent,
+or, if already there, under the first 2nd-level heading of the previous 1st-level parent. Boundaries are checked for safety."
+  (interactive)
+  (unless (org-at-heading-p)
+    (user-error "Not at a headline"))
+
+  (let* ((start-point (point))
+         (orig-level (org-current-level)))
+    (unless (= orig-level 3)
+      (user-error "Not at a 3rd level heading"))
+
+    ;; Find the current 2nd and 1st level parents
+    (save-excursion
+      (let (first2-parent-pos)
+        (outline-up-heading 1 t)                ; up to 2nd-level parent
+        (let ((parent2-pos (point)))
+          (outline-up-heading 1 t))             ; up to 1st-level parent
+        (let ((parent1-pos (point))
+              (first2-pos nil))
+          ;; Find the first 2nd-level child under THIS 1st-level parent
+          (save-excursion
+            (let ((l1end (save-excursion (org-end-of-subtree t t))))
+              (goto-char parent1-pos)
+              (outline-next-heading)
+              (while (and (< (point) l1end) (not (= (org-current-level) 2)))
+                (outline-next-heading))
+              (when (and (= (org-current-level) 2) (< (point) l1end))
+                (setq first2-pos (point)))))
+          (unless first2-pos
+            (user-error "No 2nd-level heading under this 1st-level heading"))
+          ;; Are we already under the first 2nd-level?
+          (let ((already-there
+                 (save-excursion
+                   (goto-char start-point)
+                   (outline-up-heading 1 t)
+                   (= (point) first2-pos))))
+            ;; If already there, move to previous 1st-level's first 2nd-level
+            (if already-there
+                (let ((prev1-pos nil)
+                      (prev1-first2-pos nil))
+                  ;; Try to move to previous 1st-level heading
+                  (goto-char parent1-pos)
+                  (condition-case nil
+                      (org-backward-heading-same-level 1)
+                    (error (user-error "No previous 1st-level heading found")))
+                  (setq prev1-pos (point))
+                  ;; Find first 2nd-level under that
+                  (let ((l1end (save-excursion (org-end-of-subtree t t))))
+                    (outline-next-heading)
+                    (while (and (< (point) l1end) (not (= (org-current-level) 2)))
+                      (outline-next-heading))
+                    (if (and (= (org-current-level) 2) (< (point) l1end))
+                        (setq prev1-first2-pos (point))
+                      (user-error "No 2nd-level heading under previous 1st-level heading")))
+
+                  ;; Do the move:
+                  (goto-char start-point)
+                  (org-cut-subtree)
+                  (goto-char prev1-first2-pos)
+                  (org-end-of-subtree)
+                  ; (end-of-line) ;; Not needed, org-end-of-subtree puts point at correct position
+                  (org-paste-subtree 3))
+
+              ;; Else, move under this 1st-level's first 2nd-level
+              (goto-char start-point)
+              (org-cut-subtree)
+              (goto-char first2-pos)
+              (org-end-of-subtree)
+              ; (end-of-line) ;; Not needed
+              (org-paste-subtree 3))))))))
+
+(defun gpc/move-todo-from-plan-to-now-old ()
   "Move a todo at tomorrow's heading in personal notes"
   (interactive)
   (save-excursion
