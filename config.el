@@ -719,7 +719,8 @@ or, if already there, under the first 2nd-level heading of the previous 1st-leve
 
                   ;; Do the move:
                   (goto-char start-point)
-                  (org-cut-subtree)
+                  (let ((this-command nil))
+                    (org-cut-subtree))
                   (goto-char prev1-first2-pos)
                   (org-end-of-subtree)
                   ; (end-of-line) ;; Not needed, org-end-of-subtree puts point at correct position
@@ -727,7 +728,8 @@ or, if already there, under the first 2nd-level heading of the previous 1st-leve
 
               ;; Else, move under this 1st-level's first 2nd-level
               (goto-char start-point)
-              (org-cut-subtree)
+              (let ((this-command nil))
+                (org-cut-subtree))
               (goto-char first2-pos)
               (org-end-of-subtree)
               ; (end-of-line) ;; Not needed
