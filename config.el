@@ -44,6 +44,7 @@
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
           gpc/mark-item-done 'gpc/home-mark-todo-as-done-move-to-end
           gpc/bump-todo-item 'gpc/move-todo-to-tomorrow
+          gpc/promote-todo-item 'gpc/move-todo-from-plan-to-now-old
           gpc/todays-notes-fn 'gpc/org-roam-monthly
           gpc/super-p-fn (cmd! (find-file "~/org/roam/roam-stem/240421_optivore.org")))
   (setq gpc/email "greg@syntiant.com"
@@ -51,6 +52,7 @@
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         gpc/mark-item-done 'gpc/work-mark-todo-as-done-move-to-end
         gpc/bump-todo-item 'gpc/move-todo-to-tomorrow-plan
+        gpc/promote-todo-item 'gpc/move-todo-from-plan-to-now
         gpc/todays-notes-fn 'gc/org-roam-weekly-this
         gpc/super-p-fn (cmd! (find-file "~/repos/personal/Personal/greg"))))
 
@@ -214,10 +216,10 @@
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
-      :desc "Bump TODO forward"           "l m" gpc/bump-todo-item
+      :desc "Bump TODO down"              "l m" gpc/bump-todo-item
       :desc "Insert node for today/now"   "l t" #'gpc/insert-today-node
       :desc "Bump TODO to new day"        "l n" #'gpc/move-todo-to-datespec
-      :desc "Bump TODO to now"            "l u" #'gpc/move-todo-from-plan-to-now
+      :desc "Bump TODO up"                "l u" gpc/promote-todo-item
       :desc "Move todo/day to bottom"     "l >" #'gpc/move-todo-to-bottom
       :desc "Move TODO to top"            "l <" #'gpc/move-todo-to-top
       :desc "Insert birthday props"       "l b" #'gpc/add-birthday
@@ -784,29 +786,6 @@ or, if already there, under the first 2nd-level heading of the previous 1st-leve
     (beginning-of-line)
     (yank)))
 
-(defun gpc/move-todo-to-datespec ()
-  "Move a todo to a computed new date within this file"
-  (interactive)
-  (save-excursion
-    (org-mark-element)
-    (setq last-command 'ignore)
-    (kill-region (point) (mark))
-    (outline-up-heading 1)
-    (let* ((offset (read-string "Date offset: "))
-           (orig-date (buffer-substring-no-properties (+ (point) 2) (+ (point) 12)))
-           (target-date (format-time-string "%Y-%m-%d" (org-read-date orig-date t offset))))
-      (while
-          (progn
-           (org-forward-heading-same-level 1)
-           (let ((this-date (buffer-substring-no-properties (+ (point) 2) (+ (point) 12))))
-             (if (string-equal this-date target-date)
-                 (progn
-                   (forward-line 1)
-                   (beginning-of-line)
-                   (yank)
-                   nil)
-               t)))))))
-
 (use-package! jq-mode)
 
 (setq +org-capture-journal-file "~/org/roam/roam-personal/220531_personal_journal.org")
@@ -1005,7 +984,7 @@ It puts a todo to read this article near the top of the hackernews node."
     ;; and debugging purposes.
     (gpc/insert-citations-before-citations)
     (gpc/scor "sed '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /'")
-    (gpc/scor "sed 's/^Citations:$/### Citations:\\n/'")
+    (gpc/scor "sed 's/^Citations:$/## Citations:\\n/'")
     (gpc/scor "pandoc -f markdown -t org --wrap=none")
     (gpc/scor "sed '/^:PROPERTIES:/,/^:END:/d'")
     (gpc/scor "sed 's/\\\\\\\\$//'")
@@ -1053,7 +1032,7 @@ It puts a todo to read this article near the top of the hackernews node."
     (let ((citations (make-hash-table :test 'equal))
           (citation-regex "^\\([0-9]+\\)\\. (\\(https?://[^\n]+\\))")
           (citations-start (progn (goto-char (point-min))
-                                  (search-forward "*** Citations:" nil t))))
+                                  (search-forward "** Citations:" nil t))))
       ;; Find and store citations
       (when citations-start
         (goto-char citations-start)
@@ -1107,3 +1086,74 @@ It puts a todo to read this article near the top of the hackernews node."
   ;; this magic doesn't appear to be having the desired effect?
   (setenv "GPG_TTY" (getenv "TTY"))
   (org-crypt-use-before-save-magic))
+
+(defun gpc/org-parent-date-heading ()
+  "Return date string (YYYY-MM-DD) of top-level heading ancestor, or nil."
+  (save-excursion
+    (let (result)
+      (org-back-to-heading t)
+      (while (org-up-heading-safe))
+      (when (looking-at "^\\* \\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)")
+        (setq result (match-string 1)))
+      result)))
+
+(defun gpc/move-todo-to-datespec ()
+  "Move current TODO headline to a top-level date headline chosen via org-style date input.
+Uses the enclosing top-level heading's date as the base date for relative/shortcut input."
+  (interactive)
+  (unless (org-at-heading-p)
+    (user-error "Point is not on a headline"))
+  (unless (org-get-todo-state)
+    (user-error "Current headline is not a TODO item"))
+  (let* ((current-level (org-current-level))
+         (current-pos (point))
+         (current-line (thing-at-point 'line t))
+         (current-subtree-start (save-excursion (org-back-to-heading) (point)))
+         (current-subtree-end (save-excursion (org-end-of-subtree t) (point)))
+         (subtree-text (buffer-substring-no-properties current-subtree-start current-subtree-end))
+         (base-date (gpc/org-parent-date-heading))
+         (prompt (format "Target date (default base: %s): " base-date))
+         (target-date (org-read-date nil nil nil prompt
+                                     (and base-date (org-time-string-to-time base-date))))
+         target-pos)
+    ;; Find top-level headline for the target date
+    (save-excursion
+      (goto-char (point-min))
+      (while (and (not target-pos)
+                  (re-search-forward "^\\* \\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)" nil t))
+        (when (string= (match-string 1) target-date)
+          (setq target-pos (match-beginning 0)))))
+    (if target-pos
+        (progn
+          (goto-char current-subtree-start)
+          (delete-region current-subtree-start current-subtree-end)
+          (goto-char target-pos)
+          (org-end-of-subtree t)
+          (unless (looking-at "^\\s-*$")
+            (insert "\n"))
+          (insert subtree-text)
+          (message "Moved TODO to %s" target-date))
+      (progn
+        (message "Can't find date %s in this file; leaving TODO where it was." target-date)
+        (goto-char current-pos)
+        (unless (string= (thing-at-point 'line t) current-line)
+          (save-excursion
+            (goto-char current-subtree-start)
+            (insert subtree-text)))))))
+
+;; I used this to clean up the Great Books org mode text to be more compact.
+;; I'm sure it would work on other text too.
+(defun gpc/org-normalize-region-spaces (beg end)
+  "In region, collapse runs of spaces to a single space on each line,
+and remove blank lines."
+  (interactive "r")
+  (save-excursion
+    (save-restriction
+      (narrow-to-region beg end)
+      ;; Collapse multiple spaces on each line
+      (goto-char (point-min))
+      (while (re-search-forward " +" nil t) ; one or more spaces
+        (replace-match " "))
+      ;; Remove blank lines (lines with only spaces/tabs)
+      (goto-char (point-min))
+      (flush-lines "^[ \t]*$"))))
