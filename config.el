@@ -212,7 +212,7 @@
       :desc "Copy todos from email"       "l T" #'gpc/copy-todos-from-email
       :desc "Email headline"              "l e" #'gpc/email-headline
       :desc "Mark as DONE move to bottom" "l d" gpc/mark-item-done
-      :desc "org-mark-ring-goto"          "l g m" #'org-mark-ring-goto
+      :desc "Call Gemma"                  "l g" #'gpc/insert-gemma-answer
       :desc "Flush lines"                 "l f" #'flush-lines
       :desc "Keep lines"                  "l k" #'keep-lines
       :desc "JQ interactively"            "l j" #'jq-interactively
@@ -1099,6 +1099,7 @@ It puts a todo to read this article near the top of the hackernews node."
         (setq result (match-string 1)))
       result)))
 
+
 (defun gpc/move-todo-to-datespec ()
   "Move current TODO headline to a top-level date headline chosen via org-style date input.
 Uses the enclosing top-level heading's date as the base date for relative/shortcut input."
@@ -1107,41 +1108,61 @@ Uses the enclosing top-level heading's date as the base date for relative/shortc
     (user-error "Point is not on a headline"))
   (unless (org-get-todo-state)
     (user-error "Current headline is not a TODO item"))
-  (let* ((current-level (org-current-level))
-         (current-pos (point))
-         (current-line (thing-at-point 'line t))
-         (current-subtree-start (save-excursion (org-back-to-heading) (point)))
-         (current-subtree-end (save-excursion (org-end-of-subtree t) (point)))
-         (subtree-text (buffer-substring-no-properties current-subtree-start current-subtree-end))
-         (base-date (gpc/org-parent-date-heading))
-         (prompt (format "Target date (default base: %s): " base-date))
-         (target-date (org-read-date nil nil nil prompt
-                                     (and base-date (org-time-string-to-time base-date))))
-         target-pos)
-    ;; Find top-level headline for the target date
+  (let* ((current-subtree-start (save-excursion (org-back-to-heading) (point)))
+         (current-subtree-end   (save-excursion (org-end-of-subtree t t) (point)))
+         (subtree-text          (buffer-substring-no-properties current-subtree-start current-subtree-end))
+         (base-date             (gpc/org-parent-date-heading))
+         (prompt                (format "Target date (default base: %s): " base-date))
+         (target-date           (org-read-date nil nil nil prompt
+                                               (and base-date (org-time-string-to-time base-date))))
+         target-pos parent-level)
+    ;; Normalize subtree to be a level-2 (** ...) subtree
+    (with-temp-buffer
+      (insert subtree-text)
+      (goto-char (point-min))
+      (when (looking-at "^\\*+ ")
+        (replace-match "** " nil nil))  ;; force top headline of subtree to level 2
+      ;; ensure ending newline
+      (goto-char (point-max))
+      (unless (bolp) (insert "\n"))
+      (setq subtree-text (buffer-string)))
+
+    ;; Remove original subtree
+    (delete-region current-subtree-start current-subtree-end)
+
+    ;; Find the top-level date heading
     (save-excursion
       (goto-char (point-min))
       (while (and (not target-pos)
                   (re-search-forward "^\\* \\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)" nil t))
         (when (string= (match-string 1) target-date)
           (setq target-pos (match-beginning 0)))))
-    (if target-pos
-        (progn
-          (goto-char current-subtree-start)
-          (delete-region current-subtree-start current-subtree-end)
-          (goto-char target-pos)
-          (org-end-of-subtree t)
-          (unless (looking-at "^\\s-*$")
-            (insert "\n"))
-          (insert subtree-text)
-          (message "Moved TODO to %s" target-date))
-      (progn
-        (message "Can't find date %s in this file; leaving TODO where it was." target-date)
-        (goto-char current-pos)
-        (unless (string= (thing-at-point 'line t) current-line)
-          (save-excursion
-            (goto-char current-subtree-start)
-            (insert subtree-text)))))))
+    (unless target-pos
+      (user-error "Can't find date %s in this file" target-date))
+
+    ;; Insert as first level-2 child under that date
+    (goto-char target-pos)
+    (setq parent-level (org-current-level))  ;; should be 1 for "* 2025-12-19 Friday"
+
+    ;; Move to first heading after the parent
+    (let ((after-parent (save-excursion
+                          (outline-next-heading)
+                          (point))))
+      (goto-char after-parent)
+      (cond
+       ;; There is a child (heading deeper than parent): insert before it
+       ((and (org-at-heading-p)
+             (> (org-current-level) parent-level))
+        (org-back-to-heading)
+        (insert subtree-text))
+       ;; No child: insert right after parent heading line
+       (t
+        (goto-char target-pos)
+        (end-of-line)
+        (insert "\n" subtree-text))))
+
+    (message "Moved TODO to %s" target-date)))
+
 
 ;; I used this to clean up the Great Books org mode text to be more compact.
 ;; I'm sure it would work on other text too.
@@ -1159,3 +1180,12 @@ and remove blank lines."
       ;; Remove blank lines (lines with only spaces/tabs)
       (goto-char (point-min))
       (flush-lines "^[ \t]*$"))))
+
+(defun gpc/insert-gemma-answer (question)
+  "Prompt for a QUESTION, run Greg's gemapp pipeline, and insert the result at point."
+  (interactive
+   (list (read-string "Question for Gemma: ")))
+  (let* ((cmd (format "/Users/greg/dev/python/test_gemapp.py --question %s | /Users/greg/dev/python/test_markdown_to_org.py"
+                      (shell-quote-argument question))) ;; quote for shell
+         (output (shell-command-to-string cmd)))        ;; capture output as string
+    (insert output)))
