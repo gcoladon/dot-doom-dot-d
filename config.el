@@ -317,7 +317,7 @@
   "Convert clipboard contents from HTML to Org and then paste (yank)."
   (interactive)
   ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | tee ~/$$_html.txt | pandoc -f html -t org --wrap=none --filter /Users/greg/dev/python/filter_pandoc.py | grep -v '^ *:'")
-  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | tee /Users/greg/dev/python/pandoc_$$.json | pandoc -f json -t org --wrap=none --filter /Users/greg/dev/python/filter_pandoc.py | grep -v '^ *:'")
+  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | /usr/local/bin/pandoc -f html -t json | tee /Users/greg/dev/python/pandoc_$$.json | /usr/local/bin/pandoc -f json -t org --wrap=none --filter /Users/greg/dev/python/filter_pandoc.py | grep -v '^ *:'")
   ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | tee ~/$$.json | pandoc -f json -t org --wrap=none | grep -v '^ *:'")
   (kill-new (shell-command-to-string cmd))
   (yank)
@@ -328,7 +328,7 @@
   "Convert clipboard contents from HTML to Org and then paste (yank)."
   (interactive)
   ;; (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))'  | tee /Users/greg/dev/python/pandoc_before_$$.htm | sed 's/\xc2\xa0/ /g' | sed 's#<b[^>]*><span> </span># <b>#g' | sed 's#<span> </span></b>#</b> #g' | tee /Users/greg/dev/python/pandoc_after_$$.htm | pandoc -f html -t json | tee /Users/greg/dev/python/pandoc_$$.json | pandoc -f json -t org --wrap=none --filter /Users/greg/dev/python/filter_table.py | grep -v '^ *:'")
-  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))'  | sed 's/\xc2\xa0/ /g' | sed 's#<b[^>]*><span> </span># <b>#g' | sed 's#<span> </span></b>#</b> #g' | pandoc -f html -t json | tee /Users/greg/dev/python/pandoc_$$.json | pandoc -f json -t org --wrap=none --filter /Users/greg/dev/python/filter_table.py | grep -v '^ *:'")
+  (setq cmd "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))'  | sed 's/\xc2\xa0/ /g' | sed 's#<b[^>]*><span> </span># <b>#g' | sed 's#<span> </span></b>#</b> #g' | /usr/local/bin/pandoc -f html -t json | tee /Users/greg/dev/python/pandoc_$$.json | /usr/local/bin/pandoc -f json -t org --wrap=none --filter /Users/greg/dev/python/filter_table.py | grep -v '^ *:'")
   (kill-new (shell-command-to-string cmd))
   (yank)
   ;; get rid of that newline that gets printed
@@ -987,7 +987,7 @@ It puts a todo to read this article near the top of the hackernews node."
     (gpc/insert-citations-before-citations)
     (gpc/scor "sed '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /'")
     (gpc/scor "sed 's/^Citations:$/## Citations:\\n/'")
-    (gpc/scor "pandoc -f markdown -t org --wrap=none")
+    (gpc/scor "/usr/local/bin/pandoc -f markdown -t org --wrap=none")
     (gpc/scor "sed '/^:PROPERTIES:/,/^:END:/d'")
     (gpc/scor "sed 's/\\\\\\\\$//'")
     (gpc/scor "sed '/^--------------$/,+1d'")
