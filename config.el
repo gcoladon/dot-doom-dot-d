@@ -35,7 +35,8 @@
 (if (or
      (equal (replace-regexp-in-string "[\t|\n]" ""
                                       (shell-command-to-string "ifconfig en0 | grep ether"))
-            "ether 4a:ab:6a:31:1e:f8")
+            "ether 8e:7c:67:98:89:d4")
+            ;; "ether a2:c5:51:9a:e2:c1")
      (equal  (replace-regexp-in-string "[\t|\n]" ""
                                       (shell-command-to-string "ifconfig enp5s0 | grep ether"))
              "        ether 04:7c:16:57:6c:4c  txqueuelen 1000  (Ethernet)"))
@@ -55,6 +56,11 @@
         gpc/promote-todo-item 'gpc/move-todo-from-plan-to-now
         gpc/todays-notes-fn 'gc/org-roam-weekly-this
         gpc/super-p-fn (cmd! (find-file "~/repos/personal/Personal/greg"))))
+
+;; (when (memq window-system '(mac ns x))
+;;   (exec-path-from-shell-initialize))
+
+(add-to-list 'exec-path "/opt/homebrew/bin")
 
 (setq user-mail-address gpc/email)
 
@@ -1189,3 +1195,32 @@ and remove blank lines."
                       (shell-quote-argument question))) ;; quote for shell
          (output (shell-command-to-string cmd)))        ;; capture output as string
     (insert output)))
+
+
+(defun gpc/org-count-para ()
+  "Count the number of paragraphs under the current org-mode heading."
+  (interactive)
+  (save-excursion
+    (let ((paragraph-count 0)
+          (entry-end (save-excursion (org-entry-end-position))))
+      ;; Move to the beginning of entry content (skip heading, planning, drawers)
+      (org-back-to-heading t)
+      (forward-line 1)
+      (while (and (< (point) entry-end)
+                  (or (looking-at org-drawer-regexp)
+                      (looking-at org-planning-line-re)))
+        (forward-line 1))
+      ;; Count paragraphs until end of entry
+      (while (< (point) entry-end)
+        (when (and (not (looking-at "^[ \t]*$"))  ; Not a blank line
+                   (not (looking-at "^\\*+ "))     ; Not a heading
+                   (not (org-at-drawer-p))         ; Not in a drawer
+                   (not (org-at-block-p)))         ; Not in a block
+          (setq paragraph-count (1+ paragraph-count))
+          ;; Skip to end of paragraph
+          (forward-paragraph 1))
+        (forward-line 1))
+      (message "Heading contains %d paragraph%s"
+               paragraph-count
+               (if (= paragraph-count 1) "" "s"))
+      paragraph-count)))
