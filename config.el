@@ -32,6 +32,8 @@
 
 (setq org-babel-awk-command "gawk")
 
+;; Use this: https://www.perplexity.ai/search/i-have-an-emacs-configuration-WeTu64_wTD62FqoV4Eklfw
+
 (if (or
      (equal (replace-regexp-in-string "[\t|\n]" ""
                                       (shell-command-to-string "ifconfig en0 | grep ether"))
