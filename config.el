@@ -1195,32 +1195,3 @@ and remove blank lines."
                       (shell-quote-argument question))) ;; quote for shell
          (output (shell-command-to-string cmd)))        ;; capture output as string
     (insert output)))
-
-
-(defun gpc/org-count-para ()
-  "Count the number of paragraphs under the current org-mode heading."
-  (interactive)
-  (save-excursion
-    (let ((paragraph-count 0)
-          (entry-end (save-excursion (org-entry-end-position))))
-      ;; Move to the beginning of entry content (skip heading, planning, drawers)
-      (org-back-to-heading t)
-      (forward-line 1)
-      (while (and (< (point) entry-end)
-                  (or (looking-at org-drawer-regexp)
-                      (looking-at org-planning-line-re)))
-        (forward-line 1))
-      ;; Count paragraphs until end of entry
-      (while (< (point) entry-end)
-        (when (and (not (looking-at "^[ \t]*$"))  ; Not a blank line
-                   (not (looking-at "^\\*+ "))     ; Not a heading
-                   (not (org-at-drawer-p))         ; Not in a drawer
-                   (not (org-at-block-p)))         ; Not in a block
-          (setq paragraph-count (1+ paragraph-count))
-          ;; Skip to end of paragraph
-          (forward-paragraph 1))
-        (forward-line 1))
-      (message "Heading contains %d paragraph%s"
-               paragraph-count
-               (if (= paragraph-count 1) "" "s"))
-      paragraph-count)))
