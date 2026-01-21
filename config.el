@@ -1197,3 +1197,14 @@ and remove blank lines."
                       (shell-quote-argument question))) ;; quote for shell
          (output (shell-command-to-string cmd)))        ;; capture output as string
     (insert output)))
+
+(defun set-exec-path-from-shell-PATH ()
+  (interactive)
+  (let ((path-from-shell
+         (replace-regexp-in-string
+          "[ \t\n]*$" ""
+          (shell-command-to-string
+           "$SHELL --login -c 'printf %s \"$PATH\"'"))))
+    (setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+(set-exec-path-from-shell-PATH)
