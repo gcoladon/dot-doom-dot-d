@@ -34,14 +34,13 @@
 
 ;; Use this: https://www.perplexity.ai/search/i-have-an-emacs-configuration-WeTu64_wTD62FqoV4Eklfw
 
-(if (or
-     (equal (replace-regexp-in-string "[\t|\n]" ""
-                                      (shell-command-to-string "ifconfig en0 | grep ether"))
-            "ether 8e:7c:67:98:89:d4")
-            ;; "ether a2:c5:51:9a:e2:c1")
-     (equal  (replace-regexp-in-string "[\t|\n]" ""
-                                      (shell-command-to-string "ifconfig enp5s0 | grep ether"))
-             "        ether 04:7c:16:57:6c:4c  txqueuelen 1000  (Ethernet)"))
+
+(defun gpc/serial-number ()
+  (replace-regexp-in-string "[\t|\n|\"]" ""
+                          (shell-command-to-string "ioreg -l | grep IOPlatformSerialNumber | awk '{print $4}'")))
+
+(cond
+ ((equal (gpc/serial-number) "C02HD41RQ05F")
     (setq gpc/email "gcoladon@gmail.com"
           gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-personal/23*.org"))
           org-roam-graph-viewer "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
@@ -49,7 +48,8 @@
           gpc/bump-todo-item 'gpc/move-todo-to-tomorrow
           gpc/promote-todo-item 'gpc/move-todo-from-plan-to-now-old
           gpc/todays-notes-fn 'gpc/org-roam-monthly
-          gpc/super-p-fn (cmd! (find-file "~/org/roam/roam-stem/240421_optivore.org")))
+          gpc/super-p-fn (cmd! (find-file "~/org/roam/roam-stem/240421_optivore.org"))))
+ ((equal (gpc/serial-number) "FL6D6P59HH")
   (setq gpc/email "greg@syntiant.com"
         gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-pilot/23*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -58,6 +58,7 @@
         gpc/promote-todo-item 'gpc/move-todo-from-plan-to-now
         gpc/todays-notes-fn 'gc/org-roam-weekly-this
         gpc/super-p-fn (cmd! (find-file "~/repos/personal/Personal/greg"))))
+ (t (user-error "config.el can't tell if this is Greg's work or personal laptop.. please fix.")))
 
 ;; (when (memq window-system '(mac ns x))
 ;;   (exec-path-from-shell-initialize))
