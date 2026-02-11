@@ -49,7 +49,7 @@
           gpc/promote-todo-item 'gpc/move-todo-from-plan-to-now-old
           gpc/todays-notes-fn 'gpc/org-roam-monthly
           gpc/super-p-fn (cmd! (find-file "~/org/roam/roam-stem/240421_optivore.org"))))
- ((equal (gpc/serial-number) "FL6D6P59HH")
+ ((or (equal (gpc/serial-number) "FL6D6P59HH") (equal (gpc/serial-number) "GCF2X6HQ4F"))
   (setq gpc/email "greg@syntiant.com"
         gpc/org-agenda-files (file-expand-wildcards (concat org-directory "roam/roam-pilot/23*_weekly.org"))
         org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -1001,6 +1001,7 @@ It puts a todo to read this article near the top of the hackernews node."
     ;; (gpc/scor "sed '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /'")
     ;; (gpc/scor "sed 's/^Citations:$/## Citations:\\n/'")
 
+    (replace-string-in-region "‑" "-" (point-min) (point-max))
     (gpc/scor "/usr/local/bin/pandoc -f markdown -t org --wrap=none")
     (gpc/scor "sed '/^:PROPERTIES:/,/^:END:/d'")
     (gpc/scor "sed 's/\\\\\\\\$//'")
