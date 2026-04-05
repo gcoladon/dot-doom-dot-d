@@ -1001,6 +1001,8 @@ It puts a todo to read this article near the top of the hackernews node."
     ;; (gpc/scor "sed '/^Citations:/,$s/^\\[\\(.*\\)\\]/\\1. /'")
     ;; (gpc/scor "sed 's/^Citations:$/## Citations:\\n/'")
 
+    ;; (gpc/scor "tee /Users/greg/dev/python/pandoc_$$.md") ; needed for debugging
+    (gpc/scor "sed 's/^## /\\n## /'") ; needed to fix Perpleity's broken markdown
     (gpc/scor "/usr/local/bin/pandoc -f markdown -t org --wrap=none")
     (replace-string-in-region "‑" "-" (point-min) (point-max))
     (replace-string-in-region " " " " (point-min) (point-max))
