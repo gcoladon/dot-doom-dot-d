@@ -219,6 +219,7 @@
 
       :desc "Count words region"          "l =" #'count-words-region
       :desc "Copy todos from email"       "l T" #'gpc/copy-todos-from-email
+      :desc "Bump A and B prios"          "l a" #'gpc/bump-priorities
       :desc "Email headline"              "l e" #'gpc/email-headline
       :desc "Mark as DONE move to bottom" "l d" gpc/mark-item-done
       :desc "Call Gemma"                  "l g" #'gpc/insert-gemma-answer
@@ -1002,10 +1003,13 @@ It puts a todo to read this article near the top of the hackernews node."
     ;; (gpc/scor "sed 's/^Citations:$/## Citations:\\n/'")
 
     ;; (gpc/scor "tee /Users/greg/dev/python/pandoc_$$.md") ; needed for debugging
+    (gpc/scor "sed 's/^- /\\n- /'")  ; needed to fix Perpleity's broken markdown
     (gpc/scor "sed 's/^## /\\n## /'") ; needed to fix Perpleity's broken markdown
+    (gpc/scor "sed 's/^### /\\n### /'") ; needed to fix Perpleity's broken markdown
     (gpc/scor "/usr/local/bin/pandoc -f markdown -t org --wrap=none")
     (replace-string-in-region "‑" "-" (point-min) (point-max))
     (replace-string-in-region " " " " (point-min) (point-max))
+    (replace-string-in-region " " " " (point-min) (point-max))
     (gpc/scor "sed '/^:PROPERTIES:/,/^:END:/d'")
     (gpc/scor "sed 's/\\\\\\\\$//'")
     (gpc/scor "sed '/^--------------$/,+1d'")
@@ -1086,8 +1090,8 @@ It puts a todo to read this article near the top of the hackernews node."
   (let* ((element (org-element-at-point))
          (headline (org-element-property :raw-value element))
          (content (buffer-substring-no-properties
-                   (org-element-property :begin element)
-                   (org-element-property :end element))))
+                   (org-element-property :contents-begin element)
+                   (org-element-property :contents-end element))))
     (compose-mail)
     (message-goto-to)
     (insert "gcoladon@gmail.com")
@@ -1099,13 +1103,13 @@ It puts a todo to read this article near the top of the hackernews node."
 
 (doom/increase-font-size 1)
 
-(after! org
-  (require 'org-crypt)
-  (setq org-tags-exclude-from-inheritance '("crypt"))
-  (setq org-crypt-key nil)  ;; nil = use symmetric encryption
-  ;; this magic doesn't appear to be having the desired effect?
-  (setenv "GPG_TTY" (getenv "TTY"))
-  (org-crypt-use-before-save-magic))
+;; (after! org
+;;   (require 'org-crypt)
+;;   (setq org-tags-exclude-from-inheritance '("crypt"))
+;;   (setq org-crypt-key nil)  ;; nil = use symmetric encryption
+;;   ;; this magic doesn't appear to be having the desired effect?
+;;   (setenv "GPG_TTY" (getenv "TTY"))
+;;   (org-crypt-use-before-save-magic))
 
 (defun gpc/org-parent-date-heading ()
   "Return date string (YYYY-MM-DD) of top-level heading ancestor, or nil."
@@ -1218,3 +1222,134 @@ and remove blank lines."
     (setenv "PATH" path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
 (set-exec-path-from-shell-PATH)
+
+;; Please write me an emacs-lisp function that when invoked while on the
+;; second line of the file todos_before.org, does the following: starting
+;; at the last headline under parent headline, move up through the headlines
+;; calling gpc/bump-todo-item on every "[#B]" priority headline, which bumps
+;; that headline down a day, and then go back to the bottom and do the same
+;; for every "[#A]" priority headline, so that at the end of the process,
+;; the resulting file matches todos_after.org.
+
+
+;; (defun gpc/bump-priorities ()
+;;   "Move immediate child headlines with explicit [#A] or [#B]
+;; from the current date heading to the top of the next sibling date heading.
+
+;; If called on a child headline under a date heading, first move up to that
+;; date heading and operate on all of its immediate children."
+;;   (interactive)
+;;   (require 'org)
+
+;;   (org-back-to-heading t)
+
+;;   ;; If point is on a subheadline, move up to the top-level date heading.
+;;   ;; This assumes day headings are level-1 headings like:
+;;   ;; * 2026-04-27 Monday
+;;   (while (> (org-outline-level) 1)
+;;     (unless (org-up-heading-safe)
+;;       (user-error "Not inside a date heading")))
+
+;;   (let* ((source-pos (point))
+;;          (source-level (org-outline-level))
+;;          (target-pos nil)
+;;          (candidates nil)
+;;          (moved-text nil))
+;;     ;; Find next sibling heading at the same level.
+;;     (save-excursion
+;;       (unless (org-get-next-sibling)
+;;         (user-error "No following sibling heading found"))
+;;       (setq target-pos (point)))
+
+;;     ;; Collect matching immediate children under the source heading.
+;;     (save-excursion
+;;       (save-restriction
+;;         (org-narrow-to-subtree)
+;;         (org-map-entries
+;;          (lambda ()
+;;            (when (= (org-outline-level) (1+ source-level))
+;;              (let ((line (thing-at-point 'line t)))
+;;                (when (and line
+;;                           (string-match-p "\\[#[AB]\\]" line))
+;;                  (push (point) candidates)))))
+;;          nil 'tree)))
+
+;;     ;; Delete bottom-up so positions remain valid.
+;;     (dolist (pos (sort candidates #'>))
+;;       (save-excursion
+;;         (goto-char pos)
+;;         (let ((beg (point)))
+;;           (org-end-of-subtree t t)
+;;           (push (buffer-substring beg (point)) moved-text)
+;;           (delete-region beg (point)))))
+
+;;     (setq moved-text (nreverse moved-text))
+
+;;     (unless moved-text
+;;       (user-error "No immediate child headlines with explicit [#A] or [#B] priority"))
+
+;;     ;; Insert at top of target heading contents.
+;;     (save-excursion
+;;       (goto-char target-pos)
+;;       (org-end-of-meta-data t)
+;;       (unless (bolp)
+;;         (insert "\n"))
+;;       (dolist (txt moved-text)
+;;         (insert txt)
+;;         (unless (string-suffix-p "\n" txt)
+;;           (insert "\n"))))
+
+;;     (message "Moved %d priority item(s)" (length moved-text))))
+
+
+;; The diff confirms the exact transformation: all non-DONE [#B] and [#A] items
+;;   from Monday are removed and inserted at the top of Tuesday — [#B] first
+;;   (bottom-to-top, ending up in original order), then [#A] on top of those. DONE
+;;   items with priorities are left untouched.
+
+;;   Here's the function:
+
+(defun gpc/bump-priorities ()                                               
+    "Bump all non-done [#B] then [#A] priority level-2 headings under the
+  parent date heading to the next day via `gpc/move-todo-to-tomorrow'.
+  Invoke from the second line of the buffer (first subheading of the date
+  heading)."
+    (interactive)
+    (outline-up-heading 1 t)
+    (let ((parent (point-marker)))
+      (dolist (priority '("\\[#B\\]" "\\[#A\\]"))
+        (goto-char (marker-position parent))
+        (let ((subtree-end (save-excursion (org-end-of-subtree t t) (point)))
+              (markers '()))
+          (while (re-search-forward (concat "^\\*\\* .*" priority) subtree-end
+  t)
+            (save-excursion
+              (beginning-of-line)
+              (unless (looking-at "\\*\\* DONE ")
+                (push (copy-marker (point)) markers))))
+          (dolist (marker markers)
+            (goto-char (marker-position marker))
+            (gpc/move-todo-to-tomorrow)
+            (set-marker marker nil))))
+      (set-marker parent nil)))
+
+  ;; How it works:
+
+  ;; Rather than literally walking headline-by-headline (which would require
+  ;; careful position tracking after each deletion), it uses Emacs markers —
+  ;; positions that track buffer changes automatically:
+
+  ;; 1. outline-up-heading 1 moves from line 2 up to the * 2026-05-04 Monday
+  ;; parent.
+  ;; 2. For each priority in order [#B] then [#A]:
+  ;;   - org-end-of-subtree is recalculated fresh each pass — critical because
+  ;; after the [#B] pass, Monday's subtree is shorter and subtree-end must not
+  ;; bleed into Tuesday.
+  ;;   - re-search-forward scans top-to-bottom collecting matching level-2
+  ;; headings, skipping any ** DONE ones, pushing each into markers — which
+  ;; reverses the order, giving bottom-to-top.
+  ;;   - dolist then processes them bottom-to-top: each gpc/bump-todo-item call
+  ;; inserts its item at the top of Tuesday, so after all 16 [#B] items are
+  ;; processed they end up in their original Monday order. Then the 5 [#A] items
+  ;; land on top of those, also in original order.
+  ;; 3. Markers are freed as we go; the parent marker is freed at the end.
