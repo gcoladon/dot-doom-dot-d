@@ -102,3 +102,6 @@
 ;;   :recipe (:host github :repo "xenodium/chatgpt-shell"))
 ;; (package! ob-chatgpt-shell
 ;;   :recipe (:host github :repo "xenodium/ob-chatgpt-shell"))
+
+(package! package-lint :disable t)
+(package! flycheck-package :disable t)
