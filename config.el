@@ -1010,6 +1010,7 @@ It puts a todo to read this article near the top of the hackernews node."
     (replace-string-in-region "‑" "-" (point-min) (point-max))
     (replace-string-in-region " " " " (point-min) (point-max))
     (replace-string-in-region " " " " (point-min) (point-max))
+    (replace-string-in-region " " " " (point-min) (point-max))
     (gpc/scor "sed '/^:PROPERTIES:/,/^:END:/d'")
     (gpc/scor "sed 's/\\\\\\\\$//'")
     (gpc/scor "sed '/^--------------$/,+1d'")
@@ -1353,3 +1354,9 @@ and remove blank lines."
   ;; processed they end up in their original Monday order. Then the 5 [#A] items
   ;; land on top of those, also in original order.
   ;; 3. Markers are freed as we go; the parent marker is freed at the end.
+
+;;(setq org-roam-db-update-on-save nil)
+;;(remove-hook 'before-save-hook #'org-tidy-on-save)
+
+(remove-hook 'doom-first-file-hook #'global-git-commit-mode)
+(remove-hook 'doom-first-buffer-hook #'global-git-commit-mode)
