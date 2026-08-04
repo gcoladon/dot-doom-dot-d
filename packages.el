@@ -91,7 +91,7 @@
 
 (package! org-roam-ui)
 
-;; (package! takenote :recipe (:host github :repo "gcoladon/takenote"))
+(package! takenote :recipe (:host github :repo "gcoladon/takenote"))
 
 (package! org-tidy)
 
@@ -105,3 +105,6 @@
 
 (package! package-lint :disable t)
 (package! flycheck-package :disable t)
+
+;; this is copilot's solution to incf and all eager macro expansion problems.
+(package! transient :pin "2ecba03")  ; last version before static-when and incf regression

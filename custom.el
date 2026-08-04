@@ -86,8 +86,8 @@
  '(org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 2)))
  '(org-reverse-note-order t)
  '(org-roam-capture-ref-templates
-   '(("r" "ref" plain "%?" :if-new
-      (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+title: ${title}")
+   '(("r" "ref" plain "%?" :target
+      (file+head "roam-stem/%<%y%m%d_>${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)))
  '(org-roam-capture-templates
    '(("w" "work" plain "%?" :if-new
