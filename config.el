@@ -167,6 +167,7 @@
     (browse-url ref-url)))
 
 ;; I hate that I always have to delete the newline that gets added after I insert a stored link
+;; Maybe step through this? Because the newline is still getting inserted!
 (defun org-insert-last-stored-link (arg)
   "Insert the last link stored in `org-stored-links'."
   (interactive "p")
