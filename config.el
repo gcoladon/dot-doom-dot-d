@@ -123,7 +123,7 @@
   (setq monday-tv (org-read-date nil t which))
   (let ((monday-str (org-read-date nil nil which)))
     (org-roam-node-find nil
-     (concat "Week of " monday-str)) nil nil t))
+     (concat "Week of " monday-str) nil t)))
 
 (defun gpc/org-roam-monthly ()
   "Find the monthly-file for this month."
@@ -141,6 +141,7 @@
 (global-set-key (kbd "s-f") 'org-roam-node-find)
 (global-set-key (kbd "s-i") 'org-roam-node-insert)
 (global-set-key (kbd "s-s") (cmd!  (find-file "~/repos/master/Source/")))
+(global-set-key (kbd "s-b") (cmd!  (find-file "~/repos/branch/Source/")))
 (global-set-key (kbd "s-p") gpc/super-p-fn)
 (global-set-key (kbd "s-t") 'gc/org-roam-weekly-this)
 ;; this is how I swapped windows and alt on ubuntu to match keys on mac keyboard
