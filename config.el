@@ -1361,3 +1361,9 @@ and remove blank lines."
 
 (remove-hook 'doom-first-file-hook #'global-git-commit-mode)
 (remove-hook 'doom-first-buffer-hook #'global-git-commit-mode)
+
+(setq org-id-link-description-include-outline-path t)
+
+;; (setq org-roam-db-update-on-save nil)
+;; (remove-hook 'before-save-hook #'org-tidy-on-save)
+
