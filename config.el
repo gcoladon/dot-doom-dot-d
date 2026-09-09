@@ -123,7 +123,7 @@
   (setq monday-tv (org-read-date nil t which))
   (let ((monday-str (org-read-date nil nil which)))
     (org-roam-node-find nil
-     (concat "Week of " monday-str) nil t)))
+     (concat "Week of " monday-str))))
 
 (defun gpc/org-roam-monthly ()
   "Find the monthly-file for this month."
