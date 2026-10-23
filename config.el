@@ -1104,7 +1104,26 @@ It puts a todo to read this article near the top of the hackernews node."
     (insert content)
     (message-send-and-exit)))
 
-(doom/increase-font-size 1)
+;; (doom/increase-font-size 1)
+;; Enlarge fonts once, after a graphical frame becomes available.
+(defvar gpc/initial-font-size-applied nil)
+
+(defun gpc/apply-initial-font-size (frame)
+  (when (and (not gpc/initial-font-size-applied)
+             (display-graphic-p frame))
+    (with-selected-frame frame
+      (doom/increase-font-size 1)
+      (setq gpc/initial-font-size-applied t))
+    (remove-hook 'after-make-frame-functions
+                 #'gpc/apply-initial-font-size)))
+
+(add-hook 'after-make-frame-functions
+          #'gpc/apply-initial-font-size)
+
+;; Also handle an existing graphical frame during standalone startup.
+(gpc/apply-initial-font-size (selected-frame))
+
+
 
 ;; (after! org
 ;;   (require 'org-crypt)
