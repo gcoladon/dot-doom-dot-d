@@ -1387,3 +1387,25 @@ and remove blank lines."
 ;; (setq org-roam-db-update-on-save nil)
 ;; (remove-hook 'before-save-hook #'org-tidy-on-save)
 
+
+(require 'org)
+(require 'org-element)
+
+(defun gpc/org-unlink ()
+  "Replace the Org link at point with its description, or its raw target."
+  (interactive)
+  (let ((link (org-element-context)))
+    (unless (eq (org-element-type link) 'link)
+      (user-error "Point is not on an Org link"))
+    (let* ((beg (org-element-property :begin link))
+           (end (- (org-element-property :end link)
+                   (or (org-element-property :post-blank link) 0)))
+           (cbeg (org-element-property :contents-begin link))
+           (cend (org-element-property :contents-end link))
+           (text (if (and cbeg cend)
+                     (buffer-substring-no-properties cbeg cend)
+                   (org-element-property :raw-link link))))
+      (atomic-change-group
+        (delete-region beg end)
+        (goto-char beg)
+        (insert text)))))
